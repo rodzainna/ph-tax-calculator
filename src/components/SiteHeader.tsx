@@ -7,7 +7,7 @@ const linkClass = ({ isActive }: { isActive: boolean }) =>
   cn(
     'rounded-full px-3 py-1.5 text-center text-sm font-medium max-[359px]:px-1.5 transition-all duration-200 sm:px-4',
     isActive
-      ? 'bg-gradient-to-br from-[#2F7380] to-[#243F66] text-white shadow-md shadow-[#2F7380]/30'
+      ? 'bg-gradient-to-br from-brand-teal to-brand-navy-mid text-white shadow-md shadow-brand-teal/30'
       : 'text-muted-foreground hover:bg-white/80 hover:text-foreground dark:hover:bg-white/10',
   )
 
@@ -15,13 +15,13 @@ const linkClass = ({ isActive }: { isActive: boolean }) =>
 export default function SiteHeader() {
   const { theme, toggle } = useTheme()
   return (
-    <header className="sticky top-0 z-30 bg-gradient-to-r from-[#EAACA2]/25 via-white/70 to-[#48929D]/20 dark:from-[#CE6A6B]/15 dark:via-[#0b1222]/80 dark:to-[#48929D]/15 backdrop-blur-md after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-[#CE6A6B] after:via-[#EAACA2] after:to-[#48929D]">
+    <header className="sticky top-0 z-30 bg-gradient-to-r from-brand-blush/25 via-white/70 to-brand-teal-bright/20 dark:from-brand-coral/15 dark:via-background/80 dark:to-brand-teal-bright/15 backdrop-blur-md after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-brand-coral after:via-brand-blush after:to-brand-teal-bright">
       <div className="mx-auto flex max-w-6xl flex-col gap-2.5 px-4 py-2.5 sm:flex-row sm:items-center sm:justify-between sm:py-3">
         <Link to="/" className="group flex min-w-0 items-center gap-3 whitespace-nowrap">
           <span className="relative size-9 shrink-0">
             <span
               aria-hidden
-              className="absolute -inset-1.5 rounded-[22%] bg-gradient-to-br from-[#CE6A6B] to-[#48929D] opacity-40 blur-md transition-opacity duration-300 group-hover:opacity-80"
+              className="absolute -inset-1.5 rounded-[22%] bg-gradient-to-br from-brand-coral to-brand-teal-bright opacity-40 blur-md transition-opacity duration-300 group-hover:opacity-80"
             />
             {/* 22% is the favicon's own corner radius (14 of 64), so the dark shape keeps its proportions. */}
             <img
@@ -36,7 +36,7 @@ export default function SiteHeader() {
             <span className="flex items-center gap-2">
               <span className="text-base font-semibold leading-none tracking-tight text-foreground">
                 PH Tax{' '}
-                <span className="bg-gradient-to-r from-[#2F7380] to-[#B84E50] bg-clip-text text-transparent dark:from-[#7CC3CF] dark:to-[#F0A09B]">Calculator</span>
+                <span className="bg-gradient-to-r from-brand-teal to-brand-coral-deep bg-clip-text text-transparent dark:from-brand-teal-light dark:to-brand-coral-light">Calculator</span>
               </span>
               <span className="rounded-full bg-secondary px-2 py-[3px] text-[11px] font-semibold uppercase leading-none tracking-wider text-secondary-foreground">
                 Prototype
@@ -69,7 +69,7 @@ export default function SiteHeader() {
             onClick={toggle}
             aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
             title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[22%] border border-[#48929D]/30 bg-white/85 shadow-sm transition-all duration-200 hover:bg-white hover:shadow-md dark:border-white/15 dark:bg-white/10 dark:hover:bg-white/15 lg:rounded-[9px]"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[22%] border border-brand-teal-bright/30 bg-white/85 shadow-sm transition-all duration-200 hover:bg-white hover:shadow-md dark:border-white/15 dark:bg-white/10 dark:hover:bg-white/15 lg:rounded-[9px]"
           >
             {theme === 'dark' ? <Sun className="size-5" /> : <Moon className="size-5" />}
           </button>
