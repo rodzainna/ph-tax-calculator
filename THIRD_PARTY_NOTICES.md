@@ -28,7 +28,7 @@ The components in `src/components/ui` were generated with [shadcn/ui](https://ui
 
 ## Build and development tools
 
-Used to build and test the site, not shipped to the browser: Vite, Vitest, TypeScript (Apache-2.0), Tailwind CSS (MIT), tw-animate-css (MIT), oxlint (MIT), the shadcn CLI (MIT) and the `@types/*` packages (MIT).
+Used to build and test the site, not shipped to the browser: Vite, Vitest, TypeScript (Apache-2.0), Tailwind CSS (MIT), tw-animate-css (MIT), oxlint (MIT), commitlint and husky (MIT), the shadcn CLI (MIT) and the `@types/*` packages (MIT).
 
 ## Full licence texts
 
