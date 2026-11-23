@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Prototype: keep out of search engines until the rules are verified end to end. -->
+    <meta name="robots" content="noindex, nofollow" />
+    <title>PH Tax Calculator (prototype)</title>
+    <!-- Sets light or dark before the page paints, so a dark visitor does not see a white flash. Same rule as src/lib/theme.ts. -->
+    <script>
+      try {
+        var saved = localStorage.getItem('ph-tax-theme');
+        var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (dark) document.documentElement.classList.add('dark');
+        document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <!-- Brand gradients for icon strokes (see index.css). userSpaceOnUse in a 24 x 24 box, the size of every icon,
+         so straight lines get a gradient too. Kept 0 x 0 but not display:none, which some browsers skip. -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="icon-gradient" gradientUnits="userSpaceOnUse" x1="2" y1="2" x2="22" y2="22">
+          <!-- Teal for the first part, then into coral: blending straight from teal to coral looks grey at icon size. -->
+          <stop offset="0" stop-color="#2F7380" />
+          <stop offset="0.45" stop-color="#2F7380" />
+          <stop offset="1" stop-color="#B84E50" />
+        </linearGradient>
+        <linearGradient id="icon-gradient-light" gradientUnits="userSpaceOnUse" x1="2" y1="2" x2="22" y2="22">
+          <!-- Bright all the way, so it stays clear on the navy and on the coral glow. -->
+          <stop offset="0" stop-color="#FFFFFF" />
+          <stop offset="0.5" stop-color="#FFE3DC" />
+          <stop offset="1" stop-color="#A9E6EE" />
+        </linearGradient>
+      </defs>
+    </svg>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
