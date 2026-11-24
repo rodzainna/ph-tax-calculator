@@ -61,7 +61,14 @@ describe('single-source returns', () => {
   it('compensation only behaves like the 1700', () => {
     const r = annualReturnWithEightPercent({
       year: 2024,
-      employers: [employer({ regularPay: 600_000, mandatoryContributions: 20_000, thirteenthMonthAndBenefits: 50_000, taxWithheld: 50_000 })],
+      employers: [
+        employer({
+          regularPay: 600_000,
+          mandatoryContributions: 20_000,
+          thirteenthMonthAndBenefits: 50_000,
+          taxWithheld: 50_000,
+        }),
+      ],
     })
     expect(r.form).toBe('1700')
     expect(r.business).toBeNull()
@@ -113,7 +120,14 @@ describe('graduated rates for business income (40% optional standard deduction)'
     const r = annualReturnWithGraduated({
       year: 2026,
       employers: [
-        { label: 'Employer', regularPay: 400_000, thirteenthMonthAndBenefits: 0, deMinimisExcess: 0, mandatoryContributions: 0, taxWithheld: 20_000 },
+        {
+          label: 'Employer',
+          regularPay: 400_000,
+          thirteenthMonthAndBenefits: 0,
+          deMinimisExcess: 0,
+          mandatoryContributions: 0,
+          taxWithheld: 20_000,
+        },
       ],
       business: { grossReceipts: 500_000, quarterlyTaxPaid: 5_000 },
     })
@@ -135,7 +149,12 @@ describe('graduated rates for business income (40% optional standard deduction)'
   it('counts 2307 credit and 1701Q payments, and keeps the pending credit separate', () => {
     const r = annualReturnWithGraduated({
       year: 2026,
-      business: { grossReceipts: 1_000_000, quarterlyTaxPaid: 10_000, creditableWithholding: 5_000, pendingCreditableWithholding: 3_000 },
+      business: {
+        grossReceipts: 1_000_000,
+        quarterlyTaxPaid: 10_000,
+        creditableWithholding: 5_000,
+        pendingCreditableWithholding: 3_000,
+      },
     })
     expect(r.totalCredits).toBe(15_000)
     expect(r.balance).toBe(47_500)

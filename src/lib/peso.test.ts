@@ -1,5 +1,16 @@
 import { describe, expect, it } from 'vitest'
-import { caretAfterFormat, countPesoChars, formatPeso, formatPesoInput, formatPesoWhole, formatRate, parsePeso, removedCharacter, splitPeso, wholeDigitCount } from './peso.ts'
+import {
+  caretAfterFormat,
+  countPesoChars,
+  formatPeso,
+  formatPesoInput,
+  formatPesoWhole,
+  formatRate,
+  parsePeso,
+  removedCharacter,
+  splitPeso,
+  wholeDigitCount,
+} from './peso.ts'
 
 describe('formatPesoInput (live commas while typing)', () => {
   it('stops taking whole-number digits at 12, so amounts stay exact', () => {

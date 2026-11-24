@@ -13,7 +13,8 @@ export const OSD_RULES: OsdRule[] = [
     fromYear: 2018,
     toYear: null,
     rate: 0.4,
-    source: 'RA 10963 Sec. 34(L) NIRC: optional standard deduction, 40% of gross sales or gross receipts; eBIRForms 1701v2018: 40% of Item 10, rounded to a whole peso',
+    source:
+      'RA 10963 Sec. 34(L) NIRC: optional standard deduction, 40% of gross sales or gross receipts; eBIRForms 1701v2018: 40% of Item 10, rounded to a whole peso',
     verified: true,
   },
 ]

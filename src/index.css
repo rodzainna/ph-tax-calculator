@@ -1,151 +1,151 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
-@import "@fontsource-variable/geist-mono";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/geist-mono';
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-    --font-heading: var(--font-sans);
-    --font-sans: 'Geist Variable', sans-serif;
-    --font-mono: 'Geist Mono Variable', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    --color-sidebar-ring: var(--sidebar-ring);
-    --color-sidebar-border: var(--sidebar-border);
-    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-    --color-sidebar-accent: var(--sidebar-accent);
-    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-    --color-sidebar-primary: var(--sidebar-primary);
-    --color-sidebar-foreground: var(--sidebar-foreground);
-    --color-sidebar: var(--sidebar);
-    --color-chart-5: var(--chart-5);
-    --color-chart-4: var(--chart-4);
-    --color-chart-3: var(--chart-3);
-    --color-chart-2: var(--chart-2);
-    --color-chart-1: var(--chart-1);
-    --color-ring: var(--ring);
-    --color-input: var(--input);
-    --color-border: var(--border);
-    --color-destructive: var(--destructive);
-    --color-accent-foreground: var(--accent-foreground);
-    --color-accent: var(--accent);
-    --color-muted-foreground: var(--muted-foreground);
-    --color-muted: var(--muted);
-    --color-secondary-foreground: var(--secondary-foreground);
-    --color-secondary: var(--secondary);
-    --color-primary-foreground: var(--primary-foreground);
-    --color-primary: var(--primary);
-    /* The colour of money you keep (take-home and net pay). One token, so the headline and the Net pay line always match. */
-    --color-net: var(--primary);
-    --color-popover-foreground: var(--popover-foreground);
-    --color-popover: var(--popover);
-    --color-card-foreground: var(--card-foreground);
-    --color-card: var(--card);
-    --color-foreground: var(--foreground);
-    --color-background: var(--background);
-    --radius-sm: calc(var(--radius) * 0.6);
-    --radius-md: calc(var(--radius) * 0.8);
-    --radius-lg: var(--radius);
-    --radius-xl: calc(var(--radius) * 1.4);
-    --radius-2xl: calc(var(--radius) * 1.8);
-    --radius-3xl: calc(var(--radius) * 2.2);
-    --radius-4xl: calc(var(--radius) * 2.6);
+  --font-heading: var(--font-sans);
+  --font-sans: 'Geist Variable', sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  /* The colour of money you keep (take-home and net pay). One token, so the headline and the Net pay line always match. */
+  --color-net: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
 :root {
-    --background: #F4F8F6;
-    --foreground: #202E54;
-    --card: #FFFFFF;
-    --card-foreground: #202E54;
-    --popover: #FFFFFF;
-    --popover-foreground: #202E54;
-    --primary: #2F7380;
-    --primary-foreground: #FFFFFF;
-    --secondary: #FBE6E1;
-    --secondary-foreground: #8F3436;
-    --muted: #EAF2EE;
-    --muted-foreground: #52647A;
-    --accent: #E2F0F0;
-    --accent-foreground: #202E54;
-    --destructive: #B23A3C;
-    --border: #DCE7E0;
-    --input: #C9D8CF;
-    --ring: #48929D;
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --radius: 0.625rem;
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
+  --background: #f4f8f6;
+  --foreground: #202e54;
+  --card: #ffffff;
+  --card-foreground: #202e54;
+  --popover: #ffffff;
+  --popover-foreground: #202e54;
+  --primary: #2f7380;
+  --primary-foreground: #ffffff;
+  --secondary: #fbe6e1;
+  --secondary-foreground: #8f3436;
+  --muted: #eaf2ee;
+  --muted-foreground: #52647a;
+  --accent: #e2f0f0;
+  --accent-foreground: #202e54;
+  --destructive: #b23a3c;
+  --border: #dce7e0;
+  --input: #c9d8cf;
+  --ring: #48929d;
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
 }
 
 .dark {
-    /* The same brand in the dark: a deep navy page, cards a step lighter, and the teal and coral lifted so they read on it. */
-    --background: #0b1222;
-    --foreground: #e6edf3;
-    --card: #141d33;
-    --card-foreground: #e6edf3;
-    --popover: #172138;
-    --popover-foreground: #e6edf3;
-    --primary: #6fb7c4;
-    --primary-foreground: #0b1222;
-    --secondary: #3a2330;
-    --secondary-foreground: #f6b9b3;
-    --muted: #1a2540;
-    --muted-foreground: #9fb1c5;
-    --accent: #17313c;
-    --accent-foreground: #e6edf3;
-    --destructive: #f0868a;
-    --border: #25314d;
-    --input: #34425f;
-    --ring: #6fb7c4;
-    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 10px 28px -12px rgb(0 0 0 / 0.55);
-    --shadow-card-hover: 0 2px 4px rgb(0 0 0 / 0.35), 0 18px 36px -14px rgb(0 0 0 / 0.65);
-    --shadow-hero: 0 2px 4px rgb(0 0 0 / 0.3), 0 24px 48px -18px rgb(72 146 157 / 0.35);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
+  /* The same brand in the dark: a deep navy page, cards a step lighter, and the teal and coral lifted so they read on it. */
+  --background: #0b1222;
+  --foreground: #e6edf3;
+  --card: #141d33;
+  --card-foreground: #e6edf3;
+  --popover: #172138;
+  --popover-foreground: #e6edf3;
+  --primary: #6fb7c4;
+  --primary-foreground: #0b1222;
+  --secondary: #3a2330;
+  --secondary-foreground: #f6b9b3;
+  --muted: #1a2540;
+  --muted-foreground: #9fb1c5;
+  --accent: #17313c;
+  --accent-foreground: #e6edf3;
+  --destructive: #f0868a;
+  --border: #25314d;
+  --input: #34425f;
+  --ring: #6fb7c4;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 10px 28px -12px rgb(0 0 0 / 0.55);
+  --shadow-card-hover: 0 2px 4px rgb(0 0 0 / 0.35), 0 18px 36px -14px rgb(0 0 0 / 0.65);
+  --shadow-hero: 0 2px 4px rgb(0 0 0 / 0.3), 0 24px 48px -18px rgb(72 146 157 / 0.35);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
 }
 
 @layer base {
   /* Tailwind resets buttons to the default arrow; clickable things should show a pointer. */
   button:not(:disabled),
-  [role="button"]:not([aria-disabled="true"]),
-  [role="switch"],
-  [role="radio"],
-  [role="combobox"],
-  [role="option"],
+  [role='button']:not([aria-disabled='true']),
+  [role='switch'],
+  [role='radio'],
+  [role='combobox'],
+  [role='option'],
   summary,
   label[for] {
     cursor: pointer;
   }
   * {
     @apply border-border outline-ring/50;
-    }
+  }
   body {
     @apply bg-background text-foreground;
-    }
+  }
   html {
     @apply font-sans;
-    }
+  }
 }
 
 /* ---- Design system ------------------------------------------------------------------------
@@ -261,9 +261,13 @@ body::before {
     pointer-events: none;
     /* The first and last colours match, so the loop has no seam. */
     background: conic-gradient(from var(--ring-angle), #2f7380, #48929d, #eaaca2, #ce6a6b, #eaaca2, #48929d, #2f7380);
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
-    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
     mask-composite: exclude;
     animation: ring-drift 16s linear infinite;
   }
@@ -289,9 +293,13 @@ body::before {
     padding: var(--ring-width, 2px);
     pointer-events: none;
     background: conic-gradient(from var(--ring-angle), #2f7380, #48929d, #eaaca2, #ce6a6b, #eaaca2, #48929d, #2f7380);
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
-    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
     mask-composite: exclude;
     animation: ring-drift 12s linear infinite;
   }
@@ -341,12 +349,27 @@ svg.brand-icon .ci-keys rect,
 svg.brand-icon .ci-tall {
   stroke: none;
 }
-svg.brand-icon .ci-display { fill: #2f7380; }
-svg.brand-icon .ci-keys { fill: #9dbba7; }
-svg.brand-icon .ci-tall { fill: #ce6a6b; }
-svg.brand-icon.icon-on-dark .ci-display, .dark svg.brand-icon .ci-display { fill: #6fb7c4; }
-svg.brand-icon.icon-on-dark .ci-keys, .dark svg.brand-icon .ci-keys { fill: #bed3c4; }
-svg.brand-icon.icon-on-dark .ci-tall, .dark svg.brand-icon .ci-tall { fill: #e5898a; }
+svg.brand-icon .ci-display {
+  fill: #2f7380;
+}
+svg.brand-icon .ci-keys {
+  fill: #9dbba7;
+}
+svg.brand-icon .ci-tall {
+  fill: #ce6a6b;
+}
+svg.brand-icon.icon-on-dark .ci-display,
+.dark svg.brand-icon .ci-display {
+  fill: #6fb7c4;
+}
+svg.brand-icon.icon-on-dark .ci-keys,
+.dark svg.brand-icon .ci-keys {
+  fill: #bed3c4;
+}
+svg.brand-icon.icon-on-dark .ci-tall,
+.dark svg.brand-icon .ci-tall {
+  fill: #e5898a;
+}
 
 /* ---- Brand surface ------------------------------------------------------------------------
    The logo's gradient: navy to teal, with a coral glow in the top-right corner. Defined once, for the

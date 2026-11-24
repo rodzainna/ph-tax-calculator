@@ -12,7 +12,8 @@ interface Props {
 }
 
 /** Long figures step down a size so they always fit a small tile (mono digits are wide). */
-const valueSize = (value: string): string => (value.length > 10 ? 'text-xs' : value.length > 8 ? 'text-sm' : 'text-base')
+const valueSize = (value: string): string =>
+  value.length > 10 ? 'text-xs' : value.length > 8 ? 'text-sm' : 'text-base'
 
 /** One figure on its own small card, the standard card with the accent bar: a quiet label (with an ⓘ) over a bold number. */
 export default function StatTile({ label, value, info }: Props) {

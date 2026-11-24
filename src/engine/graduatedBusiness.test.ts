@@ -29,7 +29,9 @@ describe('graduatedBusinessIncome (40% optional standard deduction)', () => {
 
   it('rejects negative or invalid amounts', () => {
     expect(() => graduatedBusinessIncome({ grossReceipts: -1 }, 2026)).toThrow(RangeError)
-    expect(() => graduatedBusinessIncome({ grossReceipts: 1, otherNonOperatingIncome: Number.NaN }, 2026)).toThrow(RangeError)
+    expect(() => graduatedBusinessIncome({ grossReceipts: 1, otherNonOperatingIncome: Number.NaN }, 2026)).toThrow(
+      RangeError,
+    )
   })
 
   it('rejects a year with no rule', () => {
@@ -39,14 +41,20 @@ describe('graduatedBusinessIncome (40% optional standard deduction)', () => {
 
 describe('graduatedBusinessIncome (itemized expenses)', () => {
   it('deducts the actual expenses instead of 40%', () => {
-    const r = graduatedBusinessIncome({ grossReceipts: 1_000_000, deduction: 'itemized', itemizedExpenses: 250_000 }, 2026)
+    const r = graduatedBusinessIncome(
+      { grossReceipts: 1_000_000, deduction: 'itemized', itemizedExpenses: 250_000 },
+      2026,
+    )
     expect(r.deductionKind).toBe('itemized')
     expect(r.deduction).toBe(250_000)
     expect(r.netBusinessIncome).toBe(750_000)
   })
 
   it('still reports what the 40% deduction would have been', () => {
-    const r = graduatedBusinessIncome({ grossReceipts: 1_000_000, deduction: 'itemized', itemizedExpenses: 250_000 }, 2026)
+    const r = graduatedBusinessIncome(
+      { grossReceipts: 1_000_000, deduction: 'itemized', itemizedExpenses: 250_000 },
+      2026,
+    )
     expect(r.osdDeduction).toBe(400_000)
   })
 
@@ -57,17 +65,25 @@ describe('graduatedBusinessIncome (itemized expenses)', () => {
   })
 
   it('adds other income after the expenses', () => {
-    const r = graduatedBusinessIncome({ grossReceipts: 500_000, otherNonOperatingIncome: 10_000, deduction: 'itemized', itemizedExpenses: 100_000 }, 2026)
+    const r = graduatedBusinessIncome(
+      { grossReceipts: 500_000, otherNonOperatingIncome: 10_000, deduction: 'itemized', itemizedExpenses: 100_000 },
+      2026,
+    )
     expect(r.netBusinessIncome).toBe(410_000)
   })
 
   it('keeps a loss as a negative income and says so, as the BIR form does', () => {
-    const r = graduatedBusinessIncome({ grossReceipts: 100_000, deduction: 'itemized', itemizedExpenses: 150_000 }, 2026)
+    const r = graduatedBusinessIncome(
+      { grossReceipts: 100_000, deduction: 'itemized', itemizedExpenses: 150_000 },
+      2026,
+    )
     expect(r.netBusinessIncome).toBe(-50_000)
     expect(r.isLoss).toBe(true)
   })
 
   it('rejects negative expenses', () => {
-    expect(() => graduatedBusinessIncome({ grossReceipts: 1, deduction: 'itemized', itemizedExpenses: -1 }, 2026)).toThrow(RangeError)
+    expect(() =>
+      graduatedBusinessIncome({ grossReceipts: 1, deduction: 'itemized', itemizedExpenses: -1 }, 2026),
+    ).toThrow(RangeError)
   })
 })

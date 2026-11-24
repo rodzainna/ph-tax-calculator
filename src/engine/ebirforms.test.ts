@@ -9,7 +9,11 @@ import { annualBasicPay, monthlyBasicSalary, thirteenthMonthPay } from './pay.ts
 // The annual return follows the BIR's offline eBIRForms 1701/1700: every computed line is a whole peso (Math.round),
 // and a business loss lowers the combined taxable income. The numbers below are made up in the shape of a real filing.
 
-const employer = (overrides: Partial<Parameters<typeof annualReturnWithEightPercent>[0]['employers'] extends (infer E)[] | undefined ? E : never> = {}) => ({
+const employer = (
+  overrides: Partial<
+    Parameters<typeof annualReturnWithEightPercent>[0]['employers'] extends (infer E)[] | undefined ? E : never
+  > = {},
+) => ({
   label: 'Employer',
   regularPay: 0,
   thirteenthMonthAndBenefits: 0,
@@ -50,7 +54,9 @@ describe('whole-peso rounding like the form', () => {
 
   it('the 8% limit is counted on the whole-peso total', () => {
     expect(() => eightPercentTax({ grossReceipts: 3_000_000.49, purelySelfEmployed: true }, 2025)).not.toThrow()
-    expect(() => eightPercentTax({ grossReceipts: 3_000_000.5, purelySelfEmployed: true }, 2025)).toThrow(EightPercentNotAvailableError)
+    expect(() => eightPercentTax({ grossReceipts: 3_000_000.5, purelySelfEmployed: true }, 2025)).toThrow(
+      EightPercentNotAvailableError,
+    )
   })
 })
 

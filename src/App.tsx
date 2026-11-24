@@ -10,14 +10,19 @@ export default function App() {
         <SiteHeader />
         <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">
           <Routes>
-            <Route path="/" element={<p className="text-sm text-muted-foreground">The calculators arrive in the next pull requests.</p>} />
+            <Route
+              path="/"
+              element={
+                <p className="text-sm text-muted-foreground">The calculators arrive in the next pull requests.</p>
+              }
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
         <footer className="mx-auto w-full max-w-6xl space-y-1 px-4 pb-8 pt-4 text-xs text-muted-foreground">
           <p className="max-w-3xl leading-relaxed">
-            Estimates only, for planning purposes. Actual withholding may differ based on your employer's payroll setup. Consult the BIR
-            or a licensed accountant for official computations.
+            Estimates only, for planning purposes. Actual withholding may differ based on your employer's payroll setup.
+            Consult the BIR or a licensed accountant for official computations.
           </p>
           <p>Nothing you type leaves your browser.</p>
         </footer>

@@ -12,9 +12,7 @@ export class UnsupportedYearError extends Error {
 
 /** Finds the table in force for a tax year, or throws if there is none. */
 export function graduatedRulesFor(year: number): GraduatedRuleSet {
-  const rules = GRADUATED_RULES.find(
-    (r) => year >= r.fromYear && (r.toYear === null || year <= r.toYear),
-  )
+  const rules = GRADUATED_RULES.find((r) => year >= r.fromYear && (r.toYear === null || year <= r.toYear))
   if (!rules) throw new UnsupportedYearError(year)
   return rules
 }

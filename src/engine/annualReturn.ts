@@ -137,7 +137,9 @@ export function annualReturnWithGraduated(input: AnnualReturnInput): AnnualRetur
   }
 
   // Like the form: a business loss lowers the combined taxable income, and the tax, the credits and what is left are whole pesos.
-  const combinedTaxableIncome = roundToPeso((compensation?.taxableCompensation ?? 0) + (graduatedBusiness?.netBusinessIncome ?? 0))
+  const combinedTaxableIncome = roundToPeso(
+    (compensation?.taxableCompensation ?? 0) + (graduatedBusiness?.netBusinessIncome ?? 0),
+  )
   const totalTaxDue = graduatedTaxToPeso(combinedTaxableIncome, input.year)
   const totalCredits = roundToPeso(
     (compensation?.totalTaxWithheld ?? 0) +

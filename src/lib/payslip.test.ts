@@ -14,7 +14,9 @@ describe('payslipFor: 35,000 a month (2026)', () => {
 
   it('monthly: as the monthly result says', () => {
     const p = payslipFor(result, lines(35_000), 'monthly')
-    expect([p.basic, p.gross, p.sss, p.philhealth, p.pagibig, p.tax]).toEqual([35_000, 35_000, 1_750, 875, 200, 1_701.25])
+    expect([p.basic, p.gross, p.sss, p.philhealth, p.pagibig, p.tax]).toEqual([
+      35_000, 35_000, 1_750, 875, 200, 1_701.25,
+    ])
     expect(p.totalDeductions).toBe(4_526.25)
     expect(p.net).toBe(30_473.75)
     expect(p.netBonuses).toBe(0)
@@ -40,7 +42,7 @@ describe('payslipFor: 35,000 a month (2026)', () => {
     expect(Math.abs(p.net - result.takeHomeMonthly / 2)).toBeLessThanOrEqual(0.011)
   })
 
-  it('annual: twelve months of each line and the year\'s tax, with the 13th month shown apart', () => {
+  it("annual: twelve months of each line and the year's tax, with the 13th month shown apart", () => {
     const p = payslipFor(result, lines(35_000), 'annual')
     expect(p.basic).toBe(420_000)
     expect(p.gross).toBe(420_000)

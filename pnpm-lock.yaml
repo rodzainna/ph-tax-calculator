@@ -81,6 +81,9 @@ importers:
       oxlint:
         specifier: ^1.90.0
         version: 1.94.0
+      prettier:
+        specifier: ^3.10.1
+        version: 3.10.1
       tailwindcss:
         specifier: ^4.3.5
         version: 4.3.5
@@ -2491,6 +2494,11 @@ packages:
   powershell-utils@0.2.1:
     resolution: {integrity: sha512-C+y9x90UElAddDZmV4qOx9W53B61PO7cIqWz2dQsWlwswuq4mr8NEwytdGKboYbQlGZ3awrkTeNvcZiZNHnQ8A==}
     engines: {node: '>=20'}
+
+  prettier@3.10.1:
+    resolution: {integrity: sha512-70vp3ZUYoPlFbF9uiTdXHUUCGEIp7d4+6p+8DYbkm2jP7x/3i/paXVF6dopSI3zd/CEitrZN1rc4i85xWmmXlg==}
+    engines: {node: '>=14'}
+    hasBin: true
 
   pretty-format@27.5.1:
     resolution: {integrity: sha512-Qb1gy5OrP5+zDf2Bvnzdl3jsTf1qXVMazbvCoKhtKqVs4/YK4ozX4gKQJJVyNe+cajNPn0KoC0MC3FUmaHWEmQ==}
@@ -5226,6 +5234,8 @@ snapshots:
       source-map-js: 1.2.3
 
   powershell-utils@0.2.1: {}
+
+  prettier@3.10.1: {}
 
   pretty-format@27.5.1:
     dependencies:

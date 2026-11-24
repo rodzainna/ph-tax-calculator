@@ -33,7 +33,13 @@ export default function MoneyRow({ label, amount, sign, strong, subtotal, note, 
   const quiet = amount === 0 && !bold
 
   return (
-    <div className={cn('grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-4 gap-y-0.5 text-sm', bold && 'font-semibold', subtotal && 'mt-1 border-t border-foreground/10 pt-2')}>
+    <div
+      className={cn(
+        'grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-4 gap-y-0.5 text-sm',
+        bold && 'font-semibold',
+        subtotal && 'mt-1 border-t border-foreground/10 pt-2',
+      )}
+    >
       <dt className={cn('min-w-0', bold ? 'text-foreground' : 'text-muted-foreground')}>
         <LabelWithTip
           label={label}
@@ -54,7 +60,10 @@ export default function MoneyRow({ label, amount, sign, strong, subtotal, note, 
           <>
             {sign ? (
               <>
-                <span className={cn('mr-1.5 font-normal', red ? 'text-destructive/70' : 'text-muted-foreground')} aria-hidden>
+                <span
+                  className={cn('mr-1.5 font-normal', red ? 'text-destructive/70' : 'text-muted-foreground')}
+                  aria-hidden
+                >
                   {SIGN_TEXT[sign]}
                 </span>
                 <span className="sr-only">{sign === 'minus' ? 'minus ' : 'plus '}</span>

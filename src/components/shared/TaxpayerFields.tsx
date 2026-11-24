@@ -28,7 +28,15 @@ const METHOD_OPTIONS: Array<Option<TaxMethod>> = [
 ]
 
 /** Tax year, then the kind of earner, then (unless employee) graduated or 8%. */
-export default function TaxpayerFields({ idPrefix, year, years, onYearChange, taxpayer, onTaxpayerChange, types = DEFAULT_TYPES }: Props) {
+export default function TaxpayerFields({
+  idPrefix,
+  year,
+  years,
+  onYearChange,
+  taxpayer,
+  onTaxpayerChange,
+  types = DEFAULT_TYPES,
+}: Props) {
   // If the page does not offer the current type (for example mixed income on a page without it), fall back to the first one it does.
   useEffect(() => {
     if (!types.includes(taxpayer.type)) onTaxpayerChange({ ...taxpayer, type: types[0] })

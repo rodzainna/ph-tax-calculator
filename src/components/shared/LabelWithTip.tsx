@@ -21,7 +21,11 @@ export default function LabelWithTip({ label, after, hint, contentClassName }: P
         {tail}
         {after}
         {hint ? (
-          <InfoTip about={typeof label === 'string' ? label : 'this figure'} className="ml-1 inline-block align-[-2px]" contentClassName={contentClassName}>
+          <InfoTip
+            about={typeof label === 'string' ? label : 'this figure'}
+            className="ml-1 inline-block align-[-2px]"
+            contentClassName={contentClassName}
+          >
             {hint}
           </InfoTip>
         ) : null}

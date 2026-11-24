@@ -46,7 +46,19 @@ interface Props {
 }
 
 /** A labelled peso field. */
-export default function PesoInput({ label, value, onChange, hint, placeholder = '0.00', emphasis, autoFocus, compact, info, description, hideLabelOnWide }: Props) {
+export default function PesoInput({
+  label,
+  value,
+  onChange,
+  hint,
+  placeholder = '0.00',
+  emphasis,
+  autoFocus,
+  compact,
+  info,
+  description,
+  hideLabelOnWide,
+}: Props) {
   const id = useId()
   const { inputRef, handleChange, handleBlur } = usePesoField(value, onChange)
   const size = compact ? 'compact' : (emphasis ?? 'default')

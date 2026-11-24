@@ -7,7 +7,17 @@ import TaxpayerFields from './TaxpayerFields.tsx'
 afterEach(cleanup)
 
 const show = (taxpayer: Taxpayer, onTaxpayerChange = vi.fn(), types?: Taxpayer['type'][]) => {
-  render(<TaxpayerFields idPrefix="t" year={2026} years={[2026, 2025]} onYearChange={() => {}} taxpayer={taxpayer} onTaxpayerChange={onTaxpayerChange} types={types} />)
+  render(
+    <TaxpayerFields
+      idPrefix="t"
+      year={2026}
+      years={[2026, 2025]}
+      onYearChange={() => {}}
+      taxpayer={taxpayer}
+      onTaxpayerChange={onTaxpayerChange}
+      types={types}
+    />,
+  )
   return onTaxpayerChange
 }
 

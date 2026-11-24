@@ -24,7 +24,17 @@ interface Props<T extends string> {
 }
 
 /** A labelled dropdown in the compact size used across the forms. */
-export default function SelectField<T extends string>({ value, onChange, options, label, ariaLabel, hideLabelOnWide, id, className, wrapperClassName }: Props<T>) {
+export default function SelectField<T extends string>({
+  value,
+  onChange,
+  options,
+  label,
+  ariaLabel,
+  hideLabelOnWide,
+  id,
+  className,
+  wrapperClassName,
+}: Props<T>) {
   const generatedId = useId()
   const fieldId = id ?? generatedId
   return (

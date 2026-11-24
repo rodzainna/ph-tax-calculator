@@ -38,9 +38,7 @@ export interface CompensationTaxResult {
 }
 
 export function benefitsCeilingFor(year: number): number {
-  const rule = BENEFITS_CEILING_RULES.find(
-    (r) => year >= r.fromYear && (r.toYear === null || year <= r.toYear),
-  )
+  const rule = BENEFITS_CEILING_RULES.find((r) => year >= r.fromYear && (r.toYear === null || year <= r.toYear))
   if (!rule) throw new UnsupportedYearError(year)
   return rule.ceiling
 }

@@ -1,5 +1,13 @@
 import { useRef, type ChangeEvent } from 'react'
-import { caretAfterFormat, countPesoChars, formatPesoInput, MAX_WHOLE_DIGITS, parsePeso, removedCharacter, wholeDigitCount } from './peso.ts'
+import {
+  caretAfterFormat,
+  countPesoChars,
+  formatPesoInput,
+  MAX_WHOLE_DIGITS,
+  parsePeso,
+  removedCharacter,
+  wholeDigitCount,
+} from './peso.ts'
 
 /**
  * The behaviour of a money text box: commas as you type, the cursor kept where it was,
@@ -20,7 +28,11 @@ export function usePesoField(value: string, onChange: (value: string) => void) {
     const caret = e.target.selectionStart ?? raw.length
     const inputType = (e.nativeEvent as InputEvent).inputType
     // A digit typed into a full field is refused, rather than pushing the last digit out of the number.
-    if (inputType === 'insertText' && wholeDigitCount(raw) > MAX_WHOLE_DIGITS && wholeDigitCount(value) >= MAX_WHOLE_DIGITS) {
+    if (
+      inputType === 'insertText' &&
+      wholeDigitCount(raw) > MAX_WHOLE_DIGITS &&
+      wholeDigitCount(value) >= MAX_WHOLE_DIGITS
+    ) {
       moveCaretLater(caret - 1)
       return
     }

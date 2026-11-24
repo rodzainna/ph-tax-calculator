@@ -82,7 +82,11 @@ export interface SelfEmployedContributions {
 }
 
 /** One month of SSS and PhilHealth for a self-employed person, paid in full by them (SSS on the MSC, PhilHealth between its floor and ceiling); a default, since they can choose otherwise. */
-export function selfEmployedContributions(year: number, month: number, pay: { monthlyIncome: number }): SelfEmployedContributions {
+export function selfEmployedContributions(
+  year: number,
+  month: number,
+  pay: { monthlyIncome: number },
+): SelfEmployedContributions {
   checkYear(year)
   if (!Number.isInteger(month) || month < 1 || month > 12) throw new RangeError(`month must be 1 to 12, got ${month}`)
   checkAmount('monthlyIncome', pay.monthlyIncome)
@@ -119,7 +123,8 @@ export interface ContributionEstimate {
 export function estimateContributions(input: ContributionEstimateInput): ContributionEstimate {
   const { year, months } = input
   const startMonth = input.startMonth ?? 1
-  if (!Number.isInteger(months) || months < 0 || months > 12) throw new RangeError(`months must be 0 to 12, got ${months}`)
+  if (!Number.isInteger(months) || months < 0 || months > 12)
+    throw new RangeError(`months must be 0 to 12, got ${months}`)
   if (!Number.isInteger(startMonth) || startMonth < 1 || startMonth > 12) {
     throw new RangeError(`startMonth must be 1 to 12, got ${startMonth}`)
   }

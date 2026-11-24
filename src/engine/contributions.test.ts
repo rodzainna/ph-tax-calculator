@@ -71,7 +71,8 @@ describe('PhilHealth employee share (half of the premium, on basic salary)', () 
 })
 
 describe('Pag-IBIG employee share', () => {
-  const pi = (year: number, month: number, basic: number) => monthlyContributions(year, month, { monthlyBasic: basic }).pagibig
+  const pi = (year: number, month: number, basic: number) =>
+    monthlyContributions(year, month, { monthlyBasic: basic }).pagibig
 
   it('is 2% up to a 10,000 cap from February 2024 (max 200)', () => {
     expect(pi(2025, 6, 30_000)).toBe(200)

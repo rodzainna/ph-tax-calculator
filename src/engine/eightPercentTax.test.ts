@@ -28,7 +28,10 @@ describe('eightPercentTax, purely self-employed (P250,000 reduction)', () => {
   })
 
   it('adds other non-operating income to the base', () => {
-    const result = eightPercentTax({ grossReceipts: 400_000, otherNonOperatingIncome: 100_000, purelySelfEmployed: true }, 2024)
+    const result = eightPercentTax(
+      { grossReceipts: 400_000, otherNonOperatingIncome: 100_000, purelySelfEmployed: true },
+      2024,
+    )
     expect(result.base).toBe(500_000)
     expect(result.tax).toBe(20_000)
   })
@@ -56,7 +59,9 @@ describe('limits and years', () => {
 
   it('counts the limit on the whole-peso total, like the form: 3,000,000.49 is allowed, 3,000,000.50 is not', () => {
     expect(() => eightPercentTax({ grossReceipts: 3_000_000.49, purelySelfEmployed: true }, 2024)).not.toThrow()
-    expect(() => eightPercentTax({ grossReceipts: 3_000_000.5, purelySelfEmployed: true }, 2024)).toThrow(EightPercentNotAvailableError)
+    expect(() => eightPercentTax({ grossReceipts: 3_000_000.5, purelySelfEmployed: true }, 2024)).toThrow(
+      EightPercentNotAvailableError,
+    )
   })
 
   it('counts other non-operating income toward the limit', () => {
@@ -67,11 +72,15 @@ describe('limits and years', () => {
 
   it('exists from 2018 and refuses earlier years', () => {
     expect(eightPercentTax({ grossReceipts: 500_000, purelySelfEmployed: true }, 2018).tax).toBe(20_000)
-    expect(() => eightPercentTax({ grossReceipts: 500_000, purelySelfEmployed: true }, 2017)).toThrow(UnsupportedYearError)
+    expect(() => eightPercentTax({ grossReceipts: 500_000, purelySelfEmployed: true }, 2017)).toThrow(
+      UnsupportedYearError,
+    )
   })
 
   it('rejects negative amounts', () => {
     expect(() => eightPercentTax({ grossReceipts: -1, purelySelfEmployed: true }, 2024)).toThrow(RangeError)
-    expect(() => eightPercentTax({ grossReceipts: 1, otherNonOperatingIncome: -1, purelySelfEmployed: true }, 2024)).toThrow(RangeError)
+    expect(() =>
+      eightPercentTax({ grossReceipts: 1, otherNonOperatingIncome: -1, purelySelfEmployed: true }, 2024),
+    ).toThrow(RangeError)
   })
 })

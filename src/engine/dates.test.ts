@@ -74,7 +74,10 @@ describe('monthsWorkedInYear', () => {
   })
 
   it('starts at the job start date when it began mid-year', () => {
-    expect(monthsWorkedInYear({ year: 2026, startDate: '2026-09-01', endDate: '2026-11-20' })).toBeCloseTo(2 + 20 / 30, 10)
+    expect(monthsWorkedInYear({ year: 2026, startDate: '2026-09-01', endDate: '2026-11-20' })).toBeCloseTo(
+      2 + 20 / 30,
+      10,
+    )
   })
 
   it('ignores dates outside the tax year', () => {

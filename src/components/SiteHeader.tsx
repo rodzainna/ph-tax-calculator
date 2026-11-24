@@ -36,44 +36,48 @@ export default function SiteHeader() {
             <span className="flex items-center gap-2">
               <span className="text-base font-semibold leading-none tracking-tight text-foreground">
                 PH Tax{' '}
-                <span className="bg-gradient-to-r from-brand-teal to-brand-coral-deep bg-clip-text text-transparent dark:from-brand-teal-light dark:to-brand-coral-light">Calculator</span>
+                <span className="bg-gradient-to-r from-brand-teal to-brand-coral-deep bg-clip-text text-transparent dark:from-brand-teal-light dark:to-brand-coral-light">
+                  Calculator
+                </span>
               </span>
               <span className="rounded-full bg-secondary px-2 py-[3px] text-[11px] font-semibold uppercase leading-none tracking-wider text-secondary-foreground">
                 Prototype
               </span>
             </span>
-            <span className="hidden truncate text-xs leading-tight text-muted-foreground lg:block">Take-home pay and income tax estimates</span>
+            <span className="hidden truncate text-xs leading-tight text-muted-foreground lg:block">
+              Take-home pay and income tax estimates
+            </span>
           </span>
         </Link>
 
         {/* The pages, then the buttons grouped on the right (8px apart, set off from the pages). */}
         <div className="flex items-center justify-between gap-4 max-[359px]:gap-2 sm:justify-start">
-        <nav aria-label="Main">
-          <div className="flex shrink-0 items-center rounded-full border border-white/80 bg-white/55 p-1 dark:border-white/10 dark:bg-white/5 shadow-[inset_0_1px_2px_rgb(32_46_84/0.07)] backdrop-blur">
-            <NavLink to="/" end className={linkClass}>
-              Monthly
-            </NavLink>
-            <NavLink to="/year" className={linkClass}>
-              Annual
-            </NavLink>
-            <NavLink to="/about" className={linkClass}>
-              <span className="sm:hidden">About</span>
-              <span className="hidden sm:inline">About &amp; sources</span>
-            </NavLink>
-          </div>
-        </nav>
+          <nav aria-label="Main">
+            <div className="flex shrink-0 items-center rounded-full border border-white/80 bg-white/55 p-1 dark:border-white/10 dark:bg-white/5 shadow-[inset_0_1px_2px_rgb(32_46_84/0.07)] backdrop-blur">
+              <NavLink to="/" end className={linkClass}>
+                Monthly
+              </NavLink>
+              <NavLink to="/year" className={linkClass}>
+                Annual
+              </NavLink>
+              <NavLink to="/about" className={linkClass}>
+                <span className="sm:hidden">About</span>
+                <span className="hidden sm:inline">About &amp; sources</span>
+              </NavLink>
+            </div>
+          </nav>
 
-        <div className="flex shrink-0 items-center gap-2">
-          <button
-            type="button"
-            onClick={toggle}
-            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-            title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[22%] border border-brand-teal-bright/30 bg-white/85 shadow-sm transition-all duration-200 hover:bg-white hover:shadow-md dark:border-white/15 dark:bg-white/10 dark:hover:bg-white/15 lg:rounded-[9px]"
-          >
-            {theme === 'dark' ? <Sun className="size-5" /> : <Moon className="size-5" />}
-          </button>
-        </div>
+          <div className="flex shrink-0 items-center gap-2">
+            <button
+              type="button"
+              onClick={toggle}
+              aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[22%] border border-brand-teal-bright/30 bg-white/85 shadow-sm transition-all duration-200 hover:bg-white hover:shadow-md dark:border-white/15 dark:bg-white/10 dark:hover:bg-white/15 lg:rounded-[9px]"
+            >
+              {theme === 'dark' ? <Sun className="size-5" /> : <Moon className="size-5" />}
+            </button>
+          </div>
         </div>
       </div>
     </header>

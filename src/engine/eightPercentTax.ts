@@ -6,7 +6,9 @@ export class EightPercentNotAvailableError extends Error {
   readonly base: number
   readonly threshold: number
   constructor(base: number, threshold: number) {
-    super(`The 8% option is not available: gross receipts and other non-operating income of ${base} exceed ${threshold}`)
+    super(
+      `The 8% option is not available: gross receipts and other non-operating income of ${base} exceed ${threshold}`,
+    )
     this.name = 'EightPercentNotAvailableError'
     this.base = base
     this.threshold = threshold
@@ -42,7 +44,10 @@ export interface EightPercentResult {
 /** Tax under the 8% option for one tax year; throws EightPercentNotAvailableError over the P3,000,000 limit (graduated rates apply instead). */
 export function eightPercentTax(input: EightPercentInput, year: number): EightPercentResult {
   const other = input.otherNonOperatingIncome ?? 0
-  for (const [name, value] of [['grossReceipts', input.grossReceipts], ['otherNonOperatingIncome', other]] as const) {
+  for (const [name, value] of [
+    ['grossReceipts', input.grossReceipts],
+    ['otherNonOperatingIncome', other],
+  ] as const) {
     if (!Number.isFinite(value) || value < 0) {
       throw new RangeError(`${name} must be a number of 0 or more, got ${value}`)
     }

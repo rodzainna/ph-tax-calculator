@@ -1,5 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
-import { applyTheme, otherTheme, readSavedTheme, resolveTheme, saveTheme, systemPrefersDark, type Theme } from './theme.ts'
+import {
+  applyTheme,
+  otherTheme,
+  readSavedTheme,
+  resolveTheme,
+  saveTheme,
+  systemPrefersDark,
+  type Theme,
+} from './theme.ts'
 
 /** The current theme and a way to switch it. Follows the device until a choice is saved. */
 export function useTheme(): { theme: Theme; toggle: () => void } {

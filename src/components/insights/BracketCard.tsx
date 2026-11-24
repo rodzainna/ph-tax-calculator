@@ -30,7 +30,11 @@ export default function BracketCard({ taxableIncome, year, caption = 'annual tax
           <div className="space-y-1">
             <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               Your tax bracket
-              <InfoTip about="your tax bracket" className="ml-1 inline-block align-[-2px]" contentClassName="normal-case tracking-normal">
+              <InfoTip
+                about="your tax bracket"
+                className="ml-1 inline-block align-[-2px]"
+                contentClassName="normal-case tracking-normal"
+              >
                 Each rate applies only to the part of your income inside its bracket, not to all of it.
               </InfoTip>
             </p>
@@ -47,16 +51,25 @@ export default function BracketCard({ taxableIncome, year, caption = 'annual tax
           Your annual taxable income of {formatPeso(taxableIncome)} is in the {formatRate(rate)} bracket.
         </p>
         <div aria-hidden className="relative pt-8">
-          <div className="absolute top-0 flex -translate-x-1/2 flex-col items-center" // Kept inside the bar so the "You" pill is never cut off at zero income or at the top rate.
-            style={{ left: `clamp(1.25rem, ${left}%, calc(100% - 1.25rem))` }}>
-            <span className="rounded-md bg-foreground px-2 py-0.5 text-xs font-semibold text-background shadow-sm">You</span>
+          <div
+            className="absolute top-0 flex -translate-x-1/2 flex-col items-center" // Kept inside the bar so the "You" pill is never cut off at zero income or at the top rate.
+            style={{ left: `clamp(1.25rem, ${left}%, calc(100% - 1.25rem))` }}
+          >
+            <span className="rounded-md bg-foreground px-2 py-0.5 text-xs font-semibold text-background shadow-sm">
+              You
+            </span>
             <span className="h-3 w-0.5 bg-foreground" />
           </div>
           <div className="flex gap-0.5">
             {segments.map((s, i) => (
               <div
                 key={s.from}
-                className={cn('h-3 flex-1 transition-opacity', i === 0 && 'rounded-l-full', i === segments.length - 1 && 'rounded-r-full', i !== index && 'opacity-60')}
+                className={cn(
+                  'h-3 flex-1 transition-opacity',
+                  i === 0 && 'rounded-l-full',
+                  i === segments.length - 1 && 'rounded-r-full',
+                  i !== index && 'opacity-60',
+                )}
                 style={{ backgroundColor: RAMP[Math.min(i, RAMP.length - 1)] }}
               />
             ))}
@@ -64,8 +77,12 @@ export default function BracketCard({ taxableIncome, year, caption = 'annual tax
           <div className="mt-2 flex gap-0.5 text-center">
             {segments.map((s, i) => (
               <div key={s.from} className="min-w-0 flex-1">
-                <p className={cn('text-sm font-semibold', i === index ? 'text-foreground' : 'text-muted-foreground')}>{formatRate(s.rate)}</p>
-                <p className="font-mono text-[11px] tabular-nums text-muted-foreground">{s.to === null ? `>${shortPeso(s.from)}` : `≤${shortPeso(s.to)}`}</p>
+                <p className={cn('text-sm font-semibold', i === index ? 'text-foreground' : 'text-muted-foreground')}>
+                  {formatRate(s.rate)}
+                </p>
+                <p className="font-mono text-[11px] tabular-nums text-muted-foreground">
+                  {s.to === null ? `>${shortPeso(s.from)}` : `≤${shortPeso(s.to)}`}
+                </p>
               </div>
             ))}
           </div>

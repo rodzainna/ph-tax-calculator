@@ -64,7 +64,11 @@ export function monthlyPay(input: MonthlyPayInput): MonthlyPayResult {
   const c = input.monthlyBasic === 0 ? none : rules
   if (input.yearlyBonuses !== undefined) check('yearlyBonuses', input.yearlyBonuses)
   const thirteenthMonth =
-    input.yearlyBonuses !== undefined ? roundToCentavos(input.yearlyBonuses) : receivesThirteenth ? roundToCentavos(input.monthlyBasic) : 0
+    input.yearlyBonuses !== undefined
+      ? roundToCentavos(input.yearlyBonuses)
+      : receivesThirteenth
+        ? roundToCentavos(input.monthlyBasic)
+        : 0
 
   const tax = compensationTax(
     [

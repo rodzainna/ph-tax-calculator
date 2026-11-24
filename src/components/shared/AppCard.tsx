@@ -13,7 +13,11 @@ export function SoftCard({ accent, className, ...props }: CardProps & { accent?:
   return (
     <Card
       size="sm"
-      className={cn('rounded-2xl border-0 shadow-card transition-shadow hover:shadow-card-hover', accent && ACCENT_BAR, className)}
+      className={cn(
+        'rounded-2xl border-0 shadow-card transition-shadow hover:shadow-card-hover',
+        accent && ACCENT_BAR,
+        className,
+      )}
       {...props}
     />
   )

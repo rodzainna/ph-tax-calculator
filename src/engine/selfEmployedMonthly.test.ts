@@ -72,20 +72,32 @@ describe('selfEmployedMonthlyPay', () => {
   })
 
   it('charges nothing for no income, even with contributions chosen', () => {
-    const r = selfEmployedMonthlyPay({ year: 2026, method: 'graduated', monthlyIncome: 0, paysSss: true, paysPhilhealth: true })
+    const r = selfEmployedMonthlyPay({
+      year: 2026,
+      method: 'graduated',
+      monthlyIncome: 0,
+      paysSss: true,
+      paysPhilhealth: true,
+    })
     expect(r.contributions).toBe(0)
     expect(r.taxMonthly).toBe(0)
     expect(r.takeHomeMonthly).toBe(0)
   })
 
   it('8% is not available over 3,000,000 a year', () => {
-    expect(() => selfEmployedMonthlyPay({ year: 2026, method: 'eight-percent', monthlyIncome: 260_000 })).toThrow(EightPercentNotAvailableError)
-    expect(selfEmployedMonthlyPay({ year: 2026, method: 'graduated', monthlyIncome: 260_000 }).taxYearly).toBeGreaterThan(0)
+    expect(() => selfEmployedMonthlyPay({ year: 2026, method: 'eight-percent', monthlyIncome: 260_000 })).toThrow(
+      EightPercentNotAvailableError,
+    )
+    expect(
+      selfEmployedMonthlyPay({ year: 2026, method: 'graduated', monthlyIncome: 260_000 }).taxYearly,
+    ).toBeGreaterThan(0)
   })
 
   it('rejects negative amounts', () => {
     expect(() => selfEmployedMonthlyPay({ year: 2026, method: 'graduated', monthlyIncome: -1 })).toThrow(RangeError)
-    expect(() => selfEmployedMonthlyPay({ year: 2026, method: 'graduated', monthlyIncome: 1, monthlyPagibig: -5 })).toThrow(RangeError)
+    expect(() =>
+      selfEmployedMonthlyPay({ year: 2026, method: 'graduated', monthlyIncome: 1, monthlyPagibig: -5 }),
+    ).toThrow(RangeError)
   })
 })
 

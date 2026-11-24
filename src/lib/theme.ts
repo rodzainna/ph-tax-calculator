@@ -6,7 +6,8 @@ export const THEME_STORAGE_KEY = 'ph-tax-theme'
 export const parseTheme = (raw: string | null): Theme | null => (raw === 'light' || raw === 'dark' ? raw : null)
 
 /** The saved choice if there is one, otherwise what the device prefers. */
-export const resolveTheme = (saved: Theme | null, prefersDark: boolean): Theme => saved ?? (prefersDark ? 'dark' : 'light')
+export const resolveTheme = (saved: Theme | null, prefersDark: boolean): Theme =>
+  saved ?? (prefersDark ? 'dark' : 'light')
 
 export const otherTheme = (theme: Theme): Theme => (theme === 'dark' ? 'light' : 'dark')
 
@@ -34,4 +35,6 @@ export function applyTheme(theme: Theme): void {
 }
 
 export const systemPrefersDark = (): boolean =>
-  typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(prefers-color-scheme: dark)').matches
+  typeof window !== 'undefined' &&
+  typeof window.matchMedia === 'function' &&
+  window.matchMedia('(prefers-color-scheme: dark)').matches

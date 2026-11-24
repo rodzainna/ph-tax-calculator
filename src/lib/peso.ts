@@ -20,7 +20,13 @@ export const MAX_WHOLE_DIGITS = 12
 export function formatPesoInput(raw: string): string {
   const cleaned = raw.replace(/[^\d.]/g, '')
   const dot = cleaned.indexOf('.')
-  const fraction = dot === -1 ? null : cleaned.slice(dot + 1).replace(/\./g, '').slice(0, 2)
+  const fraction =
+    dot === -1
+      ? null
+      : cleaned
+          .slice(dot + 1)
+          .replace(/\./g, '')
+          .slice(0, 2)
   let whole = dot === -1 ? cleaned : cleaned.slice(0, dot)
   whole = whole.replace(/^0+(?=\d)/, '').slice(0, MAX_WHOLE_DIGITS)
   if (whole === '' && fraction !== null) whole = '0'
@@ -80,7 +86,11 @@ export function formatRate(rate: number): string {
   return `${Number((rate * 100).toFixed(2))}%`
 }
 
-const wholePesoFormatter = new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP', maximumFractionDigits: 0 })
+const wholePesoFormatter = new Intl.NumberFormat('en-PH', {
+  style: 'currency',
+  currency: 'PHP',
+  maximumFractionDigits: 0,
+})
 
 /** A peso amount without centavos, for places with little room: 20415.5 -> "₱20,416". */
 export function formatPesoWhole(amount: number): string {
