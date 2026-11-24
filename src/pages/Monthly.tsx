@@ -8,14 +8,14 @@ import { PAYSLIP_ID } from '@/components/monthly/payslipView.ts'
 import TaxpayerFields from '@/components/shared/TaxpayerFields.tsx'
 import { initialMonthlyForm, monthlyOutcome, type MonthlyForm } from '@/lib/monthlyOutcome.ts'
 import { isSelfEmployed } from '@/lib/taxpayer.ts'
+import { capTaxYear, taxYearsFrom } from '@/lib/taxYears.ts'
 
-/** The tax years offered, newest first. The first one is also the most the page starts on. */
-const YEARS = [2026, 2025, 2024, 2023, 2022, 2021]
+const YEARS = taxYearsFrom(2021)
 /** Skip on touch screens, where it would pop up the keyboard and cover the page. */
 const AUTOFOCUS = typeof window !== 'undefined' && !window.matchMedia?.('(pointer: coarse)')?.matches
 
 export default function Monthly() {
-  const [form, setForm] = useState(() => initialMonthlyForm(Math.min(new Date().getFullYear(), YEARS[0])))
+  const [form, setForm] = useState(() => initialMonthlyForm(capTaxYear(new Date().getFullYear())))
 
   const change = (patch: Partial<MonthlyForm>) =>
     setForm((current) => {

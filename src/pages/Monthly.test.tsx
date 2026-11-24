@@ -2,11 +2,14 @@
 import { cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import Monthly from './Monthly.tsx'
 
-afterEach(cleanup)
+afterEach(() => {
+  cleanup()
+  vi.useRealTimers()
+})
 
 const show = () =>
   render(
@@ -25,6 +28,13 @@ const payslip = () => within(screen.getByRole('region', { name: /Payslip estimat
 const headline = (label: string) => payslip().getByText(label).nextElementSibling?.textContent
 
 describe('Monthly', () => {
+  it('starts on the latest tax year when the calendar year is later', () => {
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(new Date(2031, 0, 5))
+    show()
+    expect(screen.getByRole('combobox', { name: 'Tax year' }).textContent).toContain('2026')
+  })
+
   it('asks for a salary before showing a result', () => {
     show()
     expect(payslip().getByText('Your take-home pay')).toBeTruthy()
