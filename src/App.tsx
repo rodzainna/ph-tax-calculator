@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router'
 import SiteHeader from '@/components/SiteHeader.tsx'
 import { TooltipProvider } from '@/components/ui/tooltip'
+import Monthly from '@/pages/Monthly.tsx'
 import NotFound from '@/pages/NotFound.tsx'
 
 export default function App() {
@@ -10,12 +11,7 @@ export default function App() {
         <SiteHeader />
         <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">
           <Routes>
-            <Route
-              path="/"
-              element={
-                <p className="text-sm text-muted-foreground">The calculators arrive in the next pull requests.</p>
-              }
-            />
+            <Route path="/" element={<Monthly />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>

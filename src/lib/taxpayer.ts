@@ -9,3 +9,5 @@ export interface Taxpayer {
 }
 
 export const initialTaxpayer = (): Taxpayer => ({ type: 'employee', method: 'graduated' })
+
+export const isSelfEmployed = (taxpayer: Taxpayer): boolean => taxpayer.type === 'self-employed'

@@ -148,12 +148,14 @@
   }
 }
 
-/* ---- Design system ------------------------------------------------------------------------
-   Navy anchors the text. Teal is for things you can use. Coral is the highlight. Sage and pink are
-   quiet surfaces. One dark "hero" card carries the answer so the eye lands there first.          */
+/* ---- Brand palette and shadows ---- */
 
-@theme {
-  /* The brand palette, defined once: use it as bg-brand-teal, from-brand-coral, shadow-brand-teal/30 and so on. */
+/* static: keep every variable, even ones no class uses. The tax bracket bar reads the palette from JS. */
+@theme static {
+  /*
+   * Brand colours. Use them as bg-brand-teal, from-brand-coral, shadow-brand-teal/30 and so on.
+   * Coral is the accent: the bar along the top of cards, gradients, and the higher tax brackets.
+   */
   --color-brand-navy: #202e54;
   --color-brand-navy-mid: #243f66;
   --color-brand-teal: #2f7380;
