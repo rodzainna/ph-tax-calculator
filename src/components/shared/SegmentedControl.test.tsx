@@ -25,4 +25,16 @@ describe('SegmentedControl', () => {
     await userEvent.setup().click(screen.getByRole('radio', { name: 'Alpha' }))
     expect(onChange).not.toHaveBeenCalled()
   })
+
+  it('can take its name from a heading on the page instead of a label of its own', () => {
+    render(
+      <>
+        <p id="heading">Pick one</p>
+        <SegmentedControl labelledBy="heading" value="a" onChange={() => {}} options={[...OPTIONS]} />
+      </>,
+    )
+    const group = screen.getByRole('radiogroup', { name: 'Pick one' })
+    expect(group.getAttribute('aria-labelledby')).toBe('heading')
+    expect(group.getAttribute('aria-label')).toBeNull()
+  })
 })
