@@ -3,6 +3,7 @@ import { monthlyPay, type MonthlyPayResult } from '../engine/monthlyPay.ts'
 import { selfEmployedMonthlyPay } from '../engine/selfEmployedMonthly.ts'
 import type { MonthlyLines } from './payslip.ts'
 import { formatPeso, parsePeso } from './peso.ts'
+import { UNEXPECTED_PROBLEM } from './problem.ts'
 import { initialTaxpayer, isSelfEmployed, type Taxpayer } from './taxpayer.ts'
 
 /** What the Monthly page works out from the typed figures: a result, or the reason there is none. */
@@ -93,6 +94,6 @@ export function monthlyOutcome(input: MonthlyInput): Outcome {
       }
     }
     // The engine's own wording is for developers, so the person sees a plain message instead.
-    return { ok: false, message: 'Those figures could not be worked out. Check the amounts and the tax year.' }
+    return { ok: false, message: UNEXPECTED_PROBLEM }
   }
 }
