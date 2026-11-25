@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { cleanup, render, screen, within } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -187,7 +187,8 @@ describe('EmployerSummary: tax withheld', () => {
       employer: employer({ taxWithheld: '5,000' }),
       detail: detail({ taxWithheld: 10_000, monthsToDate: 6.5, monthsCounted: 12 }),
     })
-    await userEvent.setup().click(screen.getByRole('button', { name: 'More about the projected tax withheld' }))
+    // A plain click: moving a pointer over the button first opens the tip after a delay, and the click then closes it.
+    fireEvent.click(screen.getByRole('button', { name: 'More about the projected tax withheld' }))
     expect((await screen.findAllByText(/withheld so far this year \(6\.5 months\)/)).length).toBeGreaterThan(0)
   })
 
