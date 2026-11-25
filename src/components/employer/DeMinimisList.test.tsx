@@ -38,12 +38,12 @@ describe('DeMinimisList', () => {
     expect(screen.getAllByRole('combobox').map((c) => c.textContent)).toEqual(['Monthly', 'Quarterly'])
   })
 
-  it('shows the name column header on the first row on wide screens, and on every row on a phone', () => {
+  it('hides the repeated name header only on a row wide enough to be one line', () => {
     show([rice, laundry])
-    const [first, second] = screen.getAllByText('Benefit name')
+    const [first, second] = screen.getAllByText('Benefit')
     expect(first.classList.contains('sr-only')).toBe(false)
-    expect(first.classList.contains('sm:sr-only')).toBe(false)
-    expect(second.classList.contains('sm:sr-only')).toBe(true)
+    expect(first.classList.contains('@min-[26rem]:sr-only')).toBe(false)
+    expect(second.classList.contains('@min-[26rem]:sr-only')).toBe(true)
     expect(second.classList.contains('sr-only')).toBe(false)
   })
 

@@ -14,7 +14,7 @@ export default function BalanceRow({ balance }: { balance: number }) {
     <dl>
       <div
         className={cn(
-          'flex items-baseline justify-between gap-3 rounded-xl px-3 py-2.5',
+          'flex flex-wrap items-baseline justify-between gap-x-3 rounded-xl px-3 py-2.5',
           owes
             ? 'bg-secondary text-secondary-foreground'
             : over
@@ -28,7 +28,7 @@ export default function BalanceRow({ balance }: { balance: number }) {
             {hint}
           </InfoTip>
         </dt>
-        <dd className="text-xl font-semibold">
+        <dd className="ml-auto text-xl font-semibold">
           <PesoAmount value={Math.abs(balance)} size="total" plain />
         </dd>
       </div>

@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import { splitPeso } from '@/lib/peso.ts'
 import { cn } from '@/lib/utils'
 
@@ -22,16 +23,35 @@ interface Props {
   className?: string
 }
 
-/** An amount with a small raised peso sign and quiet cents; it reads exactly like formatPeso for copying and screen readers. */
+/**
+ * About how wide a hero figure is, in ems of its own text. A mono character is at most 0.6em; the half-size peso sign,
+ * its margin and the half-size cents add about 1.4em.
+ */
+const heroEms = (signAndWhole: string): number => signAndWhole.length * 0.6 + 1.4
+
+/**
+ * An amount with a small raised peso sign and quiet cents; it reads exactly like formatPeso for copying and screen
+ * readers. A hero figure too wide for its box is scaled down to fit, because a cut-off amount would read as a different
+ * one.
+ */
 export default function PesoAmount({ value, size, plain, className }: Props) {
   const { sign, symbol, whole, fraction } = splitPeso(Number.isFinite(value) ? value : 0)
   const s = SIZES[size]
-  return (
-    <span className={cn('font-mono tabular-nums', className)}>
+  const isHero = size === 'hero'
+  const amount = (
+    <span
+      className={cn(
+        'font-mono tabular-nums',
+        isHero && '[font-size:min(1em,calc(100cqi/var(--figure-ems)))]',
+        className,
+      )}
+      style={isHero ? ({ '--figure-ems': heroEms(sign + whole) } as CSSProperties) : undefined}
+    >
       {sign}
       <span className={cn(s.symbol, !plain && 'text-brand-gradient')}>{symbol}</span>
       {whole}
       <span className={s.fraction}>.{fraction}</span>
     </span>
   )
+  return isHero ? <span className="@container block">{amount}</span> : amount
 }

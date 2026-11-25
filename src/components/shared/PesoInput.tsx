@@ -3,6 +3,7 @@ import { useId, type ReactNode } from 'react'
 import InfoTip from '@/components/shared/InfoTip.tsx'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { LARGEST_AMOUNT } from '@/lib/peso.ts'
 import { usePesoField } from '@/lib/usePesoField.ts'
 import { cn } from '@/lib/utils'
 
@@ -25,6 +26,9 @@ const signStyle = cva('pointer-events-none absolute left-3 top-1/2 -translate-y-
   defaultVariants: { size: 'default' },
 })
 
+/** A compact field widens only for an amount its usual width would cut off, so the label beside it keeps its room. */
+const compactWidth = (value: string): string => (value.length > 12 ? 'w-40' : 'w-36')
+
 interface Props {
   label: string
   value: string
@@ -41,7 +45,7 @@ interface Props {
   info?: string
   /** A line of help between the label and the field, such as what to put here. */
   description?: string
-  /** On wide screens, keep the label for screen readers only, for a repeated row under a first row that shows it. */
+  /** On a single-line row under a first row that shows the label, keep it for screen readers only. */
   hideLabelOnWide?: boolean
 }
 
@@ -60,11 +64,15 @@ export default function PesoInput({
   hideLabelOnWide,
 }: Props) {
   const id = useId()
-  const { inputRef, handleChange, handleBlur } = usePesoField(value, onChange)
+  const { inputRef, invalid, handleChange, handlePaste, preventDrag, handleFocus, handleBlur } = usePesoField(
+    value,
+    onChange,
+  )
   const size = compact ? 'compact' : (emphasis ?? 'default')
+  const describedBy = [hint && `${id}-hint`, invalid && `${id}-error`].filter(Boolean).join(' ')
 
   const field = (
-    <div className={compact ? 'relative w-36 shrink-0' : 'relative'}>
+    <div className={compact ? cn('relative shrink-0', compactWidth(value)) : 'relative'}>
       <span className={signStyle({ size })}>₱</span>
       <Input
         id={id}
@@ -76,8 +84,13 @@ export default function PesoInput({
         value={value}
         placeholder={placeholder}
         onChange={handleChange}
+        onPaste={handlePaste}
+        onDragStart={preventDrag}
+        onDrop={preventDrag}
+        onFocus={handleFocus}
         onBlur={handleBlur}
-        aria-describedby={hint ? `${id}-hint` : undefined}
+        aria-invalid={invalid || undefined}
+        aria-describedby={describedBy || undefined}
         className={inputStyle({ size })}
       />
     </div>
@@ -85,6 +98,11 @@ export default function PesoInput({
   const hintText = hint ? (
     <p id={`${id}-hint`} className="text-xs text-muted-foreground">
       {hint}
+    </p>
+  ) : null
+  const errorText = invalid ? (
+    <p id={`${id}-error`} role="alert" className="text-xs text-destructive">
+      Enter a valid amount up to {LARGEST_AMOUNT}
     </p>
   ) : null
 
@@ -100,6 +118,7 @@ export default function PesoInput({
           </span>
           {field}
         </div>
+        {errorText}
         {hintText}
       </div>
     )
@@ -107,11 +126,15 @@ export default function PesoInput({
 
   return (
     <div className="space-y-1">
-      <Label htmlFor={id} className={cn(emphasis && 'font-semibold text-foreground', hideLabelOnWide && 'sm:sr-only')}>
+      <Label
+        htmlFor={id}
+        className={cn(emphasis && 'font-semibold text-foreground', hideLabelOnWide && '@min-[26rem]:sr-only')}
+      >
         {label}
       </Label>
       {description ? <p className="text-xs leading-snug text-muted-foreground">{description}</p> : null}
       {field}
+      {errorText}
       {hintText}
     </div>
   )

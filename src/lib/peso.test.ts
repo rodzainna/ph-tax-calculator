@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   caretAfterFormat,
+  charsBeforeCaret,
   countPesoChars,
   formatPeso,
   formatPesoInput,
@@ -13,10 +14,8 @@ import {
 } from './peso.ts'
 
 describe('formatPesoInput (live commas while typing)', () => {
-  it('stops taking whole-number digits at 12, so amounts stay exact', () => {
-    expect(formatPesoInput('999999999999')).toBe('999,999,999,999')
-    expect(formatPesoInput('9999999999999999')).toBe('999,999,999,999')
-    expect(formatPesoInput('1234567890123.45')).toBe('123,456,789,012.45')
+  it('never cuts digits off the amount, which would turn it into a different one', () => {
+    expect(formatPesoInput('1234567890.45')).toBe('1,234,567,890.45')
   })
 
   it('adds commas as the number grows', () => {
@@ -156,5 +155,17 @@ describe('wholeDigitCount and removedCharacter', () => {
     expect(removedCharacter('12', '12')).toBeNull()
     expect(removedCharacter('12', '9')).toBeNull()
     expect(removedCharacter('12', '123')).toBeNull()
+  })
+})
+
+describe('charsBeforeCaret', () => {
+  it.each([
+    ['counts the zero added before a lone dot', '.5', '.', 2],
+    ['leaves out a dropped zero', '007', '007', 1],
+    ['stays at the start when a zero is added after the cursor', '.5', '', 0],
+    ['never counts below zero when more zeros are dropped than are in front', '0050', '0', 0],
+    ['counts as typed when no zero is added or dropped', '1234.5', '123', 3],
+  ])('%s', (_what, text, before, count) => {
+    expect(charsBeforeCaret(text, before)).toBe(count)
   })
 })

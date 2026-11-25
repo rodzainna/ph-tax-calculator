@@ -95,7 +95,8 @@ describe('SummaryBody: with an estimate', () => {
   })
 
   it('draws the peso sign in the surrounding colour for a result to pay or overpaid, and in the brand colour for a plain tax', () => {
-    const sign = (container: HTMLElement) => figure(container)!.querySelector('span span') as HTMLElement
+    const sign = (container: HTMLElement) =>
+      [...figure(container)!.querySelectorAll('span')].find((span) => span.textContent === '₱') as HTMLElement
     const owe = show(success(annualResults.employee()))
     expect(sign(owe.container).className).not.toContain('text-brand-gradient')
     cleanup()
