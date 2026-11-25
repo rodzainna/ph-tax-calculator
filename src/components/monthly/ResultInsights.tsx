@@ -1,8 +1,9 @@
+import { bonusTaxInfo } from '@/components/insights/bonusTaxInfo.ts'
 import BracketCard from '@/components/insights/BracketCard.tsx'
+import StatRow from '@/components/insights/StatRow.tsx'
 import StatTile from '@/components/insights/StatTile.tsx'
-import { benefitsCeilingFor } from '@/engine/compensationTax.ts'
 import type { MonthlyPayResult } from '@/engine/monthlyPay.ts'
-import { formatPeso, formatPesoWhole } from '@/lib/peso.ts'
+import { formatPesoWhole } from '@/lib/peso.ts'
 import { isSelfEmployed, type Taxpayer } from '@/lib/taxpayer.ts'
 
 interface Props {
@@ -19,7 +20,7 @@ export default function ResultInsights({ result, year, taxpayer }: Props) {
 
   return (
     <>
-      <div className="grid grid-cols-3 gap-3">
+      <StatRow>
         <StatTile
           label="Annual tax"
           value={formatPesoWhole(result.taxYearly)}
@@ -45,13 +46,9 @@ export default function ResultInsights({ result, year, taxpayer }: Props) {
             }
           />
         ) : (
-          <StatTile
-            label="Bonus tax"
-            value={formatPesoWhole(result.taxOnBonuses)}
-            info={`Extra tax caused by the part of your 13th month and bonuses above the ${formatPeso(benefitsCeilingFor(year))} exempt amount. It is zero while they stay under it.`}
-          />
+          <StatTile label="Bonus tax" value={formatPesoWhole(result.taxOnBonuses)} info={bonusTaxInfo(year)} />
         )}
-      </div>
+      </StatRow>
       {/* The 8% option has no brackets, so there is nothing to place the income in. */}
       {selfEmployed && method === 'eight-percent' ? null : (
         <BracketCard taxableIncome={result.taxableIncomeYearly} year={year} />

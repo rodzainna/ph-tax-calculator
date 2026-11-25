@@ -14,14 +14,21 @@ interface Props {
   year: number
   /** What the figure is called under the amount. */
   caption?: string
+  /** The headline in the 0% bracket. */
+  noTaxHeadline?: string
 }
 
 /** Where your income sits in the year's tax table: six segments, one per rate, with a "You" marker on yours. */
-export default function BracketCard({ taxableIncome, year, caption = 'annual taxable income' }: Props) {
+export default function BracketCard({
+  taxableIncome,
+  year,
+  caption = 'annual taxable income',
+  noTaxHeadline = 'No income tax',
+}: Props) {
   const { segments, index, fraction, rate } = bracketPosition(taxableIncome, year)
   // Where the marker goes along the bar: the segments are the same width, and it sits part-way through its own.
   const left = ((index + fraction) / segments.length) * 100
-  const headline = rate === 0 ? 'No income tax' : `${formatRate(rate)} on the excess`
+  const headline = rate === 0 ? noTaxHeadline : `${formatRate(rate)} on the excess`
 
   return (
     <SoftCard accent>
@@ -48,11 +55,12 @@ export default function BracketCard({ taxableIncome, year, caption = 'annual tax
 
         {/* The same thing in words for screen readers; the bar and labels below are the picture of it. */}
         <p className="sr-only">
-          Your annual taxable income of {formatPeso(taxableIncome)} is in the {formatRate(rate)} bracket.
+          Your {caption} of {formatPeso(taxableIncome)} is in the {formatRate(rate)} bracket.
         </p>
         <div aria-hidden className="relative pt-8">
+          {/* Kept inside the bar, so the "You" pill is never cut off at zero income or at the top rate. */}
           <div
-            className="absolute top-0 flex -translate-x-1/2 flex-col items-center" // Kept inside the bar so the "You" pill is never cut off at zero income or at the top rate.
+            className="absolute top-0 flex -translate-x-1/2 flex-col items-center"
             style={{ left: `clamp(1.25rem, ${left}%, calc(100% - 1.25rem))` }}
           >
             <span className="rounded-md bg-foreground px-2 py-0.5 text-xs font-semibold text-background shadow-sm">
