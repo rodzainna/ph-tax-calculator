@@ -1,11 +1,13 @@
 import { Plus } from 'lucide-react'
-import { Fragment, useMemo } from 'react'
+import { Fragment, useMemo, useRef } from 'react'
 import BusinessSection from '@/components/business/BusinessSection.tsx'
 import BusinessSummary from '@/components/business/BusinessSummary.tsx'
 import EmployerSection from '@/components/employer/EmployerSection.tsx'
 import EmployerSummary from '@/components/employer/EmployerSummary.tsx'
+import AnnualInsights from '@/components/insights/AnnualInsights.tsx'
 import { ReceiptCard } from '@/components/shared/AppCard.tsx'
 import TaxpayerFields from '@/components/shared/TaxpayerFields.tsx'
+import MobileSummaryBar from '@/components/summary/MobileSummaryBar.tsx'
 import SummaryBody from '@/components/summary/SummaryBody.tsx'
 import { Button } from '@/components/ui/button'
 import { computeScenario } from '@/lib/computeScenario.ts'
@@ -17,16 +19,20 @@ import { newEmployer, withTaxpayer, withYear, yearEndScenario } from '@/lib/year
 
 const YEARS = taxYearsFrom(2018)
 
+/** The estimate counts pay and business income to the end of the year. */
+const ASSUMPTION = 'Until Dec 31'
+
 /** A card and the summary beside it. */
 const CARD_AND_SUMMARY = 'grid gap-3 md:grid-cols-[minmax(0,1fr)_280px]'
 
-/** The Annual page so far: the employer and business cards with their summaries, and the estimate. */
+/** The Annual page so far: the employer and business cards with their summaries, the estimate and its insights. */
 function Inner() {
   const { form, update, takeId } = useYear()
   const outcome = useMemo(() => computeScenario(form, yearEndScenario(form.year)), [form])
   const details = outcome.ok ? outcome.details : []
   const showEmployers = usesEmployers(form.taxpayer)
   const showBusiness = usesBusiness(form.taxpayer)
+  const sideColumn = useRef<HTMLElement>(null)
 
   return (
     <div className="space-y-4">
@@ -119,12 +125,16 @@ function Inner() {
           ) : null}
         </div>
 
-        <div className="h-fit xl:sticky xl:top-24">
+        {/* Not sticky: this column can be taller than the screen. Narrower screens get the bar at the bottom. */}
+        {/* Focusable from code only: it takes the focus when the screen widens while the bar's details are open. */}
+        <aside ref={sideColumn} tabIndex={-1} aria-label="Your estimate" className="hidden xl:block xl:self-start">
           <ReceiptCard>
-            <SummaryBody outcome={outcome} assumption="Until Dec 31" />
+            <SummaryBody outcome={outcome} assumption={ASSUMPTION} />
           </ReceiptCard>
-        </div>
+          <AnnualInsights outcome={outcome} />
+        </aside>
       </div>
+      <MobileSummaryBar outcome={outcome} assumption={ASSUMPTION} sideColumn={sideColumn} />
     </div>
   )
 }

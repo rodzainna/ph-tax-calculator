@@ -1,9 +1,10 @@
 // @vitest-environment jsdom
-import { cleanup, render, screen, within } from '@testing-library/react'
+import { cleanup, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { formatPeso } from '@/lib/peso.ts'
+import { fakeScreen } from '@/test/fakeScreen.ts'
 import { moneyRows } from '@/test/moneyRows.ts'
 import { stubRadixDomApis } from '@/test/radixStubs.ts'
 import AnnualPreview from './AnnualPreview.tsx'
@@ -13,7 +14,10 @@ beforeAll(() => {
   restoreDom = stubRadixDomApis()
 })
 afterAll(() => restoreDom())
-afterEach(cleanup)
+afterEach(() => {
+  cleanup()
+  vi.unstubAllGlobals()
+})
 
 const show = () =>
   render(
@@ -71,6 +75,44 @@ describe('AnnualPreview: the estimate', () => {
     const rows = moneyRows(container.querySelector('.receipt') as HTMLElement)
     expect(rows['Regular pay']).toBe(formatPeso(600_000))
     expect(rows['Gross pay']).toBe(formatPeso(650_000))
+  })
+
+  it('shows the insights under the receipt once there is an estimate', async () => {
+    show()
+    const side = () => within(screen.getByRole('complementary'))
+    expect(side().queryByText('Your tax bracket')).toBeNull()
+    await userEvent.setup().type(screen.getByRole('textbox', { name: 'Basic salary' }), '50000')
+    expect(side().getByText('Your tax bracket')).toBeTruthy()
+  })
+
+  // A month's contributions on 50,000 are 1,750 SSS, 1,250 PhilHealth and 200 Pag-IBIG: 38,400 a year.
+  // 600,000 - 38,400 = 561,600 taxable, and the tax is 22,500 + 20% of 161,600 = 54,820.
+  it('keeps the same figure in the bar for narrow screens', async () => {
+    const { container } = show()
+    await userEvent.setup().type(screen.getByRole('textbox', { name: 'Basic salary' }), '50000')
+    const figureIn = (selector: string) => container.querySelector(selector)?.textContent
+    expect(figureIn('.receipt p.text-4xl')).toBe(formatPeso(54_820))
+    expect(figureIn('[data-summary-bar] [aria-live] > p:last-child')).toBe(formatPeso(54_820))
+  })
+
+  it('opens the same estimate from the bar', async () => {
+    show()
+    const user = userEvent.setup()
+    await user.type(screen.getByRole('textbox', { name: 'Basic salary' }), '50000')
+    await user.click(screen.getByRole('button', { name: 'Details' }))
+    expect(within(screen.getByRole('dialog')).getByText('Tax estimate · 2026')).toBeTruthy()
+  })
+
+  it('hands over to the side column when the screen widens with the bar details open', async () => {
+    const screenWidth = fakeScreen()
+    show()
+    const user = userEvent.setup()
+    const sideColumn = screen.getByRole('complementary', { name: 'Your estimate' })
+    await user.type(screen.getByRole('textbox', { name: 'Basic salary' }), '50000')
+    await user.click(screen.getByRole('button', { name: 'Details' }))
+    screenWidth.resize(true)
+    expect(screen.queryByRole('dialog')).toBeNull()
+    await waitFor(() => expect(document.activeElement).toBe(sideColumn))
   })
 
   it('fills in the employer summary beside the card', async () => {

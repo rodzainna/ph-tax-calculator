@@ -414,3 +414,10 @@ svg.brand-icon.icon-on-dark .ci-tall,
 .receipt {
   margin-block-end: 2.5rem;
 }
+
+/* Below xl the summary bar sits over the bottom of the screen, so a focused field is scrolled to above it. */
+@media (width < 80rem) {
+  html:has([data-summary-bar]) {
+    scroll-padding-bottom: 6rem;
+  }
+}
