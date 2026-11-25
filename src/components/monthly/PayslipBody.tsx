@@ -5,6 +5,7 @@ import { ReceiptRule } from '@/components/shared/AppCard.tsx'
 import type { EmployeeRates } from '@/engine/contributions.ts'
 import type { Payslip } from '@/lib/payslip.ts'
 import { formatPeso, formatRate } from '@/lib/peso.ts'
+import { cn } from '@/lib/utils'
 import { takeHomeLabel } from './payslipView.ts'
 
 interface Props {
@@ -14,6 +15,9 @@ interface Props {
   rates: EmployeeRates | null
   children?: ReactNode
 }
+
+/** An amount in the billions steps down a size, so it still fits a very narrow screen. */
+const netSize = (amount: string): string => (amount.length > 15 ? 'text-xl' : 'text-2xl')
 
 /** The payslip itself: what comes in, what comes off, and what is left. */
 export default function PayslipBody({ slip, isSelfEmployed, rates, children }: Props) {
@@ -103,9 +107,11 @@ export default function PayslipBody({ slip, isSelfEmployed, rates, children }: P
 
       <ReceiptRule />
 
-      <div className="flex items-baseline justify-between gap-3">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-3">
         <p className="text-base font-semibold">{isSelfEmployed ? 'Net income' : 'Net pay'}</p>
-        <p className="font-mono text-2xl font-semibold tabular-nums text-net">{formatPeso(slip.net)}</p>
+        <p className={cn('ml-auto font-mono font-semibold tabular-nums text-net', netSize(formatPeso(slip.net)))}>
+          {formatPeso(slip.net)}
+        </p>
       </div>
 
       {children}

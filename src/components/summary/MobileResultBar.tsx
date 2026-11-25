@@ -26,13 +26,15 @@ export default function MobileResultBar({ label, children, targetId }: Props) {
   if (targetVisible) return null
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 px-4 py-3 backdrop-blur md:hidden">
-      <div className="flex items-center justify-between gap-3">
-        <div className="min-w-0">
-          <p className="truncate text-xs text-muted-foreground">{label}</p>
+      {/* The button moves to its own line rather than sit under a very long figure. */}
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+        <div className="flex-1">
+          <p className="text-xs text-muted-foreground">{label}</p>
           <p className="text-xl font-semibold text-net">{children}</p>
         </div>
         <Button
           variant="outline"
+          className="ml-auto"
           onClick={() => document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
         >
           Payslip <ChevronDown />

@@ -57,6 +57,16 @@ describe('PayslipCard', () => {
     expect(period()).toBe('Annual')
   })
 
+  it.each([
+    ['35000', 'text-2xl'],
+    ['999999999', 'text-xl'],
+  ])("sizes the year's net pay row for a monthly salary of %s with %s", async (basic, size) => {
+    render(card(EMPLOYEE, basic))
+    await userEvent.setup().click(screen.getByRole('radio', { name: 'Annual' }))
+    const amount = screen.getByText('Net pay').nextElementSibling as HTMLElement
+    expect(amount.classList.contains(size)).toBe(true)
+  })
+
   it('shows what went wrong instead of a payslip', () => {
     render(card(EMPLOYEE, '35,000x'))
     expect(screen.getByText('One of the amounts is not a valid number.')).toBeTruthy()
