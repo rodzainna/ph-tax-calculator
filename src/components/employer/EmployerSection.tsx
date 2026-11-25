@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button'
 import { CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { PayFrequency } from '@/engine/pay.ts'
 import type { EarningsMode, EmployerState } from '@/lib/yearForm.ts'
-import { fieldSetter } from '@/components/employer/fieldSetter.ts'
+import { fieldSetter } from '@/lib/fieldSetter.ts'
 
 interface Props {
   employer: EmployerState

@@ -5,7 +5,7 @@ import MoreTray from '@/components/shared/MoreTray.tsx'
 import PesoInput from '@/components/shared/PesoInput.tsx'
 import ToggleRow from '@/components/shared/ToggleRow.tsx'
 import { newDeMinimisLine, type EmployerState } from '@/lib/yearForm.ts'
-import { fieldSetter } from '@/components/employer/fieldSetter.ts'
+import { fieldSetter } from '@/lib/fieldSetter.ts'
 
 interface Props {
   employer: EmployerState

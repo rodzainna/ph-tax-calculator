@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import PesoInput from '@/components/shared/PesoInput.tsx'
 import type { EmployerState } from '@/lib/yearForm.ts'
-import { fieldSetter } from '@/components/employer/fieldSetter.ts'
+import { fieldSetter } from '@/lib/fieldSetter.ts'
 
 interface Props {
   employer: EmployerState

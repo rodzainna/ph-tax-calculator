@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
-import { newEmployer } from '@/lib/yearForm.ts'
 import { fieldSetter } from './fieldSetter.ts'
+import { newBusiness, newEmployer } from './yearForm.ts'
 
 describe('fieldSetter', () => {
   it('saves a new value for one field and keeps the rest of the employer', () => {
@@ -24,5 +24,12 @@ describe('fieldSetter', () => {
     expect(onChange).toHaveBeenLastCalledWith({ ...employer, hasDeMinimis: true })
     set('mode')('ytd')
     expect(onChange).toHaveBeenLastCalledWith({ ...employer, mode: 'ytd' })
+  })
+
+  it('works for any object, not only an employer', () => {
+    const business = { ...newBusiness(1), amount: '1000' }
+    const onChange = vi.fn()
+    fieldSetter(business, onChange)('deduction')('itemized')
+    expect(onChange).toHaveBeenCalledExactlyOnceWith({ ...business, deduction: 'itemized' })
   })
 })
