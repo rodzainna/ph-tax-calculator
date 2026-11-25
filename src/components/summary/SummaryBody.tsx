@@ -2,8 +2,8 @@ import type { AnnualReturnResult } from '@/engine/annualReturn.ts'
 import { ReceiptRule } from '@/components/shared/AppCard.tsx'
 import EmptyState from '@/components/shared/EmptyState.tsx'
 import PesoAmount from '@/components/shared/PesoAmount.tsx'
+import ProblemAlert from '@/components/shared/ProblemAlert.tsx'
 import Receipt from '@/components/summary/Receipt.tsx'
-import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import type { AnnualOutcome } from '@/lib/computeScenario.ts'
 import { headlineFor, type Headline } from '@/lib/headline.ts'
@@ -56,9 +56,7 @@ export default function SummaryBody({ outcome, assumption }: Props) {
         ) : outcome.empty ? (
           <EmptyState title="Your tax for the year" />
         ) : (
-          <Alert>
-            <AlertDescription>{outcome.message}</AlertDescription>
-          </Alert>
+          <ProblemAlert message={outcome.message} />
         )}
       </div>
 

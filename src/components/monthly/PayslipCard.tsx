@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import EmptyState from '@/components/shared/EmptyState.tsx'
 import PesoAmount from '@/components/shared/PesoAmount.tsx'
+import ProblemAlert from '@/components/shared/ProblemAlert.tsx'
 import SegmentedControl, { type SegmentOption } from '@/components/shared/SegmentedControl.tsx'
 import { ReceiptCard } from '@/components/shared/AppCard.tsx'
 import MobileResultBar from '@/components/summary/MobileResultBar.tsx'
-import { Alert, AlertDescription } from '@/components/ui/alert'
 import { employeeRates } from '@/engine/contributions.ts'
 import type { Outcome } from '@/lib/monthlyOutcome.ts'
 import { payslipFor, type PayslipPeriod } from '@/lib/payslip.ts'
@@ -57,13 +57,7 @@ export default function PayslipCard({ year, outcome, taxpayer, minimumWage }: Pr
 
         {!outcome.ok ? (
           <div className="mt-4">
-            {outcome.empty ? (
-              <EmptyState title="Your take-home pay" />
-            ) : (
-              <Alert>
-                <AlertDescription>{outcome.message}</AlertDescription>
-              </Alert>
-            )}
+            {outcome.empty ? <EmptyState title="Your take-home pay" /> : <ProblemAlert message={outcome.message} />}
           </div>
         ) : slip ? (
           <PayslipBody slip={slip} isSelfEmployed={selfEmployed} rates={rates}>

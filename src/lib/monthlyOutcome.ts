@@ -2,8 +2,8 @@ import { EightPercentNotAvailableError } from '../engine/eightPercentTax.ts'
 import { monthlyPay, type MonthlyPayResult } from '../engine/monthlyPay.ts'
 import { selfEmployedMonthlyPay } from '../engine/selfEmployedMonthly.ts'
 import type { MonthlyLines } from './payslip.ts'
-import { formatPeso, parsePeso } from './peso.ts'
-import { UNEXPECTED_PROBLEM } from './problem.ts'
+import { parsePeso } from './peso.ts'
+import { eightPercentOverLimit, UNEXPECTED_PROBLEM } from './problem.ts'
 import { initialTaxpayer, isSelfEmployed, type Taxpayer } from './taxpayer.ts'
 
 /** What the Monthly page works out from the typed figures: a result, or the reason there is none. */
@@ -87,12 +87,7 @@ export function monthlyOutcome(input: MonthlyInput): Outcome {
         })
     return { ok: true, result, lines }
   } catch (error) {
-    if (error instanceof EightPercentNotAvailableError) {
-      return {
-        ok: false,
-        message: `The 8% option only covers up to ${formatPeso(error.threshold)} a year, and ${formatPeso(error.base)} a year is over that. Choose Graduated rates instead.`,
-      }
-    }
+    if (error instanceof EightPercentNotAvailableError) return { ok: false, message: eightPercentOverLimit(error) }
     // The engine's own wording is for developers, so the person sees a plain message instead.
     return { ok: false, message: UNEXPECTED_PROBLEM }
   }
