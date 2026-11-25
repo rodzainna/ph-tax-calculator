@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { cleanup, render, screen, waitFor, within } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -7,7 +7,7 @@ import { formatPeso } from '@/lib/peso.ts'
 import { fakeScreen } from '@/test/fakeScreen.ts'
 import { moneyRows } from '@/test/moneyRows.ts'
 import { stubRadixDomApis } from '@/test/radixStubs.ts'
-import AnnualPreview from './AnnualPreview.tsx'
+import MyYear from './MyYear.tsx'
 
 let restoreDom: () => void
 beforeAll(() => {
@@ -22,7 +22,7 @@ afterEach(() => {
 const show = () =>
   render(
     <TooltipProvider>
-      <AnnualPreview />
+      <MyYear />
     </TooltipProvider>,
   )
 
@@ -32,7 +32,7 @@ const chooseType = async (name: string) => {
   await user.click(within(screen.getByRole('listbox')).getByRole('option', { name }))
 }
 
-describe('AnnualPreview: who it is for', () => {
+describe('MyYear: who it is for', () => {
   it('starts with one employer and no business', () => {
     show()
     expect(screen.getByText('Employer #1')).toBeTruthy()
@@ -63,7 +63,7 @@ describe('AnnualPreview: who it is for', () => {
   })
 })
 
-describe('AnnualPreview: the estimate', () => {
+describe('MyYear: the estimate', () => {
   it('asks for a salary before there is an estimate', () => {
     show()
     expect(screen.getByText('Your tax for the year')).toBeTruthy()
@@ -146,7 +146,7 @@ describe('AnnualPreview: the estimate', () => {
   })
 })
 
-describe('AnnualPreview: employers', () => {
+describe('MyYear: employers', () => {
   it('adds and removes an employer', async () => {
     const user = userEvent.setup()
     show()
@@ -171,5 +171,81 @@ describe('AnnualPreview: employers', () => {
     await userEvent.setup().click(screen.getByRole('button', { name: 'More' }))
     const fields = screen.getAllByRole('textbox', { name: 'Tax withheld' }) as HTMLInputElement[]
     expect(fields.map((f) => f.value)).toEqual(['1,000', '1,000'])
+  })
+})
+
+describe('MyYear: mixed income', () => {
+  it('always keeps an employer, since without one it would be taxed as self-employed', async () => {
+    const user = userEvent.setup()
+    show()
+    await chooseType('Mixed income')
+    expect(screen.queryByRole('button', { name: /Remove employer/ })).toBeNull()
+    await user.click(screen.getByRole('button', { name: 'Add another employer' }))
+    await user.click(screen.getByRole('button', { name: 'Remove employer #1' }))
+    expect(screen.queryByRole('button', { name: /Remove employer/ })).toBeNull()
+  })
+
+  it('puts a line between each job and before the business', async () => {
+    const { container } = show()
+    const lines = () => container.querySelectorAll('hr').length
+    expect(lines()).toBe(0)
+    await chooseType('Mixed income')
+    expect(lines()).toBe(1)
+    await userEvent.setup().click(screen.getByRole('button', { name: 'Add another employer' }))
+    expect(lines()).toBe(2)
+    await chooseType('Self-employed')
+    expect(lines()).toBe(0)
+  })
+
+  it('blanks every summary when one employer has a mistake, and says which', async () => {
+    const user = userEvent.setup()
+    const { container } = show()
+    await chooseType('Mixed income')
+    await user.type(screen.getByRole('textbox', { name: 'Basic salary' }), '50000')
+    await user.click(screen.getByRole('button', { name: 'Add another employer' }))
+    const summaries = () =>
+      ['Summary Employer #1', 'Summary Employer #2', 'Summary Business'].map((name) =>
+        Object.values(moneyRows(screen.getByRole('group', { name }))),
+      )
+    expect(summaries()[0]).toContain(formatPeso(650_000))
+    // The second job starts in September and ends in March.
+    const from = container.querySelectorAll<HTMLInputElement>('input[id^="from-"]')[1]
+    fireEvent.change(from, { target: { value: '2026-09-01' } })
+    await user.click(screen.getAllByRole('switch', { name: 'Still working' })[1])
+    const to = container.querySelector('input[type="date"][id^="to-"]') as HTMLInputElement
+    fireEvent.change(to, { target: { value: '2026-03-31' } })
+    expect(
+      summaries()
+        .flat()
+        .every((amount) => amount === '—'),
+    ).toBe(true)
+    const estimate = within(screen.getByRole('complementary'))
+    expect(estimate.getByRole('alert').textContent).toBe('Employer #2: the end date is before the start date.')
+  })
+})
+
+describe('MyYear: itemized expenses', () => {
+  it('compares them with the 40% standard deduction, and only while itemizing', async () => {
+    const user = userEvent.setup()
+    show()
+    await chooseType('Self-employed')
+    const business = within(screen.getByText('Business or freelance').closest('[data-slot="card"]') as HTMLElement)
+    await user.type(business.getByRole('textbox', { name: 'Amount' }), '50000')
+    const comparison = () => screen.queryByText(/^Your expenses for the year are/)?.textContent ?? null
+    const chooseDeduction = async (name: string) => {
+      await user.click(screen.getByRole('combobox', { name: 'Deduction' }))
+      await user.click(within(screen.getByRole('listbox')).getByRole('option', { name }))
+    }
+    expect(comparison()).toBeNull()
+
+    await chooseDeduction('Itemized expenses')
+    const expense = within(screen.getByRole('group', { name: 'Expense 1' }))
+    await user.type(expense.getByRole('textbox', { name: 'Amount' }), '30000')
+    expect(comparison()).toBe(
+      'Your expenses for the year are ₱360,000.00. The 40% standard deduction would be ₱240,000.00, so itemizing deducts more.',
+    )
+
+    await chooseDeduction('40% standard deduction')
+    expect(comparison()).toBeNull()
   })
 })
