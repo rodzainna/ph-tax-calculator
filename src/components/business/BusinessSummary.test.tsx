@@ -12,6 +12,7 @@ import type { EmployerCompensation } from '@/engine/compensationTax.ts'
 import { formatPeso } from '@/lib/peso.ts'
 import type { TaxMethod } from '@/lib/taxpayer.ts'
 import { newBusiness, type BusinessState } from '@/lib/yearForm.ts'
+import { moneyRows } from '@/test/moneyRows.ts'
 import BusinessSummary from './BusinessSummary.tsx'
 
 afterEach(cleanup)
@@ -58,19 +59,10 @@ const show = (method: TaxMethod, result?: AnnualReturnResult, b: BusinessState =
   return { onQuarterlyPaidChange, onCredit2307Change, ...view }
 }
 
-/** The label and amount of each row. A row that takes money off has "minus" read out before its amount. */
-const rows = (container: HTMLElement): Record<string, string | null> =>
-  Object.fromEntries(
-    [...container.querySelectorAll('dt')].map((term) => [
-      term.textContent,
-      term.nextElementSibling?.textContent ?? null,
-    ]),
-  )
-
 describe('BusinessSummary: the 8% option', () => {
   it('shows the receipts, the reduction, what is taxed and the tax', () => {
     const { container } = show('eight-percent', eightPercent(600_000))
-    const r = rows(container)
+    const r = moneyRows(container)
     expect(r['Receipts and other income']).toBe(formatPeso(600_000))
     expect(r['Reduction']).toContain(formatPeso(250_000))
     expect(r['Taxable amount']).toBe(formatPeso(350_000))
@@ -79,12 +71,12 @@ describe('BusinessSummary: the 8% option', () => {
 
   it('takes the reduction off, as a minus', () => {
     const { container } = show('eight-percent', eightPercent(600_000))
-    expect(rows(container)['Reduction']).toContain('minus')
+    expect(moneyRows(container)['Reduction']).toContain('minus')
   })
 
   it('shows a reduction of no more than the receipts', () => {
     const { container } = show('eight-percent', eightPercent(100_000))
-    const r = rows(container)
+    const r = moneyRows(container)
     expect(r['Reduction']).toContain(formatPeso(100_000))
     expect(r['Taxable amount']).toBe(formatPeso(0))
     expect(r['Tax at 8%']).toBe(formatPeso(0))
@@ -92,7 +84,7 @@ describe('BusinessSummary: the 8% option', () => {
 
   it('shows no reduction for someone who also earns a salary', () => {
     const { container } = show('eight-percent', eightPercent(600_000, [salary]))
-    const r = rows(container)
+    const r = moneyRows(container)
     expect(r['Reduction']).toContain(formatPeso(0))
     expect(r['Taxable amount']).toBe(formatPeso(600_000))
     expect(r['Tax at 8%']).toBe(formatPeso(48_000))
@@ -100,20 +92,20 @@ describe('BusinessSummary: the 8% option', () => {
 
   it('has no graduated rows', () => {
     const { container } = show('eight-percent', eightPercent(600_000))
-    expect(Object.keys(rows(container))).not.toContain('Gross receipts')
-    expect(Object.keys(rows(container))).not.toContain('Net income')
+    expect(Object.keys(moneyRows(container))).not.toContain('Gross receipts')
+    expect(Object.keys(moneyRows(container))).not.toContain('Net income')
   })
 
   it('shows dashes while there is no estimate', () => {
     const { container } = show('eight-percent')
-    expect(Object.values(rows(container))).toEqual(['—', '—', '—', '—'])
+    expect(Object.values(moneyRows(container))).toEqual(['—', '—', '—', '—'])
   })
 })
 
 describe('BusinessSummary: graduated rates', () => {
   it('shows the receipts, the 40% deduction and the net income', () => {
     const { container } = show('graduated', graduated(600_000))
-    const r = rows(container)
+    const r = moneyRows(container)
     expect(r['Gross receipts']).toBe(formatPeso(600_000))
     expect(r['40% deduction']).toContain(formatPeso(240_000))
     expect(r['Net income']).toBe(formatPeso(360_000))
@@ -121,7 +113,7 @@ describe('BusinessSummary: graduated rates', () => {
 
   it('names itemized expenses instead of the 40% deduction', () => {
     const { container } = show('graduated', graduated(600_000, { itemizedExpenses: 100_000 }))
-    const r = rows(container)
+    const r = moneyRows(container)
     expect(r['Itemized expenses']).toContain(formatPeso(100_000))
     expect(r['Net income']).toBe(formatPeso(500_000))
     expect(Object.keys(r)).not.toContain('40% deduction')
@@ -129,7 +121,7 @@ describe('BusinessSummary: graduated rates', () => {
 
   it('adds the other income, so the rows add up to the net income', () => {
     const { container } = show('graduated', graduated(600_000, { otherNonOperatingIncome: 50_000 }))
-    const r = rows(container)
+    const r = moneyRows(container)
     expect(r['Other income']).toContain(formatPeso(50_000))
     expect(r['Other income']).toContain('plus')
     expect(r['Net income']).toBe(formatPeso(410_000))
@@ -137,23 +129,23 @@ describe('BusinessSummary: graduated rates', () => {
 
   it('leaves the other income row out when there is none', () => {
     const { container } = show('graduated', graduated(600_000))
-    expect(Object.keys(rows(container))).not.toContain('Other income')
+    expect(Object.keys(moneyRows(container))).not.toContain('Other income')
   })
 
   it('shows a loss as a negative net income', () => {
     const { container } = show('graduated', graduated(100_000, { itemizedExpenses: 130_000 }))
-    expect(rows(container)['Net income']).toBe(formatPeso(-30_000))
+    expect(moneyRows(container)['Net income']).toBe(formatPeso(-30_000))
   })
 
   it('has no 8% rows', () => {
     const { container } = show('graduated', graduated(600_000))
-    expect(Object.keys(rows(container))).not.toContain('Tax at 8%')
-    expect(Object.keys(rows(container))).not.toContain('Reduction')
+    expect(Object.keys(moneyRows(container))).not.toContain('Tax at 8%')
+    expect(Object.keys(moneyRows(container))).not.toContain('Reduction')
   })
 
   it('shows dashes while there is no estimate', () => {
     const { container } = show('graduated')
-    expect(Object.values(rows(container))).toEqual(['—', '—', '—'])
+    expect(Object.values(moneyRows(container))).toEqual(['—', '—', '—'])
   })
 })
 

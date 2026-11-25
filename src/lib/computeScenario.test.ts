@@ -567,6 +567,15 @@ describe('mistakes in what was typed', () => {
 })
 
 describe('notes', () => {
+  it('says a note once when more than one employer gives it', () => {
+    const base = { ...employee(), year: 2020 }
+    const form = { ...base, employers: [base.employers[0], { ...base.employers[0], id: 9 }] }
+    const outcome = run(form)
+    if (!outcome.ok) throw new Error(outcome.message)
+    const note = 'For 2020 contributions are not estimated automatically'
+    expect(outcome.notes.filter((n) => n.startsWith(note))).toHaveLength(1)
+  })
+
   const graduated = (business: Partial<FormState['business']>) => {
     const base = withTaxpayer(employee(), { type: 'self-employed', method: 'graduated' })
     return worked({

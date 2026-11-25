@@ -6,6 +6,7 @@ import { TooltipProvider } from '@/components/ui/tooltip'
 import type { EmployerDetail } from '@/lib/computeScenario.ts'
 import { formatPeso } from '@/lib/peso.ts'
 import { newEmployer, type EmployerState } from '@/lib/yearForm.ts'
+import { moneyRows } from '@/test/moneyRows.ts'
 import EmployerSummary from './EmployerSummary.tsx'
 
 afterEach(() => {
@@ -48,15 +49,6 @@ const show = (props: Props = {}) => {
   return { onTaxWithheldChange, ...view }
 }
 
-/** The label and amount of each row, such as `{ SSS: '₱1,111.00' }`. */
-const rows = (container: HTMLElement): Record<string, string | null> =>
-  Object.fromEntries(
-    [...container.querySelectorAll('dt')].map((term) => [
-      term.textContent,
-      term.nextElementSibling?.textContent ?? null,
-    ]),
-  )
-
 describe('EmployerSummary: the figures', () => {
   it('is numbered from the position of its employer', () => {
     show({ index: 2 })
@@ -70,7 +62,7 @@ describe('EmployerSummary: the figures', () => {
 
   it('gives each row its own figure, with the contributions in the order of the payslip', () => {
     const { container } = show()
-    expect(rows(container)).toEqual({
+    expect(moneyRows(container)).toEqual({
       'Total pay': formatPeso(600_000),
       '13th month': formatPeso(50_000),
       SSS: formatPeso(1_111),
@@ -81,7 +73,7 @@ describe('EmployerSummary: the figures', () => {
 
   it('shows dashes and no months while there are no figures yet', () => {
     const { container } = show({ detail: undefined })
-    expect(Object.values(rows(container))).toEqual(['—', '—', '—', '—', '—'])
+    expect(Object.values(moneyRows(container))).toEqual(['—', '—', '—', '—', '—'])
     expect(screen.queryByText(/months$/)).toBeNull()
   })
 })
@@ -89,7 +81,7 @@ describe('EmployerSummary: the figures', () => {
 describe('EmployerSummary: the 13th month', () => {
   it('shows what is owed from the salary, not the amount counted', () => {
     const { container } = show({ employer: employer({ thirteenthMode: 'custom' }) })
-    expect(rows(container)['13th month']).toBe(formatPeso(50_000))
+    expect(moneyRows(container)['13th month']).toBe(formatPeso(50_000))
   })
 
   it('says it is not counted when it is unpaid', () => {
@@ -107,7 +99,7 @@ describe('EmployerSummary: the 13th month', () => {
       employer: employer({ mode: 'ytd' }),
       detail: detail({ thirteenthOwed: null, thirteenthCounted: 20_000 }),
     })
-    expect(rows(container)['13th month']).toBe(formatPeso(20_000))
+    expect(moneyRows(container)['13th month']).toBe(formatPeso(20_000))
   })
 
   it('shows nothing counted when none was entered on a payslip', () => {
@@ -115,7 +107,7 @@ describe('EmployerSummary: the 13th month', () => {
       employer: employer({ mode: 'ytd' }),
       detail: detail({ thirteenthOwed: null, thirteenthCounted: 0 }),
     })
-    expect(rows(container)['13th month']).toBe(formatPeso(0))
+    expect(moneyRows(container)['13th month']).toBe(formatPeso(0))
   })
 
   it('does not call a payslip 13th month unpaid, because that choice is only for a salary', () => {

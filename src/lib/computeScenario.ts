@@ -11,7 +11,7 @@ import { employerYear, type EmployerDetail } from './employerYear.ts'
 import { formatPeso } from './peso.ts'
 import { UNEXPECTED_PROBLEM } from './problem.ts'
 import { InputProblem } from './scenarioInput.ts'
-import type { TaxpayerType } from './taxpayer.ts'
+import { usesBusiness, usesEmployers, type TaxpayerType } from './taxpayer.ts'
 import type { FormState, Scenario } from './yearForm.ts'
 
 export type { EmployerDetail }
@@ -25,15 +25,16 @@ export function computeScenario(form: FormState, scenario: Scenario): AnnualOutc
   try {
     parseIsoDate(form.asOf)
     parseIsoDate(scenario.projectionEnd)
-    const { type, method } = form.taxpayer
+    const { taxpayer } = form
+    const { type, method } = taxpayer
     // Employee: salary only. Self-employed: business only. Mixed: both.
-    const usesEmployers = type !== 'self-employed'
-    const usesBusiness = type !== 'employee'
+    const withEmployers = usesEmployers(taxpayer)
+    const withBusiness = usesBusiness(taxpayer)
 
-    const years = (usesEmployers ? form.employers : []).map((e, i) => employerYear(form, e, i, scenario.projectionEnd))
+    const years = (withEmployers ? form.employers : []).map((e, i) => employerYear(form, e, i, scenario.projectionEnd))
     const employers = years.map((y) => y.compensation)
     const details = years.map((y) => y.detail)
-    const business = usesBusiness ? businessYear(form, form.business, scenario.projectionEnd) : undefined
+    const business = withBusiness ? businessYear(form, form.business, scenario.projectionEnd) : undefined
 
     const hasAnything =
       employers.some((e) => e.regularPay > 0 || e.thirteenthMonthAndBenefits > 0) ||
@@ -41,13 +42,16 @@ export function computeScenario(form: FormState, scenario: Scenario): AnnualOutc
       (business?.otherNonOperatingIncome ?? 0) > 0
     if (!hasAnything) return { ok: false, message: emptyMessage(type), empty: true }
 
-    const graduated = usesBusiness && method === 'graduated'
+    const graduated = withBusiness && method === 'graduated'
     const result = graduated
       ? annualReturnWithGraduated({ year: form.year, employers, business })
       : annualReturnWithEightPercent({ year: form.year, employers, business })
 
-    const payslipMode = usesEmployers && form.employers.some((e) => e.mode === 'ytd')
-    const notes = [...years.flatMap((y) => y.notes), ...resultNotes(result, details, { graduated, payslipMode })]
+    const payslipMode = withEmployers && form.employers.some((e) => e.mode === 'ytd')
+    // Two employers can give the same note, and it should be said once.
+    const notes = [
+      ...new Set([...years.flatMap((y) => y.notes), ...resultNotes(result, details, { graduated, payslipMode })]),
+    ]
     return { ok: true, result, details, notes }
   } catch (error) {
     return problem(error)

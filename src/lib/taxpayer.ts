@@ -11,3 +11,9 @@ export interface Taxpayer {
 export const initialTaxpayer = (): Taxpayer => ({ type: 'employee', method: 'graduated' })
 
 export const isSelfEmployed = (taxpayer: Taxpayer): boolean => taxpayer.type === 'self-employed'
+
+/** Pay from employers counts for everyone but the self-employed. */
+export const usesEmployers = (taxpayer: Taxpayer): boolean => taxpayer.type !== 'self-employed'
+
+/** Business or freelance income counts for everyone but employees. */
+export const usesBusiness = (taxpayer: Taxpayer): boolean => taxpayer.type !== 'employee'
