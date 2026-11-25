@@ -49,8 +49,8 @@ export default function SummaryBody({ outcome, assumption }: Props) {
         {outcome.ok ? <Badge variant="secondary">Form {outcome.result.form}</Badge> : null}
       </div>
 
-      {/* This stays on the page while its contents change, so a figure appearing or changing is announced. */}
-      <div className="space-y-1" aria-live="polite">
+      {/* Stays on the page as its contents change, so a new or changed figure is announced, with its label. */}
+      <div className="space-y-1" aria-live="polite" aria-atomic="true">
         {outcome.ok ? (
           <Figure result={outcome.result} assumption={assumption} />
         ) : outcome.empty ? (

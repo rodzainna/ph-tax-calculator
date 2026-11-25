@@ -151,6 +151,11 @@ describe('SummaryBody: with an estimate', () => {
     expect(live[0].textContent).not.toContain('Total deductions')
   })
 
+  it('announces the figure together with what it is', () => {
+    const { container } = show(success(annualResults.employee()))
+    expect(container.querySelector('[aria-live]')?.getAttribute('aria-atomic')).toBe('true')
+  })
+
   it('lists the notes about how the result was reached', () => {
     show(success(annualResults.employee(), ['De minimis benefits are treated as tax-free.', 'Another note.']))
     expect(screen.getAllByRole('listitem').map((li) => li.textContent)).toEqual([
