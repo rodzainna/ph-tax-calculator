@@ -8,8 +8,7 @@ import { EightPercentNotAvailableError } from '../engine/eightPercentTax.ts'
 import { UnsupportedYearError } from '../engine/graduatedTax.ts'
 import { businessYear } from './businessYear.ts'
 import { employerYear, type EmployerDetail } from './employerYear.ts'
-import { formatPeso } from './peso.ts'
-import { UNEXPECTED_PROBLEM } from './problem.ts'
+import { eightPercentOverLimit, UNEXPECTED_PROBLEM } from './problem.ts'
 import { InputProblem } from './scenarioInput.ts'
 import { usesBusiness, usesEmployers, type TaxpayerType } from './taxpayer.ts'
 import type { FormState, Scenario } from './yearForm.ts'
@@ -105,12 +104,7 @@ function resultNotes(
 
 /** A thrown error as a message for the person. Only messages written for them are shown as they are. */
 function problem(error: unknown): AnnualOutcome {
-  if (error instanceof EightPercentNotAvailableError) {
-    return {
-      ok: false,
-      message: `The 8% option only covers up to ${formatPeso(error.threshold)} a year. Your business income is ${formatPeso(error.base)}, so the 8% option is not available. Choose Graduated rates instead.`,
-    }
-  }
+  if (error instanceof EightPercentNotAvailableError) return { ok: false, message: eightPercentOverLimit(error) }
   if (error instanceof InputProblem || error instanceof UnsupportedYearError)
     return { ok: false, message: error.message }
   return { ok: false, message: UNEXPECTED_PROBLEM }
