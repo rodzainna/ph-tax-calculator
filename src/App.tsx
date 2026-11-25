@@ -1,8 +1,8 @@
 import { Route, Routes } from 'react-router'
 import SiteHeader from '@/components/SiteHeader.tsx'
 import { TooltipProvider } from '@/components/ui/tooltip'
-import AnnualPreview from '@/pages/AnnualPreview.tsx'
 import Monthly from '@/pages/Monthly.tsx'
+import MyYear from '@/pages/MyYear.tsx'
 import NotFound from '@/pages/NotFound.tsx'
 
 export default function App() {
@@ -13,7 +13,7 @@ export default function App() {
         <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">
           <Routes>
             <Route path="/" element={<Monthly />} />
-            <Route path="/year" element={<AnnualPreview />} />
+            <Route path="/year" element={<MyYear />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>

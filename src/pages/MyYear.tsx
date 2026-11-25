@@ -11,6 +11,7 @@ import MobileSummaryBar from '@/components/summary/MobileSummaryBar.tsx'
 import SummaryBody from '@/components/summary/SummaryBody.tsx'
 import { Button } from '@/components/ui/button'
 import { computeScenario } from '@/lib/computeScenario.ts'
+import { deductionHint } from '@/lib/deductionHint.ts'
 import { taxYearsFrom } from '@/lib/taxYears.ts'
 import { usesBusiness, usesEmployers } from '@/lib/taxpayer.ts'
 import { useYear } from '@/lib/useYear.ts'
@@ -25,7 +26,10 @@ const ASSUMPTION = 'Until Dec 31'
 /** A card and the summary beside it. */
 const CARD_AND_SUMMARY = 'grid gap-3 md:grid-cols-[minmax(0,1fr)_280px]'
 
-/** The Annual page so far: the employer and business cards with their summaries, the estimate and its insights. */
+/** A soft line before each further job and before the business, fading out at both ends, so each reads on its own. */
+const DIVIDER = 'my-7 h-px border-0 bg-gradient-to-r from-transparent via-foreground/15 to-transparent'
+
+/** Each employer and the business with a summary beside it, then the year's estimate and insights. */
 function Inner() {
   const { form, update, takeId } = useYear()
   const outcome = useMemo(() => computeScenario(form, yearEndScenario(form.year)), [form])
@@ -53,15 +57,14 @@ function Inner() {
             <>
               {form.employers.map((employer, index) => (
                 <Fragment key={employer.id}>
-                  {index > 0 ? (
-                    <hr className="my-7 h-px border-0 bg-gradient-to-r from-transparent via-foreground/15 to-transparent" />
-                  ) : null}
+                  {index > 0 ? <hr className={DIVIDER} /> : null}
                   <div className={CARD_AND_SUMMARY}>
                     <EmployerSection
                       employer={employer}
                       year={form.year}
                       asOf={form.asOf}
                       index={index}
+                      // Mixed income needs a job too: with none, the tax would be worked out as for the self-employed.
                       canRemove={form.employers.length > 1}
                       nextLineId={takeId}
                       onChange={(next) =>
@@ -102,6 +105,8 @@ function Inner() {
             </>
           ) : null}
 
+          {showEmployers && showBusiness ? <hr className={DIVIDER} /> : null}
+
           {showBusiness ? (
             <div className={CARD_AND_SUMMARY}>
               <BusinessSection
@@ -111,6 +116,7 @@ function Inner() {
                 asOf={form.asOf}
                 nextLineId={takeId}
                 onChange={(business) => update((f) => ({ ...f, business }))}
+                deductionHint={deductionHint(outcome.ok ? outcome.result.graduatedBusiness : null)}
               />
               <BusinessSummary
                 method={form.taxpayer.method}
@@ -139,7 +145,7 @@ function Inner() {
   )
 }
 
-export default function AnnualPreview() {
+export default function MyYear() {
   return (
     <YearProvider>
       <Inner />
