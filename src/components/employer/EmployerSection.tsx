@@ -87,7 +87,7 @@ export default function EmployerSection({
         </div>
 
         {payslipMode ? null : (
-          <div className="grid items-end gap-3 sm:grid-cols-2">
+          <div className="grid items-start gap-3 sm:grid-cols-2">
             <PesoInput label="Basic salary" value={employer.basic} onChange={set('basic')} emphasis="soft" />
             <SelectField
               id={`freq-${employer.id}`}

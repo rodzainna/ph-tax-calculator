@@ -54,12 +54,19 @@ describe('ExpenseList', () => {
     expect(screen.getAllByPlaceholderText('Name')).toHaveLength(2)
   })
 
-  it('shows the column headers on the first row on wide screens, and on every row on a phone', () => {
+  it('hides the repeated column headers only on a row wide enough to be one line', () => {
     show([rent, permit])
-    for (const header of ['Expense name', 'Amount', 'Per']) {
+    for (const header of ['Expense', 'Amount', 'Per']) {
       const [first, second] = screen.getAllByText(header)
-      expect(first.classList.contains('sm:sr-only'), `${header} on the first row`).toBe(false)
-      expect(second.classList.contains('sm:sr-only'), `${header} on the second row`).toBe(true)
+      expect(first.classList.contains('@min-[26rem]:sr-only'), `${header} on the first row`).toBe(false)
+      expect(second.classList.contains('@min-[26rem]:sr-only'), `${header} on the second row`).toBe(true)
+    }
+  })
+
+  it('measures each row by its own width', () => {
+    show([rent, permit])
+    for (const row of screen.getAllByRole('group')) {
+      expect(row.parentElement?.classList.contains('@container')).toBe(true)
     }
   })
 

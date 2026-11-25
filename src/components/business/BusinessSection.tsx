@@ -53,7 +53,7 @@ export default function BusinessSection({ business, method, year, asOf, onChange
         <Badge variant="secondary">{METHOD_LABEL[method]}</Badge>
       </CardHeader>
       <CardContent className="flex flex-1 flex-col gap-4">
-        <div className="grid items-end gap-3 sm:grid-cols-2">
+        <div className="grid items-start gap-3 sm:grid-cols-2">
           <PesoInput label="Amount" value={business.amount} onChange={set('amount')} emphasis="soft" />
           <SelectField
             id="business-frequency"

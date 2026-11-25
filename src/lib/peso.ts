@@ -13,10 +13,13 @@ export function formatPeso(amount: number): string {
   return pesoFormatter.format(amount)
 }
 
-/** The most whole-number digits a money field takes: past 15 digits a number loses exact centavos. */
-export const MAX_WHOLE_DIGITS = 12
+/** The most whole-number digits a money field takes. It limits one entry: a total can go higher. */
+export const MAX_WHOLE_DIGITS = 8
 
-/** What a money field shows while typing: commas in the whole part, at most two decimals, anything else dropped ("400000" -> "400,000"). */
+/**
+ * What a money field shows while typing: commas in the whole part, at most two decimals, anything else dropped
+ * ("400000" -> "400,000").
+ */
 export function formatPesoInput(raw: string): string {
   const cleaned = raw.replace(/[^\d.]/g, '')
   const dot = cleaned.indexOf('.')
@@ -28,7 +31,7 @@ export function formatPesoInput(raw: string): string {
           .replace(/\./g, '')
           .slice(0, 2)
   let whole = dot === -1 ? cleaned : cleaned.slice(0, dot)
-  whole = whole.replace(/^0+(?=\d)/, '').slice(0, MAX_WHOLE_DIGITS)
+  whole = whole.replace(/^0+(?=\d)/, '')
   if (whole === '' && fraction !== null) whole = '0'
   const grouped = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   return fraction === null ? grouped : `${grouped}.${fraction}`
@@ -39,6 +42,31 @@ export function wholeDigitCount(text: string): number {
   const cleaned = text.replace(/[^\d.]/g, '')
   const dot = cleaned.indexOf('.')
   return (dot === -1 ? cleaned : cleaned.slice(0, dot)).replace(/^0+/, '').length
+}
+
+/** The largest amount a money field takes, as the field shows it. */
+export const LARGEST_AMOUNT = formatPesoInput(`${'9'.repeat(MAX_WHOLE_DIGITS)}.99`)
+
+/** An optional peso mark, then one amount: commas only between groups of three, at most two decimals. */
+const PASTED_AMOUNT = /^\s*(?:₱|php\.?|p\.?)?\s*((?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d{1,2})?|\.\d{1,2})\s*$/i
+
+/** A pasted amount as the field shows it, or null if the text is anything else or the amount is too large. */
+export function parsePastedAmount(text: string): string | null {
+  const amount = PASTED_AMOUNT.exec(text)?.[1]
+  return amount !== undefined && wholeDigitCount(amount) <= MAX_WHOLE_DIGITS ? formatPesoInput(amount) : null
+}
+
+/**
+ * Whether a typed or deleted change has to be refused whole, because showing it would mean an amount the person did not
+ * enter. `caret` is where the cursor ended up, so what follows it in `raw` was there before.
+ */
+export function isRefusedEdit(raw: string, previous: string, caret: number): boolean {
+  const [, centavos = '', afterSecondDot] = raw.split('.')
+  // A second dot would move the decimal point, and a third centavo digit would be cut off.
+  if (afterSecondDot !== undefined || countPesoChars(centavos) > 2) return true
+  // Taking the dot out from in front of centavos would turn them into pesos.
+  if (previous.includes('.') && !raw.includes('.') && /\d/.test(raw.slice(caret))) return true
+  return wholeDigitCount(raw) > MAX_WHOLE_DIGITS
 }
 
 /** The one character that was deleted to turn `before` into `after`, or null if it was not a single deletion. */
@@ -53,7 +81,15 @@ export function removedCharacter(before: string, after: string): string | null {
 /** How many digits and dots a text has: the characters that stay put when commas are added or removed. */
 export const countPesoChars = (text: string): number => (text.match(/[\d.]/g) ?? []).length
 
-/** Where the cursor goes after the text is reformatted: right after the same number of digits and dots as before. */
+/** How many digits and dots stay in front of the cursor when formatting `text` adds or drops leading zeros. */
+export function charsBeforeCaret(text: string, before: string): number {
+  const typed = countPesoChars(before)
+  if (typed === 0) return 0
+  const wholeLength = (amount: string) => countPesoChars(amount.split('.')[0])
+  return Math.max(typed + wholeLength(formatPesoInput(text)) - wholeLength(text), 0)
+}
+
+/** Where the cursor goes after the text is reformatted: right after that many digits and dots. */
 export function caretAfterFormat(formatted: string, charsBefore: number): number {
   if (charsBefore <= 0) return 0
   let seen = 0

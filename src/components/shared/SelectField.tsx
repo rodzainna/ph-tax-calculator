@@ -15,7 +15,7 @@ interface Props<T extends string> {
   /** A visible label. Leave out and pass `ariaLabel` when the field sits beside another that already has one. */
   label?: string
   ariaLabel?: string
-  /** On wide screens, keep the label for screen readers only, for a repeated row under a first row that shows it. */
+  /** On a single-line row under a first row that shows the label, keep it for screen readers only. */
   hideLabelOnWide?: boolean
   id?: string
   className?: string
@@ -40,7 +40,7 @@ export default function SelectField<T extends string>({
   return (
     <div className={cn('space-y-1', wrapperClassName)}>
       {label ? (
-        <Label htmlFor={fieldId} className={hideLabelOnWide ? 'sm:sr-only' : undefined}>
+        <Label htmlFor={fieldId} className={hideLabelOnWide ? '@min-[26rem]:sr-only' : undefined}>
           {label}
         </Label>
       ) : null}

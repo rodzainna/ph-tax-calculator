@@ -21,18 +21,25 @@ export default function CustomContributions({ value, onChange }: { value: Custom
   return (
     <div className="space-y-2">
       {FIELDS.map(([key, label]) => (
-        <div key={key} className="grid grid-cols-[1fr_8.5rem] items-end gap-3">
-          <PesoInput
-            label={label}
-            value={value[key].amount}
-            onChange={(amount) => onChange({ ...value, [key]: { ...value[key], amount } })}
-          />
-          <SelectField
-            ariaLabel={`${label}: how often`}
-            value={value[key].per}
-            onChange={(per) => onChange({ ...value, [key]: { ...value[key], per } })}
-            options={PER_OPTIONS}
-          />
+        // How often moves under the amount when the two don't fit side by side. Side by side, which takes 20.25rem
+        // (both widths and the gap), it drops by a label's height to sit level with the amount.
+        <div key={key} className="@container">
+          <div className="flex flex-wrap items-start gap-x-3 gap-y-2">
+            <div className="flex-[999_1_11rem]">
+              <PesoInput
+                label={label}
+                value={value[key].amount}
+                onChange={(amount) => onChange({ ...value, [key]: { ...value[key], amount } })}
+              />
+            </div>
+            <SelectField
+              ariaLabel={`${label}: how often`}
+              value={value[key].per}
+              onChange={(per) => onChange({ ...value, [key]: { ...value[key], per } })}
+              options={PER_OPTIONS}
+              wrapperClassName="flex-[1_0_8.5rem] @min-[20.25rem]:mt-4.5"
+            />
+          </div>
         </div>
       ))}
     </div>
