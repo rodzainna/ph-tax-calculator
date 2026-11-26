@@ -44,7 +44,7 @@ React 19, Vite, TypeScript, Tailwind CSS 4, shadcn/ui (Radix), react-router. Tes
 | `src/lib` | Form state, formatting, the payslip periods, the bracket bar, the calculator's state machine. |
 | `src/components`, `src/pages` | The UI. Shared building blocks (cards, money rows, inputs, tips) are in `components/shared`. |
 
-Some contribution rules are not confirmed yet. They are marked `verified: false` in `src/engine/rules`.
+Each rule in `src/engine/rules` names its source. For 2026, the SSS figures from 2025 and the Pag-IBIG figures from February 2024 are assumed to still apply: no official source that restates them for 2026 was found.
 
 ## Privacy
 

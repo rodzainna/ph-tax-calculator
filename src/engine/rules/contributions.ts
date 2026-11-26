@@ -1,4 +1,7 @@
-/** Employee SSS, PhilHealth and Pag-IBIG shares as data keyed by effective month; each rule applies until the next starts. */
+/**
+ * Employee SSS, PhilHealth and Pag-IBIG shares as data keyed by effective month; each rule applies until the next starts.
+ * `verified` means an official document supports the figures when they start. `notes` says what is assumed.
+ */
 export interface YearMonth {
   year: number
   month: number // 1-12
@@ -67,9 +70,9 @@ export const SSS_RULES: SssRule[] = [
     mpfThreshold: 20_000,
     employeeRate: 0.045,
     totalRate: 0.14,
-    source: 'SSS Circular 2022-033 (effective January 2023, 14%)',
+    source: 'SSS Circular 2022-033 (effective January 2023, 14%); RA 11199 Sec. 4(a)(9)',
     verified: true,
-    notes: 'Also applies to 2024: no other schedule exists between January 2023 and January 2025 (inferred).',
+    notes: 'RA 11199 lists the same rate and salary credit limits for 2024.',
   },
   {
     from: { year: 2025, month: 1 },
@@ -79,9 +82,10 @@ export const SSS_RULES: SssRule[] = [
     mpfThreshold: 20_000,
     employeeRate: 0.05,
     totalRate: 0.15,
-    source: 'SSS Circular 2024-006 (effective January 2025, 15%)',
+    source: 'SSS Circular 2024-006 (effective January 2025, 15%); RA 11199 Sec. 4(a)(9)',
     verified: true,
-    notes: '2026 is assumed unchanged: no newer circular found.',
+    notes:
+      'Using these figures for 2026 is an assumption: the schedule in RA 11199 ends at 2025, and no official 2026 schedule was found (checked November 2026).',
   },
 ]
 
@@ -110,9 +114,10 @@ export const PHILHEALTH_RULES: PhilHealthRule[] = [
     floor: 10_000,
     ceiling: 80_000,
     employeeShare: 0.5,
-    source: 'PhilHealth schedule footnote: rate "remains at 4% for CY 2023" (increase to 4.5% suspended)',
-    verified: false,
-    notes: 'Rate is official; the 2023 ceiling at the suspended 4% rate is assumed to stay at 80,000.',
+    source:
+      'PhilHealth statement of 4 January 2023 (4%, ceiling 80,000); its contribution table under Circular 2019-0009 (floor 10,000); UHC Act rules Sec. 8.2.a (equal shares)',
+    verified: true,
+    notes: 'The scheduled rise to 4.5% and to a 90,000 ceiling was suspended for 2023.',
   },
   {
     from: { year: 2024, month: 1 },
@@ -132,9 +137,10 @@ export const PAGIBIG_RULES: PagibigRule[] = [
     employeeRate: 0.02,
     lowThreshold: 1_500,
     lowRate: 0.01,
-    source: 'Circular 460 says the cap rose "from Five Thousand Pesos" in February 2024 (search snippet)',
-    verified: false,
-    notes: 'Cap of 5,000 before February 2024 is implied, not read from the circular.',
+    source:
+      'RA 9679 Sec. 7 (1% or 2%, 5,000 cap that the Board may change); DBM Circular Letter 2024-2 (cap raised from 5,000)',
+    verified: true,
+    notes: 'The cap is older than this: January 2021 is where the estimates start.',
   },
   {
     from: { year: 2024, month: 2 },
@@ -142,9 +148,10 @@ export const PAGIBIG_RULES: PagibigRule[] = [
     employeeRate: 0.02,
     lowThreshold: 1_500,
     lowRate: 0.01,
-    source: 'Pag-IBIG Circular 460 (effective 1 February 2024; snippet), two 2026 payslips, infographic',
-    verified: false,
-    notes: 'Circular itself not read (site blocked by a bot check).',
+    source: 'DBM Circular Letter 2024-2, which sets out Pag-IBIG Fund Circular 460 (from February 2024)',
+    verified: true,
+    notes:
+      'Circular 460 itself was not read. Using these figures after 2024 assumes no later change: no newer circular was found (checked November 2026).',
   },
 ]
 
