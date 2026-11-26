@@ -2,12 +2,20 @@
 
 Philippine income tax and take-home pay estimates, worked out in your browser. Nothing you type is sent anywhere.
 
-- **Monthly**: take-home pay from a monthly salary (employees) or monthly income (self-employed), shown as a payslip with a Monthly, Cutoff and Annual view, plus your tax bracket.
-- **Annual**: the year's income tax across several employers and/or business income, with the 13th-month ceiling, de minimis benefits, tax withheld and credits, ending in what is left to pay.
-- **Taxpayer types**: employee, self-employed (8% option, or graduated rates with the 40% standard deduction or itemized expenses) and mixed income.
-- **Built-in calculator**: a draggable, resizable calculator with a running expression.
+This is a portfolio project that is still being built. Results are estimates for planning, not tax advice.
 
-This is a portfolio project. Results are estimates for planning, not tax advice.
+## What works now
+
+- **Monthly**: take-home pay from a monthly salary (employees) or monthly income (self-employed), shown as a payslip with your tax bracket. The payslip has Monthly and Annual views, and a Cutoff view for employees.
+- **Annual**: the year's income tax across several employers and/or business income, with the 13th-month ceiling, de minimis benefits (treated as tax-free), tax withheld and credits, ending in what is left to pay.
+- **Taxpayer types**: employee and self-employed on both pages, and mixed income on Annual. For business income you choose the 8% option or graduated rates. Graduated rates use the 40% standard deduction, and Annual also takes itemized expenses.
+- **Calculator**: opens from the header. It works out × and ÷ before + and −, shows the line as you build it, and takes keyboard input and pasted amounts.
+
+## Planned
+
+- Dragging, resizing and tucking away the calculator.
+- An About page that lists the tax rules and which of them are confirmed.
+- Privacy and Terms pages.
 
 ## Run it
 
@@ -29,17 +37,18 @@ React 19, Vite, TypeScript, Tailwind CSS 4, shadcn/ui (Radix), react-router. Tes
 
 | Folder | What lives there |
 | --- | --- |
-| `src/engine` | The tax maths as pure TypeScript functions with no UI: graduated tax, 8% option, 40% deduction, contributions, 13th month, monthly and annual results. Each has tests. |
+| `src/engine` | The tax maths as pure TypeScript functions with no UI: graduated tax, 8% option, 40% deduction, contributions, 13th month, monthly and annual results, with tests. |
 | `src/engine/rules` | The rules as data (brackets, rates, ceilings by year), each with a source and a `verified` flag. |
 | `src/lib` | Form state, formatting, the payslip periods, the bracket bar, the calculator's state machine. |
 | `src/components`, `src/pages` | The UI. Shared building blocks (cards, money rows, inputs, tips) are in `components/shared`. |
 
-The About page lists which rules have been checked against the law or the agency's own documents, and which have not.
+Some contribution rules are not confirmed yet. They are marked `verified: false` in `src/engine/rules`.
 
 ## Privacy
 
-- The figures you enter stay in your browser and are not stored.
-- The only thing kept is your analytics choice, in local storage. Google Tag Manager loads only after you accept (`ANALYTICS_ENABLED` in `src/config.ts`).
+- The figures you enter are not saved or sent anywhere. Reloading or closing the page clears them.
+- The app stores one thing: your light or dark choice, in your browser's local storage, once you use the header button.
+- It sets no cookies and has no analytics or tracking.
 - Fonts and images are served from the site itself.
 
 ## Deploying
