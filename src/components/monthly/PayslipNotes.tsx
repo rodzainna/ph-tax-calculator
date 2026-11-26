@@ -1,5 +1,6 @@
 import { Link } from 'react-router'
 import type { MonthlyPayResult } from '@/engine/monthlyPay.ts'
+import { MONTHLY_DE_MINIMIS_NOTE } from '@/lib/deMinimisNotes.ts'
 import type { Payslip } from '@/lib/payslip.ts'
 import { formatPeso } from '@/lib/peso.ts'
 import { isSelfEmployed, type Taxpayer } from '@/lib/taxpayer.ts'
@@ -22,6 +23,10 @@ export default function PayslipNotes({ slip, result, taxpayer, minimumWage }: Pr
             ? 'The contributions you chose come to more than your income. Check that you typed a monthly amount, not a daily one.'
             : 'SSS and PhilHealth have minimum contributions, and at this salary they come to more than the pay. Check that you typed a monthly amount, not a daily one.'}
         </p>
+      ) : null}
+      {/* A minimum wage earner's pay is all treated as exempt, which has its own note below. */}
+      {slip.deMinimis > 0 && !minimumWage ? (
+        <p className="rounded-lg bg-muted/60 px-3 py-2 text-sm">{MONTHLY_DE_MINIMIS_NOTE}</p>
       ) : null}
       {slip.period !== 'annual' && result.thirteenthMonth > 0 ? (
         <p className="rounded-lg bg-muted/60 px-3 py-2 text-sm">
