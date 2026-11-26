@@ -600,19 +600,28 @@ describe('notes', () => {
     expect(notes).toContain('the business shows a loss')
   })
 
-  it('says de minimis benefits are treated as tax-free', () => {
+  const withRice = (hasDeMinimis: boolean) => {
     const base = employee()
-    const form = {
+    return worked({
       ...base,
       employers: [
         {
           ...base.employers[0],
-          hasDeMinimis: true,
+          hasDeMinimis,
           deMinimis: [{ id: 9, label: 'Rice', amount: '1000', per: 'month' as const }],
         },
       ],
-    }
-    expect(worked(form).notes.join(' ')).toContain('De minimis benefits are treated as tax-free')
+    }).notes
+  }
+
+  it('says the legal limits on de minimis benefits are not checked', () => {
+    expect(withRice(true)).toEqual([
+      "De minimis benefits are treated as fully tax-free. This app doesn't check them against the legal limits, so your tax could be higher than shown.",
+    ])
+  })
+
+  it('has no note for a benefit that is switched off', () => {
+    expect(withRice(false)).toEqual([])
   })
 
   it('has no notes for a plain employee', () => {

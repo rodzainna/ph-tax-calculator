@@ -7,6 +7,7 @@ import { parseIsoDate } from '../engine/dates.ts'
 import { EightPercentNotAvailableError } from '../engine/eightPercentTax.ts'
 import { UnsupportedYearError } from '../engine/graduatedTax.ts'
 import { businessYear } from './businessYear.ts'
+import { ANNUAL_DE_MINIMIS_NOTE } from './deMinimisNotes.ts'
 import { employerYear, type EmployerDetail } from './employerYear.ts'
 import { eightPercentOverLimit, UNEXPECTED_PROBLEM } from './problem.ts'
 import { InputProblem } from './scenarioInput.ts'
@@ -89,11 +90,7 @@ function resultNotes(
     }
     notes.push('Percentage tax (3%) or VAT on your sales is separate and not included.')
   }
-  if (details.some((d) => d.deMinimisYear > 0)) {
-    notes.push(
-      'De minimis benefits are treated as tax-free, as your payslip does. Checking them against the legal limits is coming.',
-    )
-  }
+  if (details.some((d) => d.deMinimisYear > 0)) notes.push(ANNUAL_DE_MINIMIS_NOTE)
   if (payslipMode) {
     notes.push(
       'Payslip mode: the 13th month is left out unless you enter it (it is mostly exempt up to the ₱90,000 shared ceiling).',
