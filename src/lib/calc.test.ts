@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest'
-import { expressionText, formatDisplay, initialCalc, pendingOperator, press, screenText, type CalcKey } from './calc.ts'
+import {
+  expressionText,
+  formatDisplay,
+  initialCalc,
+  pasteAmount,
+  pendingOperator,
+  press,
+  screenText,
+  type CalcKey,
+} from './calc.ts'
 
 /** '12 + 3.5 =' as the keys 1 2 + 3 . 5 = */
 const keys = (text: string) =>
@@ -395,6 +404,81 @@ describe('the running line', () => {
 
   it('is empty after an error', () => {
     expect(line('5 ÷ 0 =')).toBe('')
+  })
+})
+
+describe('pasting an amount', () => {
+  /** The state after pressing `before`, pasting `text` and pressing `after`. */
+  const pasted = (before: string, text: string, after = '') => {
+    const state = pasteAmount(play(before), text)
+    if (state === null) throw new Error(`refused: ${text}`)
+    return keys(after).reduce(press, state)
+  }
+
+  it('takes one amount, without its commas or peso mark', () => {
+    expect(screenText(pasted('', '1,234.50'))).toBe('1234.50')
+    expect(screenText(pasted('', '₱30,125.75'))).toBe('30125.75')
+    expect(screenText(pasted('', ' Php. 50,000\n'))).toBe('50000')
+  })
+
+  it('writes it the way typing would', () => {
+    expect(screenText(pasted('', '.5'))).toBe('0.5')
+    expect(screenText(pasted('', '007'))).toBe('7')
+    expect(screenText(pasted('', '000.25'))).toBe('0.25')
+    expect(screenText(pasted('', '0.00'))).toBe('0.00')
+  })
+
+  it('takes up to 15 digits, so totals and its own results fit', () => {
+    expect(screenText(pasted('', '999,999,999,999,999'))).toBe(LARGEST)
+    expect(screenText(pasted('', '2,761,000,000.55'))).toBe('2761000000.55')
+    expect(screenText(pasted('', '0.33333333333333'))).toBe('0.33333333333333')
+  })
+
+  it('gets back every positive result it shows', () => {
+    for (const line of ['2 ÷ 3 =', '1 ÷ 3000000000 =', '999999999999998 + 1 =', '1250.75 × 12 =']) {
+      const result = play(line).display
+      expect(screenText(pasted('', formatDisplay(result)))).toBe(result)
+    }
+  })
+
+  it.each(['1,000,000,000,000,000', '0.123456789012345', '-5', '5 + 3', '12,34', 'abc', ''])('refuses %j', (text) => {
+    expect(pasteAmount(play('12 + 3'), text)).toBeNull()
+  })
+
+  it('replaces the number being typed, sign included', () => {
+    expect(screenText(pasted('123', '45'))).toBe('45')
+    expect(screenText(pasted('5 ±', '45'))).toBe('45')
+    expect(line('5 + 3')).toBe('5 + 3')
+    expect(expressionText(pasted('5 + 3', '45'))).toBe('5 + 45')
+  })
+
+  it('is the next number after an operator', () => {
+    expect(screenText(pasted('5 ×', '1,000', '='))).toBe('5000')
+    expect(screenText(pasted('200 +', '10', '% ='))).toBe('220')
+  })
+
+  it('takes a waiting minus sign', () => {
+    expect(screenText(pasted('±', '45'))).toBe('-45')
+    expect(screenText(pasted('5 + ±', '45', '='))).toBe('-40')
+  })
+
+  it('starts a new calculation after a result or an error', () => {
+    expect(expressionText(pasted('8 + 5 =', '45'))).toBe('')
+    expect(screenText(pasted('8 + 5 =', '45', '+ 1 ='))).toBe('46')
+    expect(screenText(pasted('5 ÷ 0 =', '45'))).toBe('45')
+  })
+
+  it('can be edited like a typed number', () => {
+    expect(screenText(pasted('', '45', '6'))).toBe('456')
+    expect(screenText(pasted('', '45', '⌫'))).toBe('4')
+    expect(screenText(pasted('', '45', '±'))).toBe('-45')
+  })
+
+  it('never changes the state it was given', () => {
+    const before = play('2 + ±')
+    const copy = structuredClone(before)
+    pasteAmount(before, '45')
+    expect(before).toEqual(copy)
   })
 })
 

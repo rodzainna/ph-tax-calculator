@@ -1,5 +1,6 @@
 /** The calculator's state and keys, with no UI. × and ÷ run before + and −, and the whole line stays visible. */
 import { add, divide, multiply, parseDecimal, subtract, toDecimalText, type Fraction } from './fraction.ts'
+import { readPastedAmount } from './peso.ts'
 
 type AdditiveOperator = '+' | '−'
 export type Operator = AdditiveOperator | '×' | '÷'
@@ -38,8 +39,8 @@ export const initialCalc = (): CalcState => ({
   error: null,
 })
 
-/** The most digits a number can have, typed or worked out. */
-const MAX_DIGITS = 15
+/** The most digits a number can have, typed, pasted or worked out. */
+export const MAX_DIGITS = 15
 
 const ZERO = parseDecimal('0')
 const ONE = parseDecimal('1')
@@ -185,6 +186,24 @@ export function press(state: CalcState, key: CalcKey): CalcState {
     default:
       return pressOperator(unsigned, key)
   }
+}
+
+/**
+ * Enters a pasted amount in place of the number being typed, or as the next number. Null if the text is not clearly one
+ * amount of up to 15 digits: nothing is guessed from it.
+ */
+export function pasteAmount(state: CalcState, text: string): CalcState | null {
+  const amount = readPastedAmount(text)
+  if (amount === null) return null
+  // As typed: no commas, no extra leading zeros, and a 0 before a leading dot.
+  const typed = amount
+    .replaceAll(',', '')
+    .replace(/^0+(?=\d)/, '')
+    .replace(/^\./, '0.')
+  if (digitCount(typed) > MAX_DIGITS) return null
+  // Like typing a number, pasting after a result or an error starts a new calculation.
+  const from = state.error || state.finished ? initialCalc() : state
+  return startNumber(from, typed)
 }
 
 /** What the screen shows: -0 while a minus sign waits for its number. */

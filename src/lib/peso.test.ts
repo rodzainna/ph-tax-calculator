@@ -11,6 +11,8 @@ import {
   removedCharacter,
   splitPeso,
   wholeDigitCount,
+  parsePastedAmount,
+  readPastedAmount,
 } from './peso.ts'
 
 describe('formatPesoInput (live commas while typing)', () => {
@@ -167,5 +169,29 @@ describe('charsBeforeCaret', () => {
     ['counts as typed when no zero is added or dropped', '1234.5', '123', 3],
   ])('%s', (_what, text, before, count) => {
     expect(charsBeforeCaret(text, before)).toBe(count)
+  })
+})
+
+describe('pasted amounts', () => {
+  it('reads one amount, with or without a peso mark', () => {
+    for (const text of ['1,234.5', '₱1,234.5', 'PHP 1,234.5', 'Php. 1,234.5', 'P1,234.5', 'p. 1,234.5', ' 1,234.5\n']) {
+      expect(readPastedAmount(text)).toBe('1,234.5')
+    }
+    expect(readPastedAmount('.5')).toBe('.5')
+    expect(readPastedAmount('0.33333333333333')).toBe('0.33333333333333')
+  })
+
+  it('refuses anything that is not clearly one amount', () => {
+    const unclear = ['', 'abc', '1,23', '12,34,567', '1.2.3', '5.', '-5', '−₱1,750.00', '5 + 3', '1e5', '(4)']
+    for (const text of [...unclear, '1 234', '$5', '5%', '100 200', '1,000.00\n2,000.00']) {
+      expect(readPastedAmount(text), text).toBeNull()
+    }
+  })
+
+  it('also holds money fields to two decimals and eight whole digits', () => {
+    expect(parsePastedAmount('Php. 50,000')).toBe('50,000')
+    expect(parsePastedAmount('99999999.99')).toBe('99,999,999.99')
+    expect(parsePastedAmount('100000000')).toBeNull()
+    expect(parsePastedAmount('1.234')).toBeNull()
   })
 })

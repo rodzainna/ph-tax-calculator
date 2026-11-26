@@ -15,8 +15,12 @@ export interface Viewport {
 export const LIMITS = { minW: 224, maxW: 420, minH: 376, maxH: 640 }
 /** Space kept between the calculator and the edge of the window. */
 export const MARGIN = 12
-/** The size it opens at, and its distance from the top (clear of the header) and the right edge. */
-const START = { w: 248, h: 416, top: 88, right: 24 }
+/** The size it opens at, and its distance from the right edge. */
+const START = { w: 248, h: 416, right: 24 }
+/** Narrower than this (Tailwind's sm) the header takes two rows. */
+const ONE_ROW_HEADER_WIDTH = 640
+/** The distance from the top that clears the header. */
+const START_TOP = { oneRowHeader: 88, twoRowHeader: 116 }
 
 /** `min` wins if `max` is below it, so in a window too small for the box its top-left corner stays at the margin. */
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), Math.max(min, max))
@@ -44,7 +48,8 @@ export function clampBox(box: Box, view: Viewport): Box {
 
 /** Where a new calculator opens: near the top right. */
 export function startBox(view: Viewport): Box {
-  const { w, h, top, right } = START
+  const { w, h, right } = START
+  const top = view.w < ONE_ROW_HEADER_WIDTH ? START_TOP.twoRowHeader : START_TOP.oneRowHeader
   return clampBox({ x: view.w - w - right, y: top, w, h }, view)
 }
 

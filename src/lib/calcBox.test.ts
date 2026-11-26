@@ -65,8 +65,15 @@ describe('startBox', () => {
     expect(startBox(desktop)).toEqual({ x: 1168, y: 88, w: 248, h: 416 })
   })
 
-  it('fits on a phone', () => {
-    expect(startBox(phone)).toEqual({ x: 103, y: 88, w: 248, h: 416 })
+  it('starts lower on a phone, clear of the two-row header', () => {
+    expect(startBox(phone)).toEqual({ x: 103, y: 116, w: 248, h: 416 })
+    expect(startBox({ w: 639, h: 800 }).y).toBe(116)
+    expect(startBox({ w: 640, h: 800 }).y).toBe(88)
+  })
+
+  it('still fits the smallest common phone', () => {
+    const view = { w: 320, h: 568 }
+    expect(startBox(view)).toEqual({ x: 48, y: 116, w: 248, h: 416 })
   })
 
   it('moves up and shrinks on a short window', () => {

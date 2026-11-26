@@ -1,4 +1,6 @@
+import { useRef, useState } from 'react'
 import { Route, Routes } from 'react-router'
+import FloatingCalculator from '@/components/calculator/FloatingCalculator.tsx'
 import SiteHeader from '@/components/SiteHeader.tsx'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import Monthly from '@/pages/Monthly.tsx'
@@ -6,10 +8,23 @@ import MyYear from '@/pages/MyYear.tsx'
 import NotFound from '@/pages/NotFound.tsx'
 
 export default function App() {
+  const [calculatorOpen, setCalculatorOpen] = useState(false)
+  const calculatorButton = useRef<HTMLButtonElement>(null)
+
+  // Closing from inside the calculator would leave the focus nowhere, so it goes back to the button that opens it.
+  const closeCalculator = () => {
+    setCalculatorOpen(false)
+    calculatorButton.current?.focus({ preventScroll: true })
+  }
+
   return (
     <TooltipProvider>
       <div className="flex min-h-svh flex-col text-foreground">
-        <SiteHeader />
+        <SiteHeader
+          calculatorOpen={calculatorOpen}
+          onToggleCalculator={() => setCalculatorOpen((isOpen) => !isOpen)}
+          calculatorButtonRef={calculatorButton}
+        />
         <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">
           <Routes>
             <Route path="/" element={<Monthly />} />
@@ -25,6 +40,7 @@ export default function App() {
           <p>Nothing you type leaves your browser.</p>
         </footer>
       </div>
+      <FloatingCalculator open={calculatorOpen} onClose={closeCalculator} />
     </TooltipProvider>
   )
 }

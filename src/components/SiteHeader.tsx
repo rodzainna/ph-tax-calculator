@@ -1,5 +1,7 @@
 import { Moon, Sun } from 'lucide-react'
+import type { Ref } from 'react'
 import { Link, NavLink } from 'react-router'
+import CalculatorIcon from '@/components/shared/CalculatorIcon.tsx'
 import { useTheme } from '@/lib/useTheme.ts'
 import { cn } from '@/lib/utils'
 
@@ -11,8 +13,14 @@ const linkClass = ({ isActive }: { isActive: boolean }) =>
       : 'text-muted-foreground hover:bg-white/80 hover:text-foreground dark:hover:bg-white/10',
   )
 
-/** The top bar: logo and name on the left, a pill of pages and the light/dark button on the right. */
-export default function SiteHeader() {
+interface Props {
+  calculatorOpen: boolean
+  onToggleCalculator: () => void
+  calculatorButtonRef: Ref<HTMLButtonElement>
+}
+
+/** The top bar: logo and name on the left; the pages, calculator button and light/dark button on the right. */
+export default function SiteHeader({ calculatorOpen, onToggleCalculator, calculatorButtonRef }: Props) {
   const { theme, toggle } = useTheme()
   return (
     <header className="sticky top-0 z-30 bg-gradient-to-r from-brand-blush/25 via-white/70 to-brand-teal-bright/20 dark:from-brand-coral/15 dark:via-background/80 dark:to-brand-teal-bright/15 backdrop-blur-md after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-brand-coral after:via-brand-blush after:to-brand-teal-bright">
@@ -68,6 +76,24 @@ export default function SiteHeader() {
           </nav>
 
           <div className="flex shrink-0 items-center gap-2">
+            <button
+              ref={calculatorButtonRef}
+              type="button"
+              onClick={onToggleCalculator}
+              aria-pressed={calculatorOpen}
+              aria-label="Calculator"
+              title="Calculator"
+              className={cn(
+                // A square with only the icon on a phone; a wider button with a label on a large screen.
+                'flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-[22%] border text-sm font-medium shadow-sm transition-all duration-200 lg:w-auto lg:rounded-[9px] lg:pl-[3px] lg:pr-4',
+                calculatorOpen
+                  ? 'border-transparent bg-brand text-white shadow-md shadow-brand-navy/30'
+                  : 'border-brand-teal-bright/30 bg-white/85 text-foreground hover:bg-white hover:shadow-md dark:border-white/15 dark:bg-white/10 dark:hover:bg-white/15',
+              )}
+            >
+              <CalculatorIcon className={cn('size-8 shrink-0', calculatorOpen && 'icon-on-dark')} />
+              <span className="hidden lg:inline">Calculator</span>
+            </button>
             <button
               type="button"
               onClick={toggle}
