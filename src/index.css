@@ -373,6 +373,16 @@ svg.brand-icon.icon-on-dark .ci-tall,
   fill: #e5898a;
 }
 
+/* Text only for screen readers must not be picked up with the text around it: copying a row would copy its spoken
+   "minus" too. These add to Tailwind's own sr-only and not-sr-only, so they also cover variants such as
+   `@min-[26rem]:sr-only`. Text that not-sr-only shows again can be selected like any other. */
+@utility sr-only {
+  @apply select-none;
+}
+@utility not-sr-only {
+  @apply select-auto;
+}
+
 /* ---- Brand surface ------------------------------------------------------------------------
    The logo's gradient: navy to teal, with a coral glow in the top-right corner. Defined once, for the
    larger dark surfaces that belong together: the calculator's title bar, its side tab, the header
