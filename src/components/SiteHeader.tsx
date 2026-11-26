@@ -68,10 +68,6 @@ export default function SiteHeader({ calculatorOpen, onToggleCalculator, calcula
               <NavLink to="/year" className={linkClass}>
                 Annual
               </NavLink>
-              <NavLink to="/about" className={linkClass}>
-                <span className="sm:hidden">About</span>
-                <span className="hidden sm:inline">About &amp; sources</span>
-              </NavLink>
             </div>
           </nav>
 
