@@ -46,7 +46,7 @@ interface Props {
   onPress: (key: CalcKey) => void
 }
 
-/** The keys. They stretch to fill the space they are given. */
+/** The keys. They stretch to fill the space they are given; their labels follow the narrower of width and height. */
 export default function CalculatorKeypad({ pending, onPress }: Props) {
   return (
     <div className="grid min-h-0 flex-1 grid-cols-4 grid-rows-5 gap-2">
@@ -61,7 +61,7 @@ export default function CalculatorKeypad({ pending, onPress }: Props) {
             aria-label={NAMES[key]}
             aria-pressed={kind === 'operator' ? isPending : undefined}
             className={cn(
-              'min-h-0 rounded-full text-[clamp(1.125rem,8cqw,2rem)] font-medium transition-[background-color,transform,filter] duration-100 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary',
+              'min-h-0 rounded-full text-[clamp(1rem,min(8cqw,4.8cqh),1.5rem)] leading-none font-medium transition-[background-color,transform,filter] duration-100 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary',
               isPending ? PENDING_CLASS : KIND_CLASS[kind],
               key === '0' && 'col-span-2',
             )}

@@ -10,13 +10,23 @@ import { startBox } from './lib/calcBox.ts'
 afterEach(() => {
   cleanup()
   vi.unstubAllGlobals()
+  Reflect.deleteProperty(document.documentElement, 'clientWidth')
 })
+
+/** The window's size. jsdom has no layout, so the width left of the scrollbar is given too. */
+const stubWindow = (w: number, h: number) => {
+  vi.stubGlobal('innerWidth', w)
+  vi.stubGlobal('innerHeight', h)
+  Object.defineProperty(document.documentElement, 'clientWidth', { configurable: true, value: w })
+}
 
 const opener = () => within(screen.getByRole('banner')).getByRole('button', { name: 'Calculator' })
 const panel = () => screen.getByRole('group', { name: 'Calculator' })
 const closedPanel = () => screen.queryByRole('group', { name: 'Calculator' })
 const shown = () => within(panel()).getByRole('status').textContent
 const button = (name: string) => within(panel()).getByRole('button', { name })
+const sideTab = () => screen.queryByRole('button', { name: 'Open calculator' })
+const hideButton = () => button('Hide calculator to the side')
 
 async function open() {
   const user = userEvent.setup()
@@ -42,18 +52,45 @@ describe('the calculator in the app', () => {
     expect(opener().getAttribute('aria-pressed')).toBe('false')
   })
 
-  it.each(['Close button', 'Escape'])('gives the focus back to the header button on %s', async (way) => {
-    const user = await open()
+  const hide = async (user: ReturnType<typeof userEvent.setup>, way: string) => {
     if (way === 'Escape') await user.keyboard('{Escape}')
-    else await user.click(button('Close calculator'))
+    else await user.click(hideButton())
+  }
+
+  it.each(['the X button', 'Escape'])('hides to a side tab on %s, and moves the focus to the tab', async (way) => {
+    const user = await open()
+    expect(sideTab()).toBeNull()
+    await hide(user, way)
     expect(closedPanel()).toBeNull()
+    expect(document.activeElement).toBe(sideTab())
+    expect(opener().getAttribute('aria-pressed')).toBe('false')
+  })
+
+  it.each([
+    ['the side tab', () => sideTab() as HTMLElement],
+    ['the header button', () => opener()],
+  ])('comes back from %s with the focus on it and the tab gone', async (_, way) => {
+    const user = await open()
+    await user.keyboard('{Escape}')
+    await user.click(way())
+    expect(document.activeElement).toBe(panel())
+    expect(sideTab()).toBeNull()
+    expect(opener().getAttribute('aria-pressed')).toBe('true')
+  })
+
+  it('closes completely from the header button, leaving no tab and the focus on that button', async () => {
+    const user = await open()
+    await user.click(opener())
+    expect(closedPanel()).toBeNull()
+    expect(sideTab()).toBeNull()
     expect(document.activeElement).toBe(opener())
   })
 
-  it('keeps the calculation while closed', async () => {
+  it.each(['hidden', 'closed'])('keeps the calculation while %s', async (state) => {
     const user = await open()
     await user.keyboard('12+30')
-    await user.keyboard('{Escape}')
+    if (state === 'hidden') await user.keyboard('{Escape}')
+    else await user.click(opener())
     await user.click(opener())
     await user.keyboard('=')
     expect(shown()).toBe('42')
@@ -229,9 +266,8 @@ describe('the calculator in the app', () => {
     expect(shown()).toBe('0')
   })
 
-  it('stays in its starting place when the window changes size', async () => {
-    vi.stubGlobal('innerWidth', 1440)
-    vi.stubGlobal('innerHeight', 900)
+  it('follows its starting place as the window changes size, until it is moved or resized', async () => {
+    stubWindow(1440, 900)
     await open()
     const place = () => {
       const { left, top, width, height } = panel().style
@@ -242,8 +278,7 @@ describe('the calculator in the app', () => {
       return [box.x, box.y, box.w, box.h]
     }
     expect(place()).toEqual(expected(1440, 900))
-    vi.stubGlobal('innerWidth', 375)
-    vi.stubGlobal('innerHeight', 500)
+    stubWindow(375, 500)
     act(() => void window.dispatchEvent(new Event('resize')))
     expect(place()).toEqual(expected(375, 500))
   })
