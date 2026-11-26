@@ -1,5 +1,4 @@
 import { Moon, Sun } from 'lucide-react'
-import type { Ref } from 'react'
 import { Link, NavLink } from 'react-router'
 import CalculatorIcon from '@/components/shared/CalculatorIcon.tsx'
 import { useTheme } from '@/lib/useTheme.ts'
@@ -16,11 +15,10 @@ const linkClass = ({ isActive }: { isActive: boolean }) =>
 interface Props {
   calculatorOpen: boolean
   onToggleCalculator: () => void
-  calculatorButtonRef: Ref<HTMLButtonElement>
 }
 
 /** The top bar: logo and name on the left; the pages, calculator button and light/dark button on the right. */
-export default function SiteHeader({ calculatorOpen, onToggleCalculator, calculatorButtonRef }: Props) {
+export default function SiteHeader({ calculatorOpen, onToggleCalculator }: Props) {
   const { theme, toggle } = useTheme()
   return (
     <header className="sticky top-0 z-30 bg-gradient-to-r from-brand-blush/25 via-white/70 to-brand-teal-bright/20 dark:from-brand-coral/15 dark:via-background/80 dark:to-brand-teal-bright/15 backdrop-blur-md after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-brand-coral after:via-brand-blush after:to-brand-teal-bright">
@@ -73,7 +71,6 @@ export default function SiteHeader({ calculatorOpen, onToggleCalculator, calcula
 
           <div className="flex shrink-0 items-center gap-2">
             <button
-              ref={calculatorButtonRef}
               type="button"
               onClick={onToggleCalculator}
               aria-pressed={calculatorOpen}

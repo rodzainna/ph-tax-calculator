@@ -14,16 +14,18 @@ interface Props {
   /** The last paste was not an amount the calculator can take. */
   pasteRefused: boolean
   onBackspace: () => void
+  /** The calculator's width in pixels. The line and its text change size with it. */
+  width: number
 }
 
 /** The running line, the number under it and the backspace button. */
-export default function CalculatorDisplay({ expression, text, isError, pasteRefused, onBackspace }: Props) {
+export default function CalculatorDisplay({ expression, text, isError, pasteRefused, onBackspace, width }: Props) {
   const line = useRef<HTMLDivElement>(null)
 
   // A long running line scrolls so the newest value stays in view.
   useEffect(() => {
     if (line.current) line.current.scrollLeft = line.current.scrollWidth
-  }, [expression, pasteRefused])
+  }, [expression, pasteRefused, width])
 
   return (
     <div className="relative shrink-0">
@@ -47,9 +49,10 @@ export default function CalculatorDisplay({ expression, text, isError, pasteRefu
           {isError ? (
             <span className="block text-sm font-semibold leading-8 text-destructive">{text}</span>
           ) : (
-            // A long number is scaled down to fit, because a cut-off amount would read as a different one.
+            // A long number is scaled down to fit, because a cut-off amount would read as a different one. The cqh (of
+            // the calculator's height) keeps it from squeezing the keys of a short one.
             <span
-              className="block whitespace-nowrap font-mono font-semibold leading-[1.1] tracking-tight tabular-nums [font-size:min(3.25rem,max(1.5rem,15cqi),calc(100cqi/var(--number-ems)))]"
+              className="block whitespace-nowrap font-mono font-semibold leading-[1.1] tracking-tight tabular-nums [font-size:min(2.25rem,max(1.5rem,min(15cqi,7cqh)),calc(100cqi/var(--number-ems)))]"
               style={{ '--number-ems': text.length * CHARACTER_EMS } as CSSProperties}
             >
               {text}
