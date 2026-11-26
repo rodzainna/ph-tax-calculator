@@ -47,13 +47,18 @@ export function wholeDigitCount(text: string): number {
 /** The largest amount a money field takes, as the field shows it. */
 export const LARGEST_AMOUNT = formatPesoInput(`${'9'.repeat(MAX_WHOLE_DIGITS)}.99`)
 
-/** An optional peso mark, then one amount: commas only between groups of three, at most two decimals. */
-const PASTED_AMOUNT = /^\s*(?:₱|php\.?|p\.?)?\s*((?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d{1,2})?|\.\d{1,2})\s*$/i
+/** An optional peso mark, then one amount, with commas only between groups of three. */
+const PASTED_AMOUNT = /^\s*(?:(?:₱|php\.?|p\.?)\s*)?((?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?|\.\d+)\s*$/i
 
-/** A pasted amount as the field shows it, or null if the text is anything else or the amount is too large. */
+/** The amount in pasted text, without any peso mark, or null if the text is not clearly one amount. */
+export const readPastedAmount = (text: string): string | null => PASTED_AMOUNT.exec(text)?.[1] ?? null
+
+/** A pasted amount as a money field shows it, or null if the field cannot take the text. */
 export function parsePastedAmount(text: string): string | null {
-  const amount = PASTED_AMOUNT.exec(text)?.[1]
-  return amount !== undefined && wholeDigitCount(amount) <= MAX_WHOLE_DIGITS ? formatPesoInput(amount) : null
+  const amount = readPastedAmount(text)
+  if (amount === null || wholeDigitCount(amount) > MAX_WHOLE_DIGITS) return null
+  const [, centavos = ''] = amount.split('.')
+  return centavos.length > 2 ? null : formatPesoInput(amount)
 }
 
 /**
