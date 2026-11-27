@@ -275,17 +275,15 @@ body::before {
 }
 
 /* ---- Icons ---------------------------------------------------------------------------------
-   Every icon (lucide ones, and our own with the class `brand-icon`) is stroked with the brand gradient (defined in index.html). On a dark surface, add the
-   class `icon-on-dark` for the light version, or the icon would disappear into the background. */
+   Every lucide icon is stroked with the brand gradient (defined in index.html). On a dark surface, add the class
+   `icon-on-dark` for the light version, or the icon would disappear into the background. Our own icons are files in
+   public/. */
 @layer base {
-  svg.lucide,
-  svg.brand-icon {
+  svg.lucide {
     stroke: url(#icon-gradient);
   }
   svg.lucide.icon-on-dark,
-  svg.brand-icon.icon-on-dark,
-  .dark svg.lucide,
-  .dark svg.brand-icon {
+  .dark svg.lucide {
     stroke: url(#icon-gradient-light);
   }
 }
@@ -304,35 +302,6 @@ body::before {
   content: '';
   position: absolute;
   inset: -10px -6px;
-}
-
-/* The calculator icon's inner parts are filled in the logo's colours (teal display, sage keys, coral tall key),
-   with no outline. Unlayered, so the gradient stroke above does not reach them. */
-svg.brand-icon .ci-display,
-svg.brand-icon .ci-keys rect,
-svg.brand-icon .ci-tall {
-  stroke: none;
-}
-svg.brand-icon .ci-display {
-  fill: #2f7380;
-}
-svg.brand-icon .ci-keys {
-  fill: #9dbba7;
-}
-svg.brand-icon .ci-tall {
-  fill: #ce6a6b;
-}
-svg.brand-icon.icon-on-dark .ci-display,
-.dark svg.brand-icon .ci-display {
-  fill: #6fb7c4;
-}
-svg.brand-icon.icon-on-dark .ci-keys,
-.dark svg.brand-icon .ci-keys {
-  fill: #bed3c4;
-}
-svg.brand-icon.icon-on-dark .ci-tall,
-.dark svg.brand-icon .ci-tall {
-  fill: #e5898a;
 }
 
 /* Text only for screen readers must not be picked up with the text around it: copying a row would copy its spoken

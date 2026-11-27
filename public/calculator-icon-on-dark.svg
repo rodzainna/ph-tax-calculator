@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="url(#calculator-icon-on-dark-stroke)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+  <defs>
+    <!-- Bright all the way, so it stays clear on the navy and on the coral glow. -->
+    <linearGradient id="calculator-icon-on-dark-stroke" gradientUnits="userSpaceOnUse" x1="2" y1="2" x2="22" y2="22">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="0.5" stop-color="#FFE3DC" />
+      <stop offset="1" stop-color="#A9E6EE" />
+    </linearGradient>
+  </defs>
+  <!-- Body -->
+  <rect x="3" y="3" width="18" height="18" rx="2.6" />
+  <!-- Display -->
+  <rect x="4.875" y="4.875" width="14.25" height="3.5625" rx="1.125" fill="#6FB7C4" stroke="none" />
+  <!-- Six keys -->
+  <g fill="#BED3C4" stroke="none">
+    <rect x="4.875" y="9.9375" width="3.75" height="2.4375" rx="0.94" />
+    <rect x="9.75" y="9.9375" width="3.75" height="2.4375" rx="0.94" />
+    <rect x="4.875" y="13.3125" width="3.75" height="2.4375" rx="0.94" />
+    <rect x="9.75" y="13.3125" width="3.75" height="2.4375" rx="0.94" />
+    <rect x="4.875" y="16.6875" width="3.75" height="2.4375" rx="0.94" />
+    <rect x="9.75" y="16.6875" width="3.75" height="2.4375" rx="0.94" />
+  </g>
+  <!-- Tall key -->
+  <rect x="14.625" y="9.9375" width="4.5" height="9.1875" rx="0.94" fill="#E5898A" stroke="none" />
+</svg>

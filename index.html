@@ -4,9 +4,18 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Prototype: keep out of search engines until the rules are verified end to end. -->
-    <meta name="robots" content="noindex, nofollow" />
-    <title>PH Tax Calculator (prototype)</title>
+    <title>Take-home pay calculator | PH Tax Calculator</title>
+    <!-- The home page's values. The build writes a copy of this file for each other page (src/lib/pageMeta.ts). -->
+    <meta name="description" content="Estimate monthly take-home pay in the Philippines after income tax and contributions, employed or self-employed. Estimates only, not tax advice." />
+    <meta property="og:title" content="Take-home pay calculator | PH Tax Calculator" />
+    <meta property="og:description" content="Estimate monthly take-home pay in the Philippines after income tax and contributions, employed or self-employed. Estimates only, not tax advice." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PH Tax Calculator" />
+    <meta property="og:image" content="https://ph-tax-calculator.rodzainna.com/og-banner.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="PH Tax Calculator: estimate your income tax and take-home pay" />
+    <meta name="twitter:card" content="summary_large_image" />
     <!-- Sets light or dark before the page paints, so a dark visitor does not see a white flash. Same rule as src/lib/theme.ts. -->
     <script>
       try {
