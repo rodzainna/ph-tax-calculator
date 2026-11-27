@@ -37,6 +37,18 @@ describe('MoneyRow', () => {
     expect(screen.getByText('₱0.00').className).not.toContain('text-muted-foreground/60')
   })
 
+  it('draws a deduction in red, fading a zero unless the row is bold', () => {
+    const { rerender } = inList(<MoneyRow label="SSS" amount={1_111} tone="deduction" />)
+    expect(screen.getByText('₱1,111.00').classList).toContain('text-destructive')
+
+    rerender(wrap(<MoneyRow label="SSS" amount={0} tone="deduction" />))
+    expect(screen.getByText('₱0.00').classList).toContain('text-destructive/45')
+    expect(screen.getByText('₱0.00').classList).not.toContain('text-muted-foreground/60')
+
+    rerender(wrap(<MoneyRow strong label="SSS" amount={0} tone="deduction" />))
+    expect(screen.getByText('₱0.00').classList).toContain('text-destructive')
+  })
+
   it('puts the term and its amount directly in the list, as a description list needs', () => {
     const { container } = inList(<MoneyRow label="Gross pay" amount={1} note="a note" />)
     const row = container.querySelector('dl > div')!

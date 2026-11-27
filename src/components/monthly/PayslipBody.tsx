@@ -16,8 +16,11 @@ interface Props {
   children?: ReactNode
 }
 
+/** The most characters the net pay can have at full size. */
+const NET_FITS_AT_FULL_SIZE = 15
+
 /** An amount in the billions steps down a size, so it still fits a very narrow screen. */
-const netSize = (amount: string): string => (amount.length > 15 ? 'text-xl' : 'text-2xl')
+const netSize = (amount: string): string => (amount.length > NET_FITS_AT_FULL_SIZE ? 'text-xl' : 'text-2xl')
 
 /** The payslip itself: what comes in, what comes off, and what is left. */
 export default function PayslipBody({ slip, isSelfEmployed, rates, children }: Props) {

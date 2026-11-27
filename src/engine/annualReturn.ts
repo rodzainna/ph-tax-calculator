@@ -56,7 +56,13 @@ function nonNegative(name: string, value: number): number {
   return value
 }
 
-/** Annual tax with the 8% option: compensation only is the 1700, business only the 1701A, both the 1701; compensation earners get no P250,000 reduction. */
+/** 1700 is for pay only, 1701A for business only, and 1701 for both. */
+function formFor(hasCompensation: boolean, hasBusiness: boolean): AnnualReturnResult['form'] {
+  if (!hasBusiness) return '1700'
+  return hasCompensation ? '1701' : '1701A'
+}
+
+/** Annual tax with the 8% option. Anyone who also earns pay gets no P250,000 reduction. */
 export function annualReturnWithEightPercent(input: AnnualReturnInput): AnnualReturnResult {
   const employers = input.employers ?? []
   const hasCompensation = employers.length > 0
@@ -94,7 +100,7 @@ export function annualReturnWithEightPercent(input: AnnualReturnInput): AnnualRe
 
   return {
     year: input.year,
-    form: hasCompensation && hasBusiness ? '1701' : hasBusiness ? '1701A' : '1700',
+    form: formFor(hasCompensation, hasBusiness),
     compensation,
     business,
     graduatedBusiness: null,
@@ -107,7 +113,10 @@ export function annualReturnWithEightPercent(input: AnnualReturnInput): AnnualRe
   }
 }
 
-/** Annual tax with the graduated rates and the 40% standard deduction (1701/1701A): net business income joins taxable pay and the table is applied once to the total. */
+/**
+ * Annual tax with the graduated rates, for the 40% standard deduction or itemized expenses. Net business income joins
+ * taxable pay, and the table is applied once to the total.
+ */
 export function annualReturnWithGraduated(input: AnnualReturnInput): AnnualReturnResult {
   const employers = input.employers ?? []
   const hasCompensation = employers.length > 0
@@ -150,7 +159,7 @@ export function annualReturnWithGraduated(input: AnnualReturnInput): AnnualRetur
 
   return {
     year: input.year,
-    form: hasCompensation && graduatedBusiness ? '1701' : graduatedBusiness ? '1701A' : '1700',
+    form: formFor(hasCompensation, graduatedBusiness !== null),
     compensation,
     business: null,
     graduatedBusiness,

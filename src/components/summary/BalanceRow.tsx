@@ -2,9 +2,15 @@ import InfoTip from '@/components/shared/InfoTip.tsx'
 import PesoAmount from '@/components/shared/PesoAmount.tsx'
 import { cn } from '@/lib/utils'
 
-/** The last line of the payslip: what is left to pay, in its own box. Pink to pay, teal when overpaid, grey at zero. */
+/** Pink to pay, teal when overpaid, grey at zero. */
+function boxColors(balance: number): string {
+  if (balance > 0) return 'bg-secondary text-secondary-foreground'
+  if (balance < 0) return 'bg-accent text-primary'
+  return 'bg-muted text-foreground'
+}
+
+/** The last line of the payslip: what is left to pay, in its own box. */
 export default function BalanceRow({ balance }: { balance: number }) {
-  const owes = balance > 0
   const over = balance < 0
   const hint = over
     ? 'Total income tax minus your credits. Your credits are more than the tax, so you paid more than you owe.'
@@ -15,11 +21,7 @@ export default function BalanceRow({ balance }: { balance: number }) {
       <div
         className={cn(
           'flex flex-wrap items-baseline justify-between gap-x-3 rounded-xl px-3 py-2.5',
-          owes
-            ? 'bg-secondary text-secondary-foreground'
-            : over
-              ? 'bg-accent text-primary'
-              : 'bg-muted text-foreground',
+          boxColors(balance),
         )}
       >
         <dt className="flex items-center gap-1 text-sm font-semibold">

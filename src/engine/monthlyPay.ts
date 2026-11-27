@@ -47,57 +47,51 @@ function check(name: string, value: number): void {
   if (!Number.isFinite(value) || value < 0) throw new RangeError(`${name} must be a number of 0 or more, got ${value}`)
 }
 
-/** One month of a salary: contributions, income tax and take-home, with tax estimated as the year's tax divided by 12 (payroll withholding can differ). */
+/** The year's 13th month and bonuses: the amount given, otherwise one month of basic unless that is switched off. */
+function yearlyBonusesOf(input: MonthlyPayInput): number {
+  if (input.yearlyBonuses !== undefined) return roundToCentavos(input.yearlyBonuses)
+  const receivesThirteenth = input.receivesThirteenthMonth ?? true
+  return receivesThirteenth ? roundToCentavos(input.monthlyBasic) : 0
+}
+
+/**
+ * One month of a salary: contributions, income tax and take-home. Tax is the year's tax divided by 12, so payroll
+ * withholding can differ.
+ */
 export function monthlyPay(input: MonthlyPayInput): MonthlyPayResult {
   const allowance = input.monthlyTaxableAllowance ?? 0
   const deMinimis = input.monthlyDeMinimis ?? 0
-  const receivesThirteenth = input.receivesThirteenthMonth ?? true
   check('monthlyBasic', input.monthlyBasic)
   check('monthlyTaxableAllowance', allowance)
   check('monthlyDeMinimis', deMinimis)
 
-  // December carries the latest rule of the year (for example Pag-IBIG's 2024 cap).
-  const none = { sss: { msc: 0, regular: 0, mpf: 0, total: 0 }, philhealth: 0, pagibig: 0, total: 0 }
-  // With no salary there is nothing to deduct (the minimum contributions would otherwise apply).
-  // monthlyContributions still validates the year, so unsupported years are rejected either way.
+  // December carries the latest rule of the year (for example Pag-IBIG's 2024 cap). This also rejects a year with no
+  // rules, so it runs even with no salary.
   const rules = monthlyContributions(input.year, 12, { monthlyBasic: input.monthlyBasic })
+  // With no salary there is nothing to deduct (the minimum contributions would otherwise apply).
+  const none = { sss: { msc: 0, regular: 0, mpf: 0, total: 0 }, philhealth: 0, pagibig: 0, total: 0 }
   const c = input.monthlyBasic === 0 ? none : rules
   if (input.yearlyBonuses !== undefined) check('yearlyBonuses', input.yearlyBonuses)
-  const thirteenthMonth =
-    input.yearlyBonuses !== undefined
-      ? roundToCentavos(input.yearlyBonuses)
-      : receivesThirteenth
-        ? roundToCentavos(input.monthlyBasic)
-        : 0
+  const thirteenthMonth = yearlyBonusesOf(input)
 
-  const tax = compensationTax(
-    [
-      {
-        label: 'Employer',
-        regularPay: roundToCentavos(12 * (input.monthlyBasic + allowance)),
-        thirteenthMonthAndBenefits: thirteenthMonth,
-        deMinimisExcess: 0,
-        mandatoryContributions: roundToCentavos(12 * c.total),
-        taxWithheld: 0,
-      },
-    ],
-    input.year,
-  )
-
+  // The year's tax with this much 13th month and bonuses. Everything else about the pay stays the same.
+  const taxWith = (thirteenthMonthAndBenefits: number) =>
+    compensationTax(
+      [
+        {
+          label: 'Employer',
+          regularPay: roundToCentavos(12 * (input.monthlyBasic + allowance)),
+          thirteenthMonthAndBenefits,
+          deMinimisExcess: 0,
+          mandatoryContributions: roundToCentavos(12 * c.total),
+          taxWithheld: 0,
+        },
+      ],
+      input.year,
+    )
+  const tax = taxWith(thirteenthMonth)
   // The tax again with no 13th month at all: the difference is the tax the bonuses cause.
-  const withoutBonuses = compensationTax(
-    [
-      {
-        label: 'Employer',
-        regularPay: roundToCentavos(12 * (input.monthlyBasic + allowance)),
-        thirteenthMonthAndBenefits: 0,
-        deMinimisExcess: 0,
-        mandatoryContributions: roundToCentavos(12 * c.total),
-        taxWithheld: 0,
-      },
-    ],
-    input.year,
-  )
+  const withoutBonuses = taxWith(0)
 
   // A minimum wage earner pays no income tax; everything else about the pay is the same.
   const exempt = input.isMinimumWageEarner === true
