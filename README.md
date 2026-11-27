@@ -11,12 +11,9 @@ This is a portfolio project that is still being built. Results are estimates for
 - **Taxpayer types**: employee and self-employed on both pages, and mixed income on Annual. For business income you choose the 8% option or graduated rates. Graduated rates use the 40% standard deduction, and Annual also takes itemized expenses. On Monthly, self-employed contributions start off, and only the ones you add are taken off.
 - **Calculator**: opens from the header. It works out × and ÷ before + and −, shows the line as you build it, and takes keyboard input and pasted amounts. Move it by its title bar and resize it from its corner, by dragging or with the arrow keys. It can be hidden to a tab on the side, and its place is not saved after a reload.
 - **About & sources**: where each rule comes from, how far it is confirmed, and what is assumed.
+- **Privacy and Terms**: linked from the footer.
 
 De minimis benefits (non-taxable allowances on Monthly) are treated as fully tax-free. The app does not check them against the legal limits, so the tax shown could be too low.
-
-## Planned
-
-- Privacy and Terms pages.
 
 ## Run it
 
@@ -41,6 +38,7 @@ React 19, Vite, TypeScript, Tailwind CSS 4, shadcn/ui (Radix), react-router. Tes
 | `src/engine` | The tax maths as pure TypeScript functions with no UI: graduated tax, 8% option, 40% deduction, contributions, 13th month, monthly and annual results, with tests. |
 | `src/engine/rules` | The rules as data (brackets, rates, ceilings by year), each with a source and a `verified` flag. |
 | `src/lib` | Form state, formatting, the payslip periods, the bracket bar, the calculator's state machine. |
+| `src/config.ts` | The site name, owner, contact link and host shown on the Privacy and Terms pages. |
 | `src/components`, `src/pages` | The UI. Shared building blocks (cards, money rows, inputs, tips) are in `components/shared`. |
 
 Each rule in `src/engine/rules` names its source. For 2026, the SSS figures from 2025 and the Pag-IBIG figures from February 2024 are assumed to still apply: no official source that restates them for 2026 was found.

@@ -2,10 +2,15 @@
 import { cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import App from '@/App.tsx'
 
-afterEach(cleanup)
+// jsdom does not scroll, so scrollTo is stood in for.
+beforeEach(() => vi.stubGlobal('scrollTo', vi.fn()))
+afterEach(() => {
+  cleanup()
+  vi.unstubAllGlobals()
+})
 
 const NOT_FOUND = 'That page does not exist'
 
