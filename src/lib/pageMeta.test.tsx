@@ -125,6 +125,11 @@ describe('what crawlers get', () => {
     expect(robots).toContain('\nSitemap: https://ph-tax-calculator.rodzainna.com/sitemap.xml\n')
   })
 
+  it.each(routes)('keeps the Search Console verification tag on %s', (route) => {
+    const page = parse(withPageMeta(indexHtml, PAGE_META[route]!))
+    expect(content(page, 'meta[name="google-site-verification"]')).toBe('rs7cV8akx0hA79PmdcZMoLoTbrhlI5kOJab53VtmFXc')
+  })
+
   it('is an llms.txt that links to every page', () => {
     const links = [...llms.matchAll(/\]\((https:[^)]+)\)/g)].map((match) => new URL(match[1]!).pathname)
     expect(links).toEqual(routes)
