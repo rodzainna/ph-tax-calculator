@@ -6,6 +6,7 @@ import SiteHeader from '@/components/SiteHeader.tsx'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { afterHeaderButton, type CalculatorMode } from '@/lib/calcMode.ts'
 import { useOpenAtTop } from '@/lib/useOpenAtTop.ts'
+import { usePageMeta } from '@/lib/usePageMeta.ts'
 import About from '@/pages/About.tsx'
 import Monthly from '@/pages/Monthly.tsx'
 import MyYear from '@/pages/MyYear.tsx'
@@ -17,6 +18,7 @@ export default function App() {
   const [calculator, setCalculator] = useState<CalculatorMode>('closed')
   const page = useRef<HTMLElement>(null)
   useOpenAtTop(page)
+  usePageMeta()
 
   return (
     <TooltipProvider>

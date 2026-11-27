@@ -43,7 +43,7 @@ export default function CalculatorTitleBar({ nudge, grab, onHide }: Props) {
           <GripVertical className="icon-on-dark size-3.5" aria-hidden />
         </button>
         {/* A narrow screen drops the icon to leave the bar less crowded. */}
-        <CalculatorIcon className="icon-on-dark size-7 shrink-0 max-sm:hidden" />
+        <CalculatorIcon className="size-7 shrink-0 max-sm:hidden" onDark />
         <span className="truncate text-sm font-semibold tracking-tight">Calculator</span>
       </span>
       <button

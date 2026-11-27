@@ -52,7 +52,7 @@ Each rule in `src/engine/rules` names its source. For 2026, the SSS figures from
 
 ## Deploying
 
-Static site, hosted on Vercel. `pnpm build` writes it to `dist/`, and `vercel.json` sends every path to `index.html` so the routes work on refresh. To host it on Netlify instead, `netlify.toml` and `public/_redirects` do the same there; the host named in the Privacy Policy is set in `src/config.ts`.
+Static site, hosted on Vercel. `pnpm build` writes it to `dist/`, with one HTML file per page so that each has its own title and description in link previews (`src/lib/pageMeta.ts`), and `vercel.json` sends every path to `index.html` so the routes work on refresh. To host it on Netlify instead, `netlify.toml` and `public/_redirects` do the same there; the host named in the Privacy Policy is set in `src/config.ts`.
 
 ## Licence
 

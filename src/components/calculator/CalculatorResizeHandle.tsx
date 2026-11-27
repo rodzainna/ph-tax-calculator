@@ -26,17 +26,8 @@ export default function CalculatorResizeHandle({ nudge, grab }: Pick<CalcBox, 'n
       // The calculator leaves this much room under its keys.
       className="absolute bottom-0 right-0 flex size-6 cursor-nwse-resize touch-none items-end justify-end p-1.5 text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary"
     >
-      <svg
-        viewBox="0 0 12 12"
-        className="size-3"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        aria-hidden
-      >
-        <path d="M10.5 3.5 3.5 10.5M10.5 7.5 7.5 10.5" />
-      </svg>
+      {/* The file is used as a mask, so the grip takes the button's text colour, including on hover. */}
+      <span aria-hidden className="size-3 bg-current [mask:url(/resize-grip-icon.svg)_center/contain_no-repeat]" />
     </button>
   )
 }

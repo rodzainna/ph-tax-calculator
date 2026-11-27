@@ -46,9 +46,6 @@ export default function SiteHeader({ calculatorOpen, onToggleCalculator }: Props
                   Calculator
                 </span>
               </span>
-              <span className="rounded-full bg-secondary px-2 py-[3px] text-[11px] font-semibold uppercase leading-none tracking-wider text-secondary-foreground">
-                Prototype
-              </span>
             </span>
             <span className="hidden truncate text-xs leading-tight text-muted-foreground lg:block">
               Take-home pay and income tax estimates
@@ -89,7 +86,7 @@ export default function SiteHeader({ calculatorOpen, onToggleCalculator }: Props
                   : 'border-brand-teal-bright/30 bg-white/85 text-foreground hover:bg-white hover:shadow-md dark:border-white/15 dark:bg-white/10 dark:hover:bg-white/15',
               )}
             >
-              <CalculatorIcon className={cn('size-8 shrink-0', calculatorOpen && 'icon-on-dark')} />
+              <CalculatorIcon className="size-8 shrink-0" onDark={calculatorOpen} />
               <span className="hidden lg:inline">Calculator</span>
             </button>
             <button
