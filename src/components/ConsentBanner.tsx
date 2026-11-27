@@ -23,12 +23,12 @@ export default function ConsentBanner({ takeFocus, onDecide }: Props) {
   }, [takeFocus])
 
   return (
-    // It sits above the phone's bottom total bar, and under the calculator window.
+    // Below the width where the bottom bars end, it sits above them. It stays under the calculator window.
     <aside
       ref={card}
       tabIndex={-1}
       aria-label="Analytics choice"
-      className="fixed right-4 bottom-24 z-40 w-80 max-w-[calc(100vw-2rem)] rounded-2xl bg-card p-4 shadow-card-hover ring-1 ring-foreground/10 outline-none animate-in fade-in slide-in-from-bottom-4 duration-300 motion-reduce:animate-none sm:right-6 sm:bottom-6 sm:w-96"
+      className="fixed right-4 bottom-24 z-40 w-80 max-w-[calc(100vw-2rem)] rounded-2xl bg-card p-4 shadow-card-hover ring-1 ring-foreground/10 outline-none animate-in fade-in slide-in-from-bottom-4 duration-300 motion-reduce:animate-none sm:right-6 sm:w-96 xl:bottom-6"
     >
       <div className="flex items-start gap-3.5">
         <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-secondary" aria-hidden>

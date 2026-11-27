@@ -1,6 +1,8 @@
 import { ChevronDown } from 'lucide-react'
 import { useEffect, useState, type ReactNode } from 'react'
+import { RESULT_NAVY } from '@/components/shared/AppCard.tsx'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 interface Props {
   /** What the figure is, e.g. "Take-home pay per month". */
@@ -25,7 +27,13 @@ export default function MobileResultBar({ label, children, targetId }: Props) {
 
   if (targetVisible) return null
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 px-4 py-3 backdrop-blur md:hidden">
+    <div
+      className={cn(
+        RESULT_NAVY,
+        // m-0, or the page's spacing between cards would lift the bar off the bottom of the screen.
+        'fixed inset-x-0 bottom-0 z-40 m-0 border-t bg-card px-4 py-3 text-card-foreground md:hidden',
+      )}
+    >
       {/* The button moves to its own line rather than sit under a very long figure. */}
       <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
         <div className="flex-1">

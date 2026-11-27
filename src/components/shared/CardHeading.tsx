@@ -22,8 +22,8 @@ export default function CardHeading({ badge, title, description, action }: Props
           {badge}
         </span>
         <div className="min-w-0">
-          <CardTitle className="text-lg group-data-[size=sm]/card:text-lg">{title}</CardTitle>
-          {description && <p className="text-sm text-muted-foreground">{description}</p>}
+          <CardTitle className="text-lg leading-tight group-data-[size=sm]/card:text-lg">{title}</CardTitle>
+          {description && <p className="text-sm leading-tight text-muted-foreground">{description}</p>}
         </div>
       </div>
       {action}

@@ -51,6 +51,16 @@ describe('MoneyRow', () => {
     expect(screen.getByText('₱0.00').classList).toContain('text-destructive')
   })
 
+  it('draws a new element for a new figure, so none is laid out at an old width', () => {
+    const { rerender } = inList(<MoneyRow label="Gross pay" amount={1} />)
+    const first = screen.getByText('₱1.00')
+    rerender(wrap(<MoneyRow label="Gross pay" amount={1} />))
+    expect(screen.getByText('₱1.00')).toBe(first)
+    rerender(wrap(<MoneyRow label="Gross pay" amount={111_111} />))
+    expect(screen.getByText('₱111,111.00')).not.toBe(first)
+    expect(first.isConnected).toBe(false)
+  })
+
   it('puts the term and its amount directly in the list, as a description list needs', () => {
     const { container } = inList(<MoneyRow label="Gross pay" amount={1} note="a note" />)
     const row = container.querySelector('dl > div')!

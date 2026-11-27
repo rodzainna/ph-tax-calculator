@@ -41,12 +41,13 @@ export default function MoneyRow({ label, amount, sign, strong, subtotal, note, 
   return (
     <div
       className={cn(
-        'grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-4 gap-y-0.5 text-sm',
+        // A flex row, not a grid: on an iPhone the grid's amount column was seen to keep an earlier, narrower width.
+        'flex flex-wrap items-baseline gap-x-4 gap-y-0.5 text-sm',
         bold && 'font-semibold',
         subtotal && 'mt-1 border-t border-foreground/10 pt-2',
       )}
     >
-      <dt className={cn('min-w-0', bold ? 'text-foreground' : 'text-muted-foreground')}>
+      <dt className={cn('min-w-0 flex-1', bold ? 'text-foreground' : 'text-muted-foreground')}>
         <LabelWithTip
           label={label}
           after={tag ? <span className="ml-1.5 text-xs font-normal text-muted-foreground/80">{tag}</span> : null}
@@ -54,6 +55,8 @@ export default function MoneyRow({ label, amount, sign, strong, subtotal, note, 
         />
       </dt>
       <dd
+        // A new figure gets a new element, so that no browser can lay it out at the old figure's width.
+        key={amount ?? 'none'}
         className={cn(
           'shrink-0 whitespace-nowrap font-mono text-[0.92em] tabular-nums',
           !bold && 'font-medium',
@@ -79,7 +82,7 @@ export default function MoneyRow({ label, amount, sign, strong, subtotal, note, 
           </>
         )}
       </dd>
-      {note ? <dd className="col-span-2 text-xs font-normal leading-snug text-muted-foreground">{note}</dd> : null}
+      {note ? <dd className="basis-full text-xs font-normal leading-snug text-muted-foreground">{note}</dd> : null}
     </div>
   )
 }
