@@ -4,6 +4,7 @@ import FloatingCalculator from '@/components/calculator/FloatingCalculator.tsx'
 import SiteHeader from '@/components/SiteHeader.tsx'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { afterHeaderButton, type CalculatorMode } from '@/lib/calcMode.ts'
+import About from '@/pages/About.tsx'
 import Monthly from '@/pages/Monthly.tsx'
 import MyYear from '@/pages/MyYear.tsx'
 import NotFound from '@/pages/NotFound.tsx'
@@ -22,6 +23,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Monthly />} />
             <Route path="/year" element={<MyYear />} />
+            <Route path="/about" element={<About />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>

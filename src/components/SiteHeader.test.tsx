@@ -26,7 +26,7 @@ describe('the header links', () => {
     const user = userEvent.setup()
     renderAt('/')
     const links = within(screen.getByRole('banner')).getAllByRole('link')
-    expect(links.map((link) => link.getAttribute('href'))).toContain('/year')
+    expect(links.map((link) => link.getAttribute('href'))).toEqual(expect.arrayContaining(['/year', '/about']))
     for (const link of links) {
       await user.click(link)
       expect(screen.queryByText(NOT_FOUND), link.getAttribute('href') ?? '').toBeNull()

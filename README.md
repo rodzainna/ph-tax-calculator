@@ -10,12 +10,12 @@ This is a portfolio project that is still being built. Results are estimates for
 - **Annual**: the year's income tax across several employers and/or business income, with the 13th-month ceiling, de minimis benefits, tax withheld and credits, ending in what is left to pay.
 - **Taxpayer types**: employee and self-employed on both pages, and mixed income on Annual. For business income you choose the 8% option or graduated rates. Graduated rates use the 40% standard deduction, and Annual also takes itemized expenses.
 - **Calculator**: opens from the header. It works out × and ÷ before + and −, shows the line as you build it, and takes keyboard input and pasted amounts. Move it by its title bar and resize it from its corner, by dragging or with the arrow keys. It can be hidden to a tab on the side, and its place is not saved after a reload.
+- **About & sources**: where each rule comes from, how far it is confirmed, and what is assumed.
 
 De minimis benefits (non-taxable allowances on Monthly) are treated as fully tax-free. The app does not check them against the legal limits, so the tax shown could be too low.
 
 ## Planned
 
-- An About page that lists the tax rules and which of them are confirmed.
 - Privacy and Terms pages.
 
 ## Run it
