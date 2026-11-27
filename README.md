@@ -47,7 +47,7 @@ Each rule in `src/engine/rules` names its source. For 2026, the SSS figures from
 
 - The figures you enter are not saved or sent anywhere. Reloading or closing the page clears them.
 - In your browser's local storage the app keeps your light or dark choice, once you use the header button, and, if it has analytics, your answer to the analytics question.
-- It has no analytics unless it is built with a Google tag ID in `VITE_GTM_ID` (see `.env.example`). With one, Google Analytics loads, and sets cookies, only after a visitor accepts.
+- It has no analytics unless it is built with a Google tag ID in `VITE_GTM_ID` (see `.env.example`). With one, Google Analytics loads, and sets cookies, only after a visitor accepts. The site also tells it that a calculator gave an estimate (`monthly_estimate`, `annual_estimate`), with no figures.
 - Fonts and images are served from the site itself.
 
 ## Deploying

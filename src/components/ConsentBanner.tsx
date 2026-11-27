@@ -38,9 +38,9 @@ export default function ConsentBanner({ takeFocus, onDecide }: Props) {
           <div className="space-y-1">
             <p className="text-base font-semibold">Can I count visits?</p>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              If you accept, Google Analytics loads to show me how the site is used, such as pages viewed, scrolling and
-              links clicked, and it sets cookies. What you type into the calculators is not sent to it. The site works
-              the same if you decline.{' '}
+              If you accept, Google Analytics loads to show me how the site is used, such as pages viewed, scrolling,
+              links clicked and whether you got an estimate, and it sets cookies. What you type into the calculators is
+              not sent to it. The site works the same if you decline.{' '}
               <Link to="/privacy" className="underline">
                 Privacy
               </Link>

@@ -3,6 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   allowAnalytics,
   CONSENT_STORAGE_KEY,
+  countUse,
+  forgetUse,
   parseChoice,
   readChoice,
   saveChoice,
@@ -15,6 +17,7 @@ beforeEach(() => {
   localStorage.clear()
   document.head.innerHTML = ''
   delete window.dataLayer
+  forgetUse()
 })
 afterEach(() => vi.restoreAllMocks())
 
@@ -62,7 +65,8 @@ describe('the Google tag', () => {
       'default',
       { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'granted' },
     ])
-    expect(commands()[1]![0]).toBe('js')
+    expect(commands()[1]).toEqual(['set', { cookie_domain: 'none' }])
+    expect(commands()[2]![0]).toBe('js')
     expect(tags()).toHaveLength(1)
     expect((tags()[0] as HTMLScriptElement).src).toBe(tagScriptUrl('GTM-TEST'))
   })
@@ -91,5 +95,44 @@ describe('the Google tag', () => {
     stopAnalytics()
     expect(window.dataLayer).toBeUndefined()
     expect(tags()).toHaveLength(0)
+  })
+})
+
+describe('counting that a calculator was used', () => {
+  const events = () => commands().filter(([name]) => name === 'event')
+
+  it('sends nothing without permission', () => {
+    countUse('monthly_estimate')
+    expect(window.dataLayer).toBeUndefined()
+  })
+
+  it('sends the name and nothing else, once, however often the estimate changes', () => {
+    allowAnalytics('GTM-TEST')
+    countUse('monthly_estimate')
+    countUse('monthly_estimate')
+    countUse('annual_estimate')
+    expect(events()).toEqual([
+      ['event', 'monthly_estimate'],
+      ['event', 'annual_estimate'],
+    ])
+  })
+
+  it('sends an estimate already shown once analytics is accepted, after the tag is set up', () => {
+    countUse('monthly_estimate')
+    allowAnalytics('GTM-TEST')
+    expect(commands().map(([name]) => name)).toEqual(['consent', 'set', 'js', 'event'])
+  })
+
+  it('sends nothing new while declined, then sends it if accepted again, without repeating', () => {
+    allowAnalytics('GTM-TEST')
+    countUse('monthly_estimate')
+    stopAnalytics()
+    countUse('annual_estimate')
+    expect(events()).toHaveLength(1)
+    allowAnalytics('GTM-TEST')
+    expect(events()).toEqual([
+      ['event', 'monthly_estimate'],
+      ['event', 'annual_estimate'],
+    ])
   })
 })
