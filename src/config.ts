@@ -4,4 +4,4 @@ export const OWNER_NAME = 'Rodzainna Hamisain'
 export const OWNER_SITE = { label: 'rodzainna.com', href: 'https://rodzainna.com' }
 /** A profile link, so that no email address is published. */
 export const CONTACT = { label: 'LinkedIn', href: 'https://www.linkedin.com/in/rodzainna' }
-export const HOSTING_PROVIDER = 'Netlify'
+export const HOSTING_PROVIDER = 'Vercel'
