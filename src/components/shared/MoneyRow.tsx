@@ -25,18 +25,18 @@ interface Props {
 
 const SIGN_TEXT = { minus: '−', plus: '+' } as const
 
-/** A deduction is red. A faded amount keeps its colour, only lighter. */
-function amountColor(red: boolean, faded: boolean): string | undefined {
-  if (red) return faded ? 'text-destructive/45' : 'text-destructive'
-  return faded ? 'text-muted-foreground/60' : undefined
+/** A deduction is red. A quiet amount is grey, which stays readable on every card. */
+function amountColor(red: boolean, quiet: boolean): string | undefined {
+  if (quiet) return 'text-muted-foreground'
+  return red ? 'text-destructive' : undefined
 }
 
 /** One "label ........ amount" line inside a <dl>. Used by every summary and breakdown. */
 export default function MoneyRow({ label, amount, sign, strong, subtotal, note, hint, tag, tone }: Props) {
   const bold = strong || subtotal
   const red = tone === 'deduction'
-  // A zero is faded so the other amounts are easier to find. Totals stay at full strength.
-  const faded = amount === 0 && !bold
+  // A zero is quiet so the other amounts are easier to find. Totals stay at full strength.
+  const quiet = amount === 0 && !bold
 
   return (
     <div
@@ -57,7 +57,7 @@ export default function MoneyRow({ label, amount, sign, strong, subtotal, note, 
         className={cn(
           'shrink-0 whitespace-nowrap font-mono text-[0.92em] tabular-nums',
           !bold && 'font-medium',
-          amountColor(red, faded),
+          amountColor(red, quiet),
         )}
       >
         {amount === null ? (
@@ -67,7 +67,7 @@ export default function MoneyRow({ label, amount, sign, strong, subtotal, note, 
             {sign ? (
               <>
                 <span
-                  className={cn('mr-1.5 font-normal', red ? 'text-destructive/70' : 'text-muted-foreground')}
+                  className={cn('mr-1.5 font-normal', red && !quiet ? 'text-destructive/70' : 'text-muted-foreground')}
                   aria-hidden
                 >
                   {SIGN_TEXT[sign]}
