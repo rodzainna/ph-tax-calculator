@@ -80,7 +80,7 @@ describe('DeMinimisList', () => {
     const { onChange } = show([rice, laundry])
     await user.click(screen.getAllByRole('combobox')[0])
     await user.click(within(screen.getByRole('listbox')).getByRole('option', { name: 'Yearly' }))
-    expect(onChange).toHaveBeenCalledWith([{ ...rice, per: 'year' }, laundry])
+    expect(onChange).toHaveBeenCalledWith([{ ...rice, per: 'year', perChosen: true }, laundry])
   })
 
   it('adds a blank benefit with the next free id', async () => {

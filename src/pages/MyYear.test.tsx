@@ -174,6 +174,42 @@ describe('MyYear: employers', () => {
   })
 })
 
+describe('MyYear: how often a benefit is paid', () => {
+  it.each([
+    ['Yearly', 'Yearly'],
+    ['Cutoff', 'Twice a month'],
+  ])('keeps a chosen %s while Paid changes to %s and back', async (per, paid) => {
+    const user = userEvent.setup()
+    show()
+    const pick = async (field: string, option: string) => {
+      await user.click(screen.getByRole('combobox', { name: field }))
+      await user.click(within(screen.getByRole('listbox')).getByRole('option', { name: option }))
+    }
+    const chosen = () => screen.getByRole('combobox', { name: 'Per' }).textContent
+    await user.click(screen.getByRole('switch', { name: 'De minimis benefits' }))
+    await pick('Per', per)
+    for (const next of [paid, 'Monthly']) {
+      await pick('Paid', next)
+      expect(chosen(), next).toBe(per)
+    }
+  })
+
+  it('follows Paid while Per has not been chosen', async () => {
+    const user = userEvent.setup()
+    show()
+    await user.click(screen.getByRole('switch', { name: 'De minimis benefits' }))
+    for (const [paid, per] of [
+      ['Twice a month', 'Cutoff'],
+      ['Yearly', 'Yearly'],
+      ['Monthly', 'Monthly'],
+    ] as const) {
+      await user.click(screen.getByRole('combobox', { name: 'Paid' }))
+      await user.click(within(screen.getByRole('listbox')).getByRole('option', { name: paid }))
+      expect(screen.getByRole('combobox', { name: 'Per' }).textContent, paid).toBe(per)
+    }
+  })
+})
+
 describe('MyYear: mixed income', () => {
   it('always keeps an employer, since without one it would be taxed as self-employed', async () => {
     const user = userEvent.setup()

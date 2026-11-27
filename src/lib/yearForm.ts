@@ -28,6 +28,8 @@ export interface DeMinimisLine {
   label: string
   amount: string
   per: DeMinimisPer
+  /** Set once Per is picked by hand. Changing how the salary is paid then leaves it alone. */
+  perChosen?: boolean
 }
 
 /** Everything is raw text from the inputs so people can type freely. */
@@ -113,16 +115,15 @@ export const newDeMinimisLine = (id: number, frequency: PayFrequency): DeMinimis
 })
 
 /**
- * Changes how the salary is paid. Benefits with no amount yet follow it, unless their own frequency was changed. A
- * benefit with an amount keeps its frequency, so that no figure changes by itself.
+ * Changes how the salary is paid. A benefit follows it while it has no amount and its Per was never picked. Any other
+ * benefit keeps its Per. The yearly total of one paid each cutoff still changes with the number of cutoffs.
  */
 export function withPayFrequency(employer: EmployerState, frequency: PayFrequency): EmployerState {
-  const followed = BENEFIT_PER[employer.frequency]
   return {
     ...employer,
     frequency,
     deMinimis: employer.deMinimis.map((line) =>
-      line.amount.trim() === '' && line.per === followed ? { ...line, per: BENEFIT_PER[frequency] } : line,
+      line.amount.trim() === '' && !line.perChosen ? { ...line, per: BENEFIT_PER[frequency] } : line,
     ),
   }
 }

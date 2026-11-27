@@ -106,7 +106,7 @@ describe('how often a benefit is paid', () => {
 
   it.each([
     ['has an amount', { id: 2, label: 'Rice', amount: '1111', per: 'month' }],
-    ['had its frequency chosen', { id: 2, label: '', amount: '', per: 'quarter' }],
+    ['had its frequency chosen', { id: 2, label: '', amount: '', per: 'month', perChosen: true }],
   ] as const)('is left alone once a row %s', (_, line) => {
     const changed = withPayFrequency({ ...job, deMinimis: [line] }, 'semi-monthly')
     expect(changed.deMinimis).toEqual([line])

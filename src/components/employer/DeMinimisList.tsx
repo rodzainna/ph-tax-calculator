@@ -18,10 +18,19 @@ interface Props {
 
 /** The de minimis benefit rows: a name, an amount, how often, and delete. Add as many as you need. */
 export default function DeMinimisList({ lines, payFrequency, onChange, onTurnOff, nextLineId }: Props) {
+  // A different Per on a row that was already there can only come from its dropdown.
+  const report = (next: DeMinimisLine[]) =>
+    onChange(
+      next.map((line) => {
+        const before = lines.find((l) => l.id === line.id)
+        return before && before.per !== line.per ? { ...line, perChosen: true } : line
+      }),
+    )
+
   return (
     <LineList
       lines={lines}
-      onChange={onChange}
+      onChange={report}
       newLine={() => newDeMinimisLine(nextLineId(), payFrequency)}
       perOptions={PER_OPTIONS}
       idPrefix="dm"
