@@ -61,7 +61,7 @@ export default function MobileSummaryBar({ outcome, assumption, sideColumn }: Pr
   }
 
   return (
-    // Edge to edge on phones. Wider than that it is a floating card, which also looks right on a short page.
+    // Edge to edge on phones, and a floating card on wider screens.
     <div
       data-summary-bar
       className="sticky bottom-0 z-40 -mx-4 border-t bg-background/95 px-4 py-3 backdrop-blur sm:bottom-3 sm:mx-0 sm:rounded-2xl sm:border sm:shadow-card xl:hidden"

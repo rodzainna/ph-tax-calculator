@@ -38,7 +38,7 @@ export default function BusinessSection({ business, method, year, asOf, onChange
   const set = fieldSetter(business, onChange)
 
   return (
-    // Built like the employer card: the accent bar, a 40px badge and an 18px title, as tall as the summary beside it.
+    // The same header as the employer card (accent bar, 40px badge, 18px title). As tall as the summary beside it.
     <SoftCard accent className="h-full">
       <CardHeader className="flex flex-row items-center justify-between gap-4 space-y-0">
         <div className="flex items-center gap-3">

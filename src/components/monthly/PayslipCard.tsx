@@ -55,11 +55,12 @@ export default function PayslipCard({ year, outcome, taxpayer, minimumWage }: Pr
           />
         </div>
 
-        {!outcome.ok ? (
+        {outcome.ok ? null : (
           <div className="mt-4">
             {outcome.empty ? <EmptyState title="Your take-home pay" /> : <ProblemAlert message={outcome.message} />}
           </div>
-        ) : slip ? (
+        )}
+        {outcome.ok && slip ? (
           <PayslipBody slip={slip} isSelfEmployed={selfEmployed} rates={rates}>
             <PayslipNotes slip={slip} result={outcome.result} taxpayer={taxpayer} minimumWage={minimumWage} />
           </PayslipBody>

@@ -1,4 +1,7 @@
-/** Annual ceiling on the 13th month and other benefits exclusion: NIRC Sec. 32(B)(7)(e) as amended by RA 10963 (P90,000), keyed by year because RR 11-2018 lets it change. */
+/**
+ * Yearly ceiling on the tax-free 13th month and other benefits: P90,000, NIRC Sec. 32(B)(7)(e) as amended by RA 10963.
+ * Keyed by year because RR 11-2018 allows it to change.
+ */
 export interface BenefitsCeilingRule {
   fromYear: number
   toYear: number | null

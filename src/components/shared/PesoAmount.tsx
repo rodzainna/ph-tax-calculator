@@ -30,7 +30,7 @@ interface Props {
 const heroEms = (signAndWhole: string): number => signAndWhole.length * 0.6 + 1.4
 
 /**
- * An amount with a small raised peso sign and quiet cents; it reads exactly like formatPeso for copying and screen
+ * An amount with a small raised peso sign and muted cents; it reads exactly like formatPeso for copying and screen
  * readers. A hero figure too wide for its box is scaled down to fit, because a cut-off amount would read as a different
  * one.
  */

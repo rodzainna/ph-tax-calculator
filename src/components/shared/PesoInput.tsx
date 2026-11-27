@@ -26,8 +26,11 @@ const signStyle = cva('pointer-events-none absolute left-3 top-1/2 -translate-y-
   defaultVariants: { size: 'default' },
 })
 
+/** The most characters a compact field can show at its usual width. */
+const FITS_USUAL_WIDTH = 12
+
 /** A compact field widens only for an amount its usual width would cut off, so the label beside it keeps its room. */
-const compactWidth = (value: string): string => (value.length > 12 ? 'w-40' : 'w-36')
+const compactWidth = (value: string): string => (value.length > FITS_USUAL_WIDTH ? 'w-40' : 'w-36')
 
 interface Props {
   label: string

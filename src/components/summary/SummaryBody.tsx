@@ -38,6 +38,13 @@ function Figure({ result, assumption }: { result: AnnualReturnResult; assumption
   )
 }
 
+/** The figure, or why there is none: nothing entered yet, or a problem to fix. */
+function Answer({ outcome, assumption }: Props) {
+  if (outcome.ok) return <Figure result={outcome.result} assumption={assumption} />
+  if (outcome.empty) return <EmptyState title="Your tax for the year" />
+  return <ProblemAlert message={outcome.message} />
+}
+
 /** The estimate as the inside of a payslip: the title, the big figure and receipt, or why there is no figure yet. */
 export default function SummaryBody({ outcome, assumption }: Props) {
   return (
@@ -51,13 +58,7 @@ export default function SummaryBody({ outcome, assumption }: Props) {
 
       {/* Stays on the page as its contents change, so a new or changed figure is announced, with its label. */}
       <div className="space-y-1" aria-live="polite" aria-atomic="true">
-        {outcome.ok ? (
-          <Figure result={outcome.result} assumption={assumption} />
-        ) : outcome.empty ? (
-          <EmptyState title="Your tax for the year" />
-        ) : (
-          <ProblemAlert message={outcome.message} />
-        )}
+        <Answer outcome={outcome} assumption={assumption} />
       </div>
 
       {outcome.ok ? (

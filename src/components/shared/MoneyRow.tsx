@@ -11,7 +11,7 @@ interface Props {
   sign?: 'minus' | 'plus'
   /** Bold row, for subtotals and totals. */
   strong?: boolean
-  /** A subtotal: bold, with a thin rule above it, like the sum line in a column of figures. */
+  /** A subtotal: bold, with a thin rule above it. */
   subtotal?: boolean
   /** A small line under the label. */
   note?: string
@@ -25,12 +25,18 @@ interface Props {
 
 const SIGN_TEXT = { minus: '−', plus: '+' } as const
 
+/** A deduction is red. A faded amount keeps its colour, only lighter. */
+function amountColor(red: boolean, faded: boolean): string | undefined {
+  if (red) return faded ? 'text-destructive/45' : 'text-destructive'
+  return faded ? 'text-muted-foreground/60' : undefined
+}
+
 /** One "label ........ amount" line inside a <dl>. Used by every summary and breakdown. */
 export default function MoneyRow({ label, amount, sign, strong, subtotal, note, hint, tag, tone }: Props) {
   const bold = strong || subtotal
   const red = tone === 'deduction'
-  // A zero is real information, but it should not shout as loudly as an amount that matters.
-  const quiet = amount === 0 && !bold
+  // A zero is faded so the other amounts are easier to find. Totals stay at full strength.
+  const faded = amount === 0 && !bold
 
   return (
     <div
@@ -51,7 +57,7 @@ export default function MoneyRow({ label, amount, sign, strong, subtotal, note, 
         className={cn(
           'shrink-0 whitespace-nowrap font-mono text-[0.92em] tabular-nums',
           !bold && 'font-medium',
-          red ? (quiet ? 'text-destructive/45' : 'text-destructive') : quiet && 'text-muted-foreground/60',
+          amountColor(red, faded),
         )}
       >
         {amount === null ? (

@@ -81,7 +81,11 @@ export interface SelfEmployedContributions {
   philhealth: number
 }
 
-/** One month of SSS and PhilHealth for a self-employed person, paid in full by them (SSS on the MSC, PhilHealth between its floor and ceiling); a default, since they can choose otherwise. */
+/**
+ * One month of SSS and PhilHealth for a self-employed person, who pays the whole of both. SSS uses the salary credit that
+ * matches the income, which is only a default because the member can choose otherwise. PhilHealth uses the income, kept
+ * between its floor and ceiling.
+ */
 export function selfEmployedContributions(
   year: number,
   month: number,

@@ -5,7 +5,7 @@ import type { CSSProperties } from 'react'
 export default function EmptyState({ title }: { title: string }) {
   return (
     <div className="flex flex-col items-center gap-3 py-6 text-center">
-      {/* Two soft rings around the icon so it reads as an illustration, not a button; the outer one drifts coral to teal. */}
+      {/* Two decorative rings around the icon. The outer one has the moving gradient line. */}
       <span
         style={{ '--ring-width': '1.5px' } as CSSProperties}
         className="gradient-ring flex size-20 items-center justify-center rounded-full bg-gradient-to-br from-brand-blush/25 to-brand-teal-bright/20"

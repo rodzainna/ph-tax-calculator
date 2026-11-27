@@ -26,7 +26,7 @@ const ASSUMPTION = 'Until Dec 31'
 /** A card and the summary beside it. */
 const CARD_AND_SUMMARY = 'grid gap-3 md:grid-cols-[minmax(0,1fr)_280px]'
 
-/** A soft line before each further job and before the business, fading out at both ends, so each reads on its own. */
+/** The line above each further job and above the business section. It fades out at both ends. */
 const DIVIDER = 'my-7 h-px border-0 bg-gradient-to-r from-transparent via-foreground/15 to-transparent'
 
 /** Each employer and the business with a summary beside it, then the year's estimate and insights. */

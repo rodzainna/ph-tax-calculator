@@ -1,4 +1,7 @@
-/** Optional standard deduction: NIRC Sec. 34(L) as amended by RA 10963, 40% of gross receipts instead of itemizing; checked against the eBIRForms 1701v2018 code. */
+/**
+ * Optional standard deduction: 40% of gross receipts instead of itemizing, NIRC Sec. 34(L) as amended by RA 10963.
+ * Checked against the eBIRForms 1701v2018 code.
+ */
 export interface OsdRule {
   fromYear: number
   toYear: number | null

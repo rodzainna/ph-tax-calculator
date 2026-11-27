@@ -36,7 +36,10 @@ export interface GraduatedBusinessResult {
   isLoss: boolean
 }
 
-/** Net business income for the graduated rates (40% standard deduction or itemized): the income, not the tax, since mixed earners add it to pay first. */
+/**
+ * Net business income for the graduated rates, with the 40% standard deduction or itemized expenses. It returns the
+ * income rather than the tax, because mixed earners add it to their pay first.
+ */
 export function graduatedBusinessIncome(input: GraduatedBusinessInput, year: number): GraduatedBusinessResult {
   const other = input.otherNonOperatingIncome ?? 0
   const kind = input.deduction ?? 'osd'
