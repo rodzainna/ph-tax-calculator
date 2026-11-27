@@ -1,6 +1,9 @@
 /** The latest tax year the app has rules for. Add a year here when new rules are added. */
 export const LATEST_TAX_YEAR = 2026
 
+/** The first tax year the Annual page offers: the first year of the graduated tables and the 8% option. */
+export const ANNUAL_FIRST_YEAR = 2018
+
 /** A calendar year, but no later than the latest year the app has rules for. */
 export const capTaxYear = (year: number): number => Math.min(year, LATEST_TAX_YEAR)
 

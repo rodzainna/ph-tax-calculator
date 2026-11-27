@@ -12,13 +12,13 @@ import SummaryBody from '@/components/summary/SummaryBody.tsx'
 import { Button } from '@/components/ui/button'
 import { computeScenario } from '@/lib/computeScenario.ts'
 import { deductionHint } from '@/lib/deductionHint.ts'
-import { taxYearsFrom } from '@/lib/taxYears.ts'
+import { ANNUAL_FIRST_YEAR, taxYearsFrom } from '@/lib/taxYears.ts'
 import { usesBusiness, usesEmployers } from '@/lib/taxpayer.ts'
 import { useYear } from '@/lib/useYear.ts'
 import { YearProvider } from '@/lib/yearContext.tsx'
 import { newEmployer, withTaxpayer, withYear, yearEndScenario } from '@/lib/yearForm.ts'
 
-const YEARS = taxYearsFrom(2018)
+const YEARS = taxYearsFrom(ANNUAL_FIRST_YEAR)
 
 /** The estimate counts pay and business income to the end of the year. */
 const ASSUMPTION = 'Until Dec 31'

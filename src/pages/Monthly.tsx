@@ -6,11 +6,12 @@ import ResultInsights from '@/components/monthly/ResultInsights.tsx'
 import SelfEmployedFields from '@/components/monthly/SelfEmployedFields.tsx'
 import { PAYSLIP_ID } from '@/components/monthly/payslipView.ts'
 import TaxpayerFields from '@/components/shared/TaxpayerFields.tsx'
+import { CONTRIBUTIONS_FIRST_YEAR } from '@/engine/rules/contributions.ts'
 import { initialMonthlyForm, monthlyOutcome, type MonthlyForm } from '@/lib/monthlyOutcome.ts'
 import { isSelfEmployed } from '@/lib/taxpayer.ts'
 import { capTaxYear, taxYearsFrom } from '@/lib/taxYears.ts'
 
-const YEARS = taxYearsFrom(2021)
+const YEARS = taxYearsFrom(CONTRIBUTIONS_FIRST_YEAR)
 /** Skip on touch screens, where it would pop up the keyboard and cover the page. */
 const AUTOFOCUS = typeof window !== 'undefined' && !window.matchMedia?.('(pointer: coarse)')?.matches
 

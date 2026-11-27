@@ -1,5 +1,16 @@
 import { describe, expect, it } from 'vitest'
-import { capTaxYear, LATEST_TAX_YEAR, taxYearsFrom } from './taxYears.ts'
+import { EIGHT_PERCENT_RULES } from '../engine/rules/eightPercent.ts'
+import { GRADUATED_RULES } from '../engine/rules/graduated.ts'
+import { ANNUAL_FIRST_YEAR, capTaxYear, LATEST_TAX_YEAR, taxYearsFrom } from './taxYears.ts'
+
+describe('the first Annual year', () => {
+  it.each([
+    ['graduated tables', GRADUATED_RULES],
+    ['8% option', EIGHT_PERCENT_RULES],
+  ])('is the first year of the %s', (_, rules) => {
+    expect(ANNUAL_FIRST_YEAR).toBe(Math.min(...rules.map((rule) => rule.fromYear)))
+  })
+})
 
 describe('capTaxYear', () => {
   it('leaves a year the app has rules for alone', () => {
