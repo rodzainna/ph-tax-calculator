@@ -25,28 +25,29 @@ interface Props {
 
 const SIGN_TEXT = { minus: '−', plus: '+' } as const
 
-/** A deduction is red. A faded amount keeps its colour, only lighter. */
-function amountColor(red: boolean, faded: boolean): string | undefined {
-  if (red) return faded ? 'text-destructive/45' : 'text-destructive'
-  return faded ? 'text-muted-foreground/60' : undefined
+/** A deduction is red. A quiet amount is grey, which stays readable on every card. */
+function amountColor(red: boolean, quiet: boolean): string | undefined {
+  if (quiet) return 'text-muted-foreground'
+  return red ? 'text-destructive' : undefined
 }
 
 /** One "label ........ amount" line inside a <dl>. Used by every summary and breakdown. */
 export default function MoneyRow({ label, amount, sign, strong, subtotal, note, hint, tag, tone }: Props) {
   const bold = strong || subtotal
   const red = tone === 'deduction'
-  // A zero is faded so the other amounts are easier to find. Totals stay at full strength.
-  const faded = amount === 0 && !bold
+  // A zero is quiet so the other amounts are easier to find. Totals stay at full strength.
+  const quiet = amount === 0 && !bold
 
   return (
     <div
       className={cn(
-        'grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-4 gap-y-0.5 text-sm',
+        // A flex row, not a grid: on an iPhone the grid's amount column was seen to keep an earlier, narrower width.
+        'flex flex-wrap items-baseline gap-x-4 gap-y-0.5 text-sm',
         bold && 'font-semibold',
         subtotal && 'mt-1 border-t border-foreground/10 pt-2',
       )}
     >
-      <dt className={cn('min-w-0', bold ? 'text-foreground' : 'text-muted-foreground')}>
+      <dt className={cn('min-w-0 flex-1', bold ? 'text-foreground' : 'text-muted-foreground')}>
         <LabelWithTip
           label={label}
           after={tag ? <span className="ml-1.5 text-xs font-normal text-muted-foreground/80">{tag}</span> : null}
@@ -54,10 +55,12 @@ export default function MoneyRow({ label, amount, sign, strong, subtotal, note, 
         />
       </dt>
       <dd
+        // A new figure gets a new element, so that no browser can lay it out at the old figure's width.
+        key={amount ?? 'none'}
         className={cn(
           'shrink-0 whitespace-nowrap font-mono text-[0.92em] tabular-nums',
           !bold && 'font-medium',
-          amountColor(red, faded),
+          amountColor(red, quiet),
         )}
       >
         {amount === null ? (
@@ -67,7 +70,7 @@ export default function MoneyRow({ label, amount, sign, strong, subtotal, note, 
             {sign ? (
               <>
                 <span
-                  className={cn('mr-1.5 font-normal', red ? 'text-destructive/70' : 'text-muted-foreground')}
+                  className={cn('mr-1.5 font-normal', red && !quiet ? 'text-destructive/70' : 'text-muted-foreground')}
                   aria-hidden
                 >
                   {SIGN_TEXT[sign]}
@@ -79,7 +82,7 @@ export default function MoneyRow({ label, amount, sign, strong, subtotal, note, 
           </>
         )}
       </dd>
-      {note ? <dd className="col-span-2 text-xs font-normal leading-snug text-muted-foreground">{note}</dd> : null}
+      {note ? <dd className="basis-full text-xs font-normal leading-snug text-muted-foreground">{note}</dd> : null}
     </div>
   )
 }

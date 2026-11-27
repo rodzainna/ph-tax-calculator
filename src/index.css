@@ -145,6 +145,18 @@
   body {
     @apply bg-background text-foreground;
   }
+  /* iPhone Safari draws a date field as its own control, wider and taller than the fields beside it. These make it
+     take the same size as any other input. */
+  input[type='date'] {
+    -webkit-appearance: none;
+    appearance: none;
+    min-width: 0;
+  }
+  input[type='date']::-webkit-date-and-time-value {
+    min-height: 1.5rem;
+    margin: 0;
+    text-align: left;
+  }
   html {
     @apply font-sans;
   }
@@ -327,6 +339,16 @@ body::before {
     linear-gradient(135deg, #202e54, #243f66 55%, #2b6e7d);
 }
 
+/* The result card's navy is the brand navy, lighter than the dark theme's cards, with surfaces and lines to match.
+   It follows the `.dark` colours, so that it wins over them. */
+.result-navy {
+  --card: var(--color-brand-navy);
+  --muted: #2a3a63;
+  --muted-foreground: #b8c7dc;
+  --accent: #20424f;
+  --border: #37486f;
+}
+
 /* ---- Receipt (the payslip card) -------------------------------------------------------------
    A row of half circles hangs below the card, in the paper colour, so the bottom edge looks scalloped.
    The shadow is a filter, which follows the shape including the scallops. The bottom margin leaves room
@@ -360,6 +382,10 @@ body::before {
 
 /* Below xl the summary bar sits over the bottom of the screen, so a focused field is scrolled to above it. */
 @media (width < 80rem) {
+  /* Room under the footer, so that the bar never covers its links at the end of the page. */
+  body:has([data-summary-bar]) footer {
+    padding-bottom: 7.5rem;
+  }
   html:has([data-summary-bar]) {
     scroll-padding-bottom: 6rem;
   }

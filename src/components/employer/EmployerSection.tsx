@@ -2,14 +2,15 @@ import { Trash2 } from 'lucide-react'
 import EmployerPayslipFields from '@/components/employer/EmployerPayslipFields.tsx'
 import EmployerSalaryDetails from '@/components/employer/EmployerSalaryDetails.tsx'
 import { SoftCard } from '@/components/shared/AppCard.tsx'
+import CardHeading from '@/components/shared/CardHeading.tsx'
 import DateRangeFields from '@/components/shared/DateRangeFields.tsx'
 import PesoInput from '@/components/shared/PesoInput.tsx'
 import SegmentedControl, { type SegmentOption } from '@/components/shared/SegmentedControl.tsx'
 import SelectField, { type Option } from '@/components/shared/SelectField.tsx'
 import { Button } from '@/components/ui/button'
-import { CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { CardContent } from '@/components/ui/card'
 import type { PayFrequency } from '@/engine/pay.ts'
-import type { EarningsMode, EmployerState } from '@/lib/yearForm.ts'
+import { withPayFrequency, type EarningsMode, type EmployerState } from '@/lib/yearForm.ts'
 import { fieldSetter } from '@/lib/fieldSetter.ts'
 
 interface Props {
@@ -53,28 +54,23 @@ export default function EmployerSection({
 
   return (
     <SoftCard accent className="h-full">
-      <CardHeader className="flex flex-row items-center justify-between gap-4 space-y-0">
-        <div className="flex items-center gap-3">
-          <span
-            className="flex size-10 shrink-0 items-center justify-center rounded-full bg-secondary text-xl font-semibold leading-none text-secondary-foreground"
-            aria-hidden
-          >
-            {index + 1}
-          </span>
-          <CardTitle className="text-lg group-data-[size=sm]/card:text-lg">Employer #{index + 1}</CardTitle>
-        </div>
-        {canRemove ? (
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={onRemove}
-            aria-label={`Remove employer #${index + 1}`}
-          >
-            <Trash2 /> Remove
-          </Button>
-        ) : null}
-      </CardHeader>
+      <CardHeading
+        badge={index + 1}
+        title={`Employer #${index + 1}`}
+        action={
+          canRemove ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={onRemove}
+              aria-label={`Remove employer #${index + 1}`}
+            >
+              <Trash2 /> Remove
+            </Button>
+          ) : null
+        }
+      />
 
       <CardContent className="flex flex-1 flex-col gap-4">
         <div>
@@ -93,7 +89,7 @@ export default function EmployerSection({
               id={`freq-${employer.id}`}
               label="Paid"
               value={employer.frequency}
-              onChange={set('frequency')}
+              onChange={(frequency) => onChange(withPayFrequency(employer, frequency))}
               options={FREQUENCY_OPTIONS}
             />
           </div>

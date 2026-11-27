@@ -28,6 +28,8 @@ export interface DeMinimisLine {
   label: string
   amount: string
   per: DeMinimisPer
+  /** Set once Per is picked by hand. Changing how the salary is paid then leaves it alone. */
+  perChosen?: boolean
 }
 
 /** Everything is raw text from the inputs so people can type freely. */
@@ -102,7 +104,29 @@ export const todayIso = (): string => {
   return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`
 }
 
-export const newDeMinimisLine = (id: number): DeMinimisLine => ({ id, label: '', amount: '', per: 'payout' })
+/** The benefit frequency that matches how the salary is paid. Pay twice a month comes in cutoffs. */
+const BENEFIT_PER: Record<PayFrequency, DeMinimisPer> = { monthly: 'month', 'semi-monthly': 'payout', yearly: 'year' }
+
+export const newDeMinimisLine = (id: number, frequency: PayFrequency): DeMinimisLine => ({
+  id,
+  label: '',
+  amount: '',
+  per: BENEFIT_PER[frequency],
+})
+
+/**
+ * Changes how the salary is paid. A benefit follows it while it has no amount and its Per was never picked. Any other
+ * benefit keeps its Per. The yearly total of one paid each cutoff still changes with the number of cutoffs.
+ */
+export function withPayFrequency(employer: EmployerState, frequency: PayFrequency): EmployerState {
+  return {
+    ...employer,
+    frequency,
+    deMinimis: employer.deMinimis.map((line) =>
+      line.amount.trim() === '' && !line.perChosen ? { ...line, per: BENEFIT_PER[frequency] } : line,
+    ),
+  }
+}
 
 export const newEmployer = (id: number, lineId: number): EmployerState => ({
   id,
@@ -112,7 +136,7 @@ export const newEmployer = (id: number, lineId: number): EmployerState => ({
   basic: '',
   frequency: 'monthly',
   hasDeMinimis: false,
-  deMinimis: [newDeMinimisLine(lineId)],
+  deMinimis: [newDeMinimisLine(lineId, 'monthly')],
   thirteenthMode: 'estimate',
   thirteenthCustom: '',
   contributionsMode: 'estimate',

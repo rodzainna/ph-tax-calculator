@@ -20,7 +20,15 @@ const show = (lines: DeMinimisLine[]) => {
   const onChange = vi.fn()
   const onTurnOff = vi.fn()
   const nextLineId = vi.fn(() => 99)
-  render(<DeMinimisList lines={lines} onChange={onChange} onTurnOff={onTurnOff} nextLineId={nextLineId} />)
+  render(
+    <DeMinimisList
+      lines={lines}
+      payFrequency="monthly"
+      onChange={onChange}
+      onTurnOff={onTurnOff}
+      nextLineId={nextLineId}
+    />,
+  )
   return { onChange, onTurnOff, nextLineId }
 }
 
@@ -72,14 +80,14 @@ describe('DeMinimisList', () => {
     const { onChange } = show([rice, laundry])
     await user.click(screen.getAllByRole('combobox')[0])
     await user.click(within(screen.getByRole('listbox')).getByRole('option', { name: 'Yearly' }))
-    expect(onChange).toHaveBeenCalledWith([{ ...rice, per: 'year' }, laundry])
+    expect(onChange).toHaveBeenCalledWith([{ ...rice, per: 'year', perChosen: true }, laundry])
   })
 
   it('adds a blank benefit with the next free id', async () => {
     const { onChange, nextLineId } = show([rice])
     await userEvent.setup().click(screen.getByRole('button', { name: 'Add another benefit' }))
     expect(nextLineId).toHaveBeenCalledTimes(1)
-    expect(onChange).toHaveBeenCalledWith([rice, { id: 99, label: '', amount: '', per: 'payout' }])
+    expect(onChange).toHaveBeenCalledWith([rice, { id: 99, label: '', amount: '', per: 'month' }])
   })
 
   it('removes only the benefit whose button was pressed', async () => {

@@ -30,23 +30,35 @@ describe('MoneyRow', () => {
     expect(screen.getByText('−')).toBeTruthy()
   })
 
-  it('plays a zero down, but not on a bold row', () => {
+  it('greys a zero to play it down, but not on a bold row, and never makes it see-through', () => {
     const { rerender } = inList(<MoneyRow label="Tax" amount={0} />)
-    expect(screen.getByText('₱0.00').className).toContain('text-muted-foreground/60')
+    expect(screen.getByText('₱0.00').classList).toContain('text-muted-foreground')
+    expect(screen.getByText('₱0.00').className).not.toMatch(/foreground\/\d/)
     rerender(wrap(<MoneyRow strong label="Tax" amount={0} />))
-    expect(screen.getByText('₱0.00').className).not.toContain('text-muted-foreground/60')
+    expect(screen.getByText('₱0.00').classList).not.toContain('text-muted-foreground')
   })
 
-  it('draws a deduction in red, fading a zero unless the row is bold', () => {
+  it('draws a deduction in red, and a zero one in grey unless the row is bold', () => {
     const { rerender } = inList(<MoneyRow label="SSS" amount={1_111} tone="deduction" />)
     expect(screen.getByText('₱1,111.00').classList).toContain('text-destructive')
 
-    rerender(wrap(<MoneyRow label="SSS" amount={0} tone="deduction" />))
-    expect(screen.getByText('₱0.00').classList).toContain('text-destructive/45')
-    expect(screen.getByText('₱0.00').classList).not.toContain('text-muted-foreground/60')
+    rerender(wrap(<MoneyRow label="SSS" amount={0} sign="minus" tone="deduction" />))
+    expect(screen.getByText('₱0.00').classList).toContain('text-muted-foreground')
+    expect(screen.getByText('₱0.00').classList).not.toContain('text-destructive')
+    expect(screen.getByText('−').classList).toContain('text-muted-foreground')
 
     rerender(wrap(<MoneyRow strong label="SSS" amount={0} tone="deduction" />))
     expect(screen.getByText('₱0.00').classList).toContain('text-destructive')
+  })
+
+  it('draws a new element for a new figure, so none is laid out at an old width', () => {
+    const { rerender } = inList(<MoneyRow label="Gross pay" amount={1} />)
+    const first = screen.getByText('₱1.00')
+    rerender(wrap(<MoneyRow label="Gross pay" amount={1} />))
+    expect(screen.getByText('₱1.00')).toBe(first)
+    rerender(wrap(<MoneyRow label="Gross pay" amount={111_111} />))
+    expect(screen.getByText('₱111,111.00')).not.toBe(first)
+    expect(first.isConnected).toBe(false)
   })
 
   it('puts the term and its amount directly in the list, as a description list needs', () => {

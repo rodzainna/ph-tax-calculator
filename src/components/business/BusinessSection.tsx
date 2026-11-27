@@ -1,13 +1,14 @@
 import { Briefcase } from 'lucide-react'
 import ExpenseList from '@/components/business/ExpenseList.tsx'
 import { SoftCard } from '@/components/shared/AppCard.tsx'
+import CardHeading from '@/components/shared/CardHeading.tsx'
 import DateRangeFields from '@/components/shared/DateRangeFields.tsx'
 import MoreTray from '@/components/shared/MoreTray.tsx'
 import PesoInput from '@/components/shared/PesoInput.tsx'
 import { RECURRENCE_OPTIONS } from '@/components/shared/recurrenceOptions.ts'
 import SelectField, { type Option } from '@/components/shared/SelectField.tsx'
 import { Badge } from '@/components/ui/badge'
-import { CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { CardContent } from '@/components/ui/card'
 import { fieldSetter } from '@/lib/fieldSetter.ts'
 import type { TaxMethod } from '@/lib/taxpayer.ts'
 import type { BusinessDeductionChoice, BusinessState } from '@/lib/yearForm.ts'
@@ -38,20 +39,13 @@ export default function BusinessSection({ business, method, year, asOf, onChange
   const set = fieldSetter(business, onChange)
 
   return (
-    // The same header as the employer card (accent bar, 40px badge, 18px title). As tall as the summary beside it.
+    // As tall as the summary beside it.
     <SoftCard accent className="h-full">
-      <CardHeader className="flex flex-row items-center justify-between gap-4 space-y-0">
-        <div className="flex items-center gap-3">
-          <span
-            className="flex size-10 shrink-0 items-center justify-center rounded-full bg-secondary text-secondary-foreground"
-            aria-hidden
-          >
-            <Briefcase className="size-5" />
-          </span>
-          <CardTitle className="text-lg group-data-[size=sm]/card:text-lg">Business or freelance</CardTitle>
-        </div>
-        <Badge variant="secondary">{METHOD_LABEL[method]}</Badge>
-      </CardHeader>
+      <CardHeading
+        badge={<Briefcase className="size-5" />}
+        title="Business or freelance"
+        action={<Badge variant="secondary">{METHOD_LABEL[method]}</Badge>}
+      />
       <CardContent className="flex flex-1 flex-col gap-4">
         <div className="grid items-start gap-3 sm:grid-cols-2">
           <PesoInput label="Amount" value={business.amount} onChange={set('amount')} emphasis="soft" />

@@ -8,6 +8,9 @@ type CardProps = ComponentProps<typeof Card>
 const ACCENT_BAR =
   'relative before:absolute before:inset-x-0 before:top-0 before:h-1 before:bg-gradient-to-r before:from-brand-coral before:via-brand-blush before:to-brand-teal-bright'
 
+/** Gives an element the result's navy, in either theme. The theme's `dark:` styles reach what is inside it. */
+export const RESULT_NAVY = 'dark result-navy'
+
 /** The standard content card: rounded, with a shadow that deepens on hover. */
 export function SoftCard({ accent, className, ...props }: CardProps & { accent?: boolean }) {
   return (
@@ -23,15 +26,21 @@ export function SoftCard({ accent, className, ...props }: CardProps & { accent?:
   )
 }
 
-/** The payslip: accent bar on top and a scalloped bottom edge (drawn in index.css as `.receipt`). */
+/**
+ * The payslip: accent bar on top and a scalloped bottom edge (drawn in index.css as `.receipt`). It is navy in both
+ * themes, so that the result stands out.
+ */
 export function ReceiptCard({ className, children, ...props }: ComponentProps<'div'>) {
   return (
-    <div className={cn('receipt relative rounded-t-2xl p-5 pb-6 text-sm text-card-foreground', className)} {...props}>
-      {/* The bar is clipped by its own rounded-top box, since the whole card cannot clip: the scallops hang outside it. */}
-      <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-4 overflow-hidden rounded-t-2xl">
-        <span className="block h-1 bg-gradient-to-r from-brand-coral via-brand-blush to-brand-teal-bright" />
-      </span>
-      {children}
+    // The colours sit on a wrapper because `dark:` styles reach only what is inside it.
+    <div className={RESULT_NAVY}>
+      <div className={cn('receipt relative rounded-t-2xl p-5 pb-6 text-sm text-card-foreground', className)} {...props}>
+        {/* The bar is clipped by its own rounded-top box, since the whole card cannot clip: the scallops hang outside it. */}
+        <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-4 overflow-hidden rounded-t-2xl">
+          <span className="block h-1 bg-gradient-to-r from-brand-coral via-brand-blush to-brand-teal-bright" />
+        </span>
+        {children}
+      </div>
     </div>
   )
 }

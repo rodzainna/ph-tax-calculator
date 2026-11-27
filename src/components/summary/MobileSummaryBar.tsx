@@ -2,11 +2,13 @@ import { ChevronUp } from 'lucide-react'
 import { useEffect, useState, type RefObject } from 'react'
 import AnnualInsights from '@/components/insights/AnnualInsights.tsx'
 import PesoAmount from '@/components/shared/PesoAmount.tsx'
+import { RESULT_NAVY } from '@/components/shared/AppCard.tsx'
 import SummaryBody from '@/components/summary/SummaryBody.tsx'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import type { AnnualOutcome } from '@/lib/computeScenario.ts'
 import { headlineFor, type Headline } from '@/lib/headline.ts'
+import { cn } from '@/lib/utils'
 
 interface Props {
   outcome: AnnualOutcome
@@ -34,9 +36,8 @@ function focusSheet(event: Event) {
 }
 
 /**
- * On narrow screens the estimate stays in view at the bottom, with the full working behind "Details".
- * It is sticky, so put it last in the page: it then stops where the page ends and never covers what follows.
- * index.css looks for `data-summary-bar` to keep a focused field from ending up behind it.
+ * On narrow screens the estimate stays at the bottom of the screen, with the full working behind "Details".
+ * index.css looks for `data-summary-bar`, to keep a focused field and the end of the page clear of it.
  */
 export default function MobileSummaryBar({ outcome, assumption, sideColumn }: Props) {
   const headline = outcome.ok ? headlineFor(outcome.result) : null
@@ -61,10 +62,14 @@ export default function MobileSummaryBar({ outcome, assumption, sideColumn }: Pr
   }
 
   return (
-    // Edge to edge on phones, and a floating card on wider screens.
+    // Edge to edge on phones, and a floating card on wider screens, as wide as the page's content: its largest
+    // width less its side padding.
     <div
       data-summary-bar
-      className="sticky bottom-0 z-40 -mx-4 border-t bg-background/95 px-4 py-3 backdrop-blur sm:bottom-3 sm:mx-0 sm:rounded-2xl sm:border sm:shadow-card xl:hidden"
+      className={cn(
+        RESULT_NAVY,
+        'fixed inset-x-0 bottom-0 z-40 border-t bg-card px-4 py-3 text-card-foreground sm:inset-x-4 sm:bottom-3 sm:mx-auto sm:max-w-[calc(var(--container-6xl)-2rem)] sm:rounded-2xl sm:border sm:shadow-card-hover xl:hidden',
+      )}
     >
       <Sheet open={open} onOpenChange={setOpen}>
         {/* The button moves to its own line rather than sit under a very long figure. */}

@@ -100,7 +100,12 @@ describe('EmployerSection: salary mode', () => {
     const { onChange } = show(e)
     await user.click(screen.getByRole('combobox', { name: 'Paid' }))
     await user.click(within(screen.getByRole('listbox')).getByRole('option', { name: 'Twice a month' }))
-    expect(onChange).toHaveBeenCalledWith({ ...e, frequency: 'semi-monthly' })
+    // The blank benefit row follows, since twice-a-month pay comes in cutoffs.
+    expect(onChange).toHaveBeenCalledWith({
+      ...e,
+      frequency: 'semi-monthly',
+      deMinimis: [{ ...e.deMinimis[0]!, per: 'payout' }],
+    })
   })
 
   it('shows the benefit rows only when de minimis is on', async () => {
@@ -122,7 +127,7 @@ describe('EmployerSection: salary mode', () => {
     expect(onChange).toHaveBeenCalledWith({
       ...e,
       hasDeMinimis: false,
-      deMinimis: [{ id: 77, label: '', amount: '', per: 'payout' }],
+      deMinimis: [{ id: 77, label: '', amount: '', per: 'month' }],
     })
   })
 })

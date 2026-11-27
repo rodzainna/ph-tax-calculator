@@ -32,7 +32,7 @@ Node version is in `.nvmrc`. Commit messages follow Conventional Commits; git ho
 
 ## Checks
 
-GitHub Actions runs on every push and every pull request: the format check, lint, tests, and a build that also checks the types (`.github/workflows/ci.yml`).
+GitHub Actions runs once for each change, on every pull request and on every push to `main`: the format check, lint, tests, and a build that also checks the types (`.github/workflows/ci.yml`).
 
 Changes reach `main` only through a pull request whose `Checks (pull_request)` run has passed on top of the latest `main`.
 
