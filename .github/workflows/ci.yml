@@ -8,14 +8,17 @@ on:
 permissions:
   contents: read
 
+# On a branch, a newer push cancels the older run. On main each commit has its own group: in a shared group, GitHub
+# drops a waiting run when a newer one arrives, so that commit would never be checked.
 concurrency:
-  group: ci-${{ github.event_name }}-${{ github.ref }}
+  group: ci-${{ github.event_name }}-${{ github.ref == 'refs/heads/main' && github.sha || github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   checks:
     # Both runs happen on purpose: a push checks the branch as it is, and a pull request checks it merged with main.
     # Neither is skipped with `if`, because GitHub counts a skipped job as passed, even for a required check.
+    # The rules for main require `Checks (pull_request)` by this name. Renaming it would block every merge.
     name: Checks (${{ github.event_name }})
     runs-on: ubuntu-latest
     timeout-minutes: 10

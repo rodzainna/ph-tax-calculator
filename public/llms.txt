@@ -4,7 +4,7 @@
 
 - The Monthly page estimates take-home pay. The Annual page estimates a year's income tax, and what may still be due or overpaid.
 - Tax years 2018 onward. For 2021 onward it can estimate an employee's SSS, PhilHealth and Pag-IBIG contributions from a salary. For the self-employed, only the Monthly page estimates SSS and PhilHealth, when they are switched on, and Pag-IBIG is typed in. For 2018 to 2020, contributions are typed in on the Annual page.
-- It leaves out percentage tax and VAT on sales, does not check de minimis benefits against the legal limits, and does not deduct business losses carried forward from earlier years. Its "Minimum wage earner" setting treats all the pay entered as tax-free, although some pay, such as commissions, may be taxable.
+- It leaves out percentage tax and VAT on sales, does not check de minimis benefits against the legal limits, and does not deduct business losses carried forward from earlier years. The Monthly page has a "Minimum wage earner" setting for employees, which treats all the pay entered as tax-free, although some pay, such as commissions, may be taxable. The Annual page has no such setting.
 - Some rules are only partly verified, not verified or assumed. The About & sources page says which, and links to the sources. Check any figure with the Bureau of Internal Revenue (BIR), your Revenue District Office or a certified public accountant before filing or paying.
 - This site is independent. It is not affiliated with or endorsed by the BIR, SSS, PhilHealth, Pag-IBIG or any government agency.
 

@@ -34,6 +34,8 @@ Node version is in `.nvmrc`. Commit messages follow Conventional Commits; git ho
 
 GitHub Actions runs on every push and every pull request: the format check, lint, tests, and a build that also checks the types (`.github/workflows/ci.yml`).
 
+Changes reach `main` only through a pull request whose `Checks (pull_request)` run has passed on top of the latest `main`.
+
 ## Stack
 
 React 19, Vite, TypeScript, Tailwind CSS 4, shadcn/ui (Radix), react-router. Tests with Vitest.

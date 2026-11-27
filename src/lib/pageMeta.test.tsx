@@ -130,6 +130,17 @@ describe('what crawlers get', () => {
     expect(content(page, 'meta[name="google-site-verification"]')).toBe('rs7cV8akx0hA79PmdcZMoLoTbrhlI5kOJab53VtmFXc')
   })
 
+  it('says in llms.txt which page has the minimum wage setting, which is where the app has it', async () => {
+    const user = userEvent.setup()
+    renderAt('/')
+    const setting = () => screen.queryByRole('switch', { name: 'Minimum wage earner' })
+    expect(setting()).not.toBeNull()
+    await user.click(within(screen.getByRole('banner')).getByRole('link', { name: 'Annual' }))
+    expect(setting()).toBeNull()
+    expect(llms).toContain('The Monthly page has a "Minimum wage earner" setting for employees')
+    expect(llms).toContain('The Annual page has no such setting.')
+  })
+
   it('is an llms.txt that links to every page', () => {
     const links = [...llms.matchAll(/\]\((https:[^)]+)\)/g)].map((match) => new URL(match[1]!).pathname)
     expect(links).toEqual(routes)
