@@ -1,3 +1,4 @@
+import ExternalLink from '@/components/shared/ExternalLink.tsx'
 import { Badge } from '@/components/ui/badge'
 import type { Source, SourceStatus } from '@/lib/aboutSources.ts'
 
@@ -21,15 +22,9 @@ export default function SourceItem({ topic, years, status, note, links }: Source
       {note ? <p className="text-sm text-muted-foreground">{note}</p> : null}
       <p className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
         {links.map((link) => (
-          <a
-            key={link.href}
-            href={link.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary underline"
-          >
+          <ExternalLink key={link.href} href={link.href} className="text-primary">
             {link.label}
-          </a>
+          </ExternalLink>
         ))}
       </p>
     </li>
