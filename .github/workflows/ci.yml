@@ -14,9 +14,9 @@ concurrency:
 
 jobs:
   checks:
-    name: Checks
-    # A pull request from this repository is already checked by its push. Pull requests from forks are checked here.
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    # Both runs happen on purpose: a push checks the branch as it is, and a pull request checks it merged with main.
+    # Neither is skipped with `if`, because GitHub counts a skipped job as passed, even for a required check.
+    name: Checks (${{ github.event_name }})
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

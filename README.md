@@ -32,7 +32,7 @@ Node version is in `.nvmrc`. Commit messages follow Conventional Commits; git ho
 
 ## Checks
 
-GitHub Actions runs on every push, and on pull requests from forks: the format check, lint, tests, and a build that also checks the types (`.github/workflows/ci.yml`).
+GitHub Actions runs on every push and every pull request: the format check, lint, tests, and a build that also checks the types (`.github/workflows/ci.yml`).
 
 ## Stack
 
