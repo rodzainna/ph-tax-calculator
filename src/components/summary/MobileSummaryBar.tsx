@@ -62,12 +62,13 @@ export default function MobileSummaryBar({ outcome, assumption, sideColumn }: Pr
   }
 
   return (
-    // Edge to edge on phones, and a floating card on wider screens.
+    // Edge to edge on phones, and a floating card on wider screens, as wide as the page's content: its largest
+    // width less its side padding.
     <div
       data-summary-bar
       className={cn(
         RESULT_NAVY,
-        'fixed inset-x-0 bottom-0 z-40 border-t bg-card px-4 py-3 text-card-foreground sm:inset-x-4 sm:bottom-3 sm:mx-auto sm:max-w-6xl sm:rounded-2xl sm:border sm:shadow-card-hover xl:hidden',
+        'fixed inset-x-0 bottom-0 z-40 border-t bg-card px-4 py-3 text-card-foreground sm:inset-x-4 sm:bottom-3 sm:mx-auto sm:max-w-[calc(var(--container-6xl)-2rem)] sm:rounded-2xl sm:border sm:shadow-card-hover xl:hidden',
       )}
     >
       <Sheet open={open} onOpenChange={setOpen}>
