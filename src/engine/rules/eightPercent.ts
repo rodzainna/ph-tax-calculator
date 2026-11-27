@@ -1,4 +1,7 @@
-/** The 8% option: NIRC Sec. 24(A)(2)(b)-(c) as amended by RA 10963; no P250,000 reduction with compensation income; VAT threshold P3,000,000 (Sec. 109(BB)). */
+/**
+ * The 8% option: NIRC Sec. 24(A)(2)(b)-(c) as amended by RA 10963. No P250,000 reduction for someone who also earns
+ * pay. The VAT threshold is P3,000,000 (Sec. 109(BB)).
+ */
 export interface EightPercentRule {
   fromYear: number
   toYear: number | null

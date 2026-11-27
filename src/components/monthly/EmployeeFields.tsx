@@ -17,7 +17,7 @@ interface Props {
   onChange: (patch: Partial<EmployeeValues>) => void
 }
 
-/** Everything is on show, like a payslip: no switches to open and no "More" to find. */
+/** The rest of an employee's pay. Every field is always visible. */
 export default function EmployeeFields({ year, values, onChange }: Props) {
   return (
     <>

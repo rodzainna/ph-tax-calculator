@@ -1,4 +1,7 @@
-/** Graduated tables: NIRC Sec. 24(A)(2)(a) as amended by RA 10963 (2018-2022 and 2023 onward), checked against eBIRForms 1700/1701; tax = base + rate x (income - over). */
+/**
+ * Graduated tables for 2018-2022 and 2023 onward: NIRC Sec. 24(A)(2)(a) as amended by RA 10963, checked against
+ * eBIRForms 1700 and 1701. Tax = base + rate x (income - over).
+ */
 export interface Bracket {
   /** Lower edge of the bracket, in pesos (income "over" this amount). */
   over: number

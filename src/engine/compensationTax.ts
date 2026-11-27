@@ -62,7 +62,10 @@ function validate(employer: EmployerCompensation): void {
 
 const sum = (values: number[]): number => roundToCentavos(values.reduce((a, b) => a + b, 0))
 
-/** Annual tax on compensation from one or more employers (BIR 1700): the P90,000 benefits ceiling applies once to the pooled benefits, then the graduated table, less tax withheld. */
+/**
+ * Annual tax on pay from one or more employers (BIR 1700). The P90,000 benefits ceiling applies once to the pooled
+ * benefits. Then the graduated table applies, less the tax withheld.
+ */
 export function compensationTax(employers: EmployerCompensation[], year: number): CompensationTaxResult {
   employers.forEach(validate)
   const benefitsCeiling = benefitsCeilingFor(year)

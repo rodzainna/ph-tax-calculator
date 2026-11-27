@@ -69,7 +69,7 @@ export function usePesoField(value: string, onChange: (value: string) => void) {
     let before = raw.slice(0, caret)
     let after = raw.slice(caret)
     // Deleting a comma changes nothing once the commas are put back, so the key would seem dead:
-    // take the digit next to the comma instead, the way you would expect.
+    // take the digit next to the comma instead.
     if (removedCharacter(value, raw) === ',') {
       if (inputType === 'deleteContentBackward') before = before.slice(0, -1)
       else if (inputType === 'deleteContentForward') after = after.slice(1)

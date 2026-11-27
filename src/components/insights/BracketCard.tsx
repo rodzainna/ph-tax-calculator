@@ -5,7 +5,7 @@ import { bracketPosition, shortPeso } from '@/lib/bracket.ts'
 import { formatPeso, formatRate } from '@/lib/peso.ts'
 import { cn } from '@/lib/utils'
 
-/** From low to high rates: sage and teal for the low brackets, warming up through peach to coral for the high ones. */
+/** Segment colours from the lowest rate to the highest: sage and teal, then peach and coral. */
 const RAMP = ['sage', 'sky', 'blush', 'rose', 'coral', 'coral-deep'].map((name) => `var(--color-brand-${name})`)
 
 interface Props {
@@ -53,7 +53,7 @@ export default function BracketCard({
           </div>
         </div>
 
-        {/* The same thing in words for screen readers; the bar and labels below are the picture of it. */}
+        {/* What the bar below shows, in words for screen readers. */}
         <p className="sr-only">
           Your {caption} of {formatPeso(taxableIncome)} is in the {formatRate(rate)} bracket.
         </p>
