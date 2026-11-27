@@ -66,6 +66,11 @@ export default function SiteHeader({ calculatorOpen, onToggleCalculator }: Props
               <NavLink to="/year" className={linkClass}>
                 Annual
               </NavLink>
+              <NavLink to="/about" className={linkClass}>
+                {/* The full name would wrap below 768px. */}
+                <span className="md:hidden">About</span>
+                <span className="hidden md:inline">About &amp; sources</span>
+              </NavLink>
             </div>
           </nav>
 
