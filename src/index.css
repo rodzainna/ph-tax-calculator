@@ -35,7 +35,7 @@
   --color-secondary: var(--secondary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
-  /* The colour of money you keep (take-home and net pay). One token, so the headline and the Net pay line always match. */
+  /* Take-home and net pay. One token, so the headline and the Net pay line always match. */
   --color-net: var(--primary);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
@@ -88,7 +88,7 @@
 }
 
 .dark {
-  /* The same brand in the dark: a deep navy page, cards a step lighter, and the teal and coral lifted so they read on it. */
+  /* Dark theme: a navy page, lighter navy cards, and lighter teal and coral for contrast. */
   --background: #0b1222;
   --foreground: #e6edf3;
   --card: #141d33;
@@ -109,7 +109,6 @@
   --ring: #6fb7c4;
   --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 10px 28px -12px rgb(0 0 0 / 0.55);
   --shadow-card-hover: 0 2px 4px rgb(0 0 0 / 0.35), 0 18px 36px -14px rgb(0 0 0 / 0.65);
-  --shadow-hero: 0 2px 4px rgb(0 0 0 / 0.3), 0 24px 48px -18px rgb(72 146 157 / 0.35);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -169,10 +168,9 @@
   --color-brand-rose: #e39791;
   --color-brand-blush: #eaaca2;
 
-  /* Layered, navy-tinted shadows: a tight contact shadow plus a soft, wide ambient one. */
+  /* Navy-tinted shadows, each with a small tight layer and a wide soft one. */
   --shadow-card: 0 1px 2px rgb(32 46 84 / 0.06), 0 10px 28px -12px rgb(32 46 84 / 0.2);
   --shadow-card-hover: 0 2px 4px rgb(32 46 84 / 0.07), 0 18px 36px -14px rgb(32 46 84 / 0.28);
-  --shadow-hero: 0 2px 4px rgb(32 46 84 / 0.06), 0 24px 48px -18px rgb(47 115 128 / 0.42);
 }
 
 /* The peso sign's gradient: teal to coral, in lighter tones on the dark theme. */
@@ -192,9 +190,8 @@
 }
 
 /* ---- Page background ------------------------------------------------------------------------
-   A warm sage base with colour in all four corners, so the page keeps its colour all the way down
-   (the washes stay put while the page scrolls). A faint dotted grid, like graph paper, fades out
-   downward from the top for a little texture. */
+   A sage base with colour washes in the corners and along the bottom, fixed while the page scrolls.
+   A dotted grid fades out from the top downward. */
 body {
   background-color: #f3f6f0;
   background-image:
@@ -206,7 +203,7 @@ body {
   background-attachment: fixed;
 }
 
-/* Dark: the same four glows, dimmer, on deep navy. */
+/* Dark: the same washes, dimmer, on navy. */
 .dark body {
   background-color: #0a1020;
   background-image:
@@ -232,9 +229,9 @@ body::before {
   background-image: radial-gradient(rgb(255 255 255 / 0.08) 1px, transparent 1.3px);
 }
 
-/* ---- Border ring -------------------------------------------------------------------------
-   A 4px teal-to-coral line on all four sides of the answer card. The colours drift slowly around it.
-   Needs @property so the angle can animate. */
+/* ---- Gradient ring ---------------------------------------------------------------------------
+   A teal-to-coral line that turns slowly around the empty-state icon. Set --ring-width on the element
+   (default 2px). Needs @property so the angle can animate. */
 @property --ring-angle {
   syntax: '<angle>';
   inherits: false;
@@ -248,42 +245,6 @@ body::before {
 }
 
 @layer components {
-  .border-beam {
-    position: relative;
-    background-image:
-      radial-gradient(420px 240px at 100% 0%, rgb(72 146 157 / 0.14), transparent 70%),
-      linear-gradient(160deg, #ffffff 0%, #ffffff 55%, #eef6f5 100%);
-  }
-  .border-beam::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 4px;
-    pointer-events: none;
-    /* The first and last colours match, so the loop has no seam. */
-    background: conic-gradient(from var(--ring-angle), #2f7380, #48929d, #eaaca2, #ce6a6b, #eaaca2, #48929d, #2f7380);
-    -webkit-mask:
-      linear-gradient(#000 0 0) content-box,
-      linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask:
-      linear-gradient(#000 0 0) content-box,
-      linear-gradient(#000 0 0);
-    mask-composite: exclude;
-    animation: ring-drift 16s linear infinite;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .border-beam::after {
-      animation: none;
-    }
-  }
-}
-
-/* ---- Gradient ring (small version) ---------------------------------------------------------
-   The same drifting teal-to-coral line as the answer card, for small things: the header's
-   calculator button and the calculator's side tab. Set --ring-width on the element (default 2px). */
-@layer components {
   .gradient-ring {
     position: relative;
   }
@@ -294,6 +255,7 @@ body::before {
     border-radius: inherit;
     padding: var(--ring-width, 2px);
     pointer-events: none;
+    /* The first and last colours match, so the loop has no seam. */
     background: conic-gradient(from var(--ring-angle), #2f7380, #48929d, #eaaca2, #ce6a6b, #eaaca2, #48929d, #2f7380);
     -webkit-mask:
       linear-gradient(#000 0 0) content-box,
@@ -384,10 +346,9 @@ svg.brand-icon.icon-on-dark .ci-tall,
 }
 
 /* ---- Brand surface ------------------------------------------------------------------------
-   The logo's gradient: navy to teal, with a coral glow in the top-right corner. Defined once, for the
-   larger dark surfaces that belong together: the calculator's title bar, its side tab, the header
-   button when it is on, and the empty-state icon. (Small controls such as the nav chip and the keypad
-   operators use a flatter teal-to-navy, where a glow would look odd.) */
+   The logo's gradient: navy to teal, with a coral glow in the top-right corner. Used by the larger
+   dark surfaces: the calculator's title bar, its side tab, the header button when it is on, and the
+   empty-state icon. Small controls such as the nav chip and the keypad operators have no glow. */
 @utility bg-brand {
   background-image:
     radial-gradient(circle at 100% 0%, rgb(206 106 107 / 0.75), transparent 65%),

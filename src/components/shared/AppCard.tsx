@@ -8,7 +8,7 @@ type CardProps = ComponentProps<typeof Card>
 const ACCENT_BAR =
   'relative before:absolute before:inset-x-0 before:top-0 before:h-1 before:bg-gradient-to-r before:from-brand-coral before:via-brand-blush before:to-brand-teal-bright'
 
-/** The standard content card: rounded, with a soft shadow that lifts on hover. */
+/** The standard content card: rounded, with a shadow that deepens on hover. */
 export function SoftCard({ accent, className, ...props }: CardProps & { accent?: boolean }) {
   return (
     <Card
@@ -21,11 +21,6 @@ export function SoftCard({ accent, className, ...props }: CardProps & { accent?:
       {...props}
     />
   )
-}
-
-/** The card that carries the answer: light, with a slowly moving gradient line around its border. */
-export function HeroCard({ className, ...props }: CardProps) {
-  return <Card size="sm" className={cn('border-beam rounded-2xl border-0 shadow-hero ring-0', className)} {...props} />
 }
 
 /** The payslip: accent bar on top and a scalloped bottom edge (drawn in index.css as `.receipt`). */
