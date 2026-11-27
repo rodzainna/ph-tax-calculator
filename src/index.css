@@ -327,6 +327,16 @@ body::before {
     linear-gradient(135deg, #202e54, #243f66 55%, #2b6e7d);
 }
 
+/* The result card's navy is the brand navy, lighter than the dark theme's cards, with surfaces and lines to match.
+   It follows the `.dark` colours, so that it wins over them. */
+.result-navy {
+  --card: var(--color-brand-navy);
+  --muted: #2a3a63;
+  --muted-foreground: #b8c7dc;
+  --accent: #20424f;
+  --border: #37486f;
+}
+
 /* ---- Receipt (the payslip card) -------------------------------------------------------------
    A row of half circles hangs below the card, in the paper colour, so the bottom edge looks scalloped.
    The shadow is a filter, which follows the shape including the scallops. The bottom margin leaves room

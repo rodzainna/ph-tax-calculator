@@ -6,7 +6,7 @@ const SIZES = {
   /** The big number on a result card. */
   hero: {
     symbol: 'mr-1 align-[0.55em] text-[0.5em] font-semibold',
-    fraction: 'text-[0.5em] font-semibold opacity-60',
+    fraction: 'text-[0.5em] font-semibold opacity-85',
   },
   /** A highlighted total inside a card. */
   total: {
