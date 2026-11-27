@@ -6,7 +6,7 @@ import { metaFor, PAGE_TAGS } from '@/lib/pageMeta.ts'
 export function usePageMeta(): void {
   const { pathname } = useLocation()
 
-  // A layout effect, so the title changes before the new page is painted.
+  // A layout effect, so the title has changed before analytics reads it for a page view.
   useLayoutEffect(() => {
     const meta = metaFor(pathname)
     document.title = meta.title

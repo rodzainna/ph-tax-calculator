@@ -1,10 +1,13 @@
 import { useRef, useState } from 'react'
 import { Route, Routes } from 'react-router'
 import FloatingCalculator from '@/components/calculator/FloatingCalculator.tsx'
+import ConsentBanner from '@/components/ConsentBanner.tsx'
 import SiteFooter from '@/components/SiteFooter.tsx'
 import SiteHeader from '@/components/SiteHeader.tsx'
 import { TooltipProvider } from '@/components/ui/tooltip'
+import { ANALYTICS_ENABLED } from '@/config.ts'
 import { afterHeaderButton, type CalculatorMode } from '@/lib/calcMode.ts'
+import { useConsent } from '@/lib/useConsent.ts'
 import { useOpenAtTop } from '@/lib/useOpenAtTop.ts'
 import { usePageMeta } from '@/lib/usePageMeta.ts'
 import About from '@/pages/About.tsx'
@@ -19,6 +22,7 @@ export default function App() {
   const page = useRef<HTMLElement>(null)
   useOpenAtTop(page)
   usePageMeta()
+  const consent = useConsent()
 
   return (
     <TooltipProvider>
@@ -37,9 +41,10 @@ export default function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
-        <SiteFooter />
+        <SiteFooter onAnalyticsChoice={ANALYTICS_ENABLED ? consent.reopen : undefined} />
       </div>
       <FloatingCalculator mode={calculator} onModeChange={setCalculator} />
+      {consent.asking && <ConsentBanner takeFocus={consent.reopened} onDecide={consent.decide} />}
     </TooltipProvider>
   )
 }

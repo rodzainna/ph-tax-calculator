@@ -22,7 +22,7 @@ const named = [
 
 describe('files in public/', () => {
   it('include every one the code names', () => {
-    expect(named).toContain('/calculator-icon.svg')
+    expect(named).toContain('/shield-check-icon.svg')
     expect(named).toContain('/resize-grip-icon.svg')
     for (const file of named) expect(present, file).toContain(file)
   })

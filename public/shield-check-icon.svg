@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="url(#shield-check-icon-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <defs>
+    <!-- Teal for the first part, then into coral: blending straight from teal to coral looks grey at icon size. -->
+    <linearGradient id="shield-check-icon-gradient" gradientUnits="userSpaceOnUse" x1="2" y1="2" x2="22" y2="22">
+      <stop offset="0" stop-color="#2F7380" />
+      <stop offset="0.45" stop-color="#2F7380" />
+      <stop offset="1" stop-color="#B84E50" />
+    </linearGradient>
+  </defs>
+  <!-- Shield -->
+  <path d="M12 2.6c2.8 2.1 6 3.1 10 3.1v4.8c0 5.4-4.1 8.9-10 10.9C6.1 19.4 2 15.9 2 10.5V5.7c4 0 7.2-1 10-3.1z" fill="url(#shield-check-icon-gradient)" />
+  <!-- Check -->
+  <path d="m7.8 11.5 3.4 3.4 5.6-6" stroke="#fff" stroke-width="2.4" />
+</svg>
