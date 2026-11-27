@@ -2,7 +2,8 @@
 import { cleanup, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
 import { afterEach, describe, expect, it } from 'vitest'
-import { CONTACT, HOSTING_PROVIDER, OWNER_NAME } from '@/config.ts'
+import { CONTACT, HOSTING_PRIVACY_URL, HOSTING_PROVIDER, OWNER_NAME } from '@/config.ts'
+import { monthlyPay } from '@/engine/monthlyPay.ts'
 import { CONTRIBUTIONS_FIRST_YEAR } from '@/engine/rules/contributions.ts'
 import { ANNUAL_FIRST_YEAR } from '@/lib/taxYears.ts'
 import Privacy from '@/pages/Privacy.tsx'
@@ -76,6 +77,15 @@ describe('what the terms say is estimated and left out', () => {
     expect(container.textContent).toContain('against the legal limits, so your tax could be higher than shown.')
     expect(container.textContent).toContain('if you are entitled to deduct one, your tax could be lower than shown.')
   })
+
+  it('warns that the minimum wage switch treats all pay as tax-free, which is what it does', () => {
+    const { container } = show(<Terms />)
+    expect(container.textContent).toContain('“Minimum wage earner”, all the pay you enter is treated as tax-free.')
+    expect(container.textContent).toContain('such as commissions, is taxable, you could owe more than shown.')
+    const pay = { year: 2026, monthlyBasic: 23_117, monthlyTaxableAllowance: 71_113 }
+    expect(monthlyPay(pay).taxMonthly).toBeGreaterThan(0)
+    expect(monthlyPay({ ...pay, isMinimumWageEarner: true }).taxMonthly).toBe(0)
+  })
 })
 
 describe('what the privacy policy states', () => {
@@ -88,9 +98,12 @@ describe('what the privacy policy states', () => {
     )
   })
 
-  it('names the host', () => {
+  it('names the host, says why it processes logs and links to its privacy notice', () => {
     const { container } = show(<Privacy />)
     expect(container.textContent).toContain(`The site is hosted by ${HOSTING_PROVIDER}.`)
+    expect(container.textContent).toContain('This is needed to deliver the page and keep the site secure.')
+    const notice = screen.getByRole('link', { name: `${HOSTING_PROVIDER} privacy notice` })
+    expect(notice.getAttribute('href')).toBe(HOSTING_PRIVACY_URL)
   })
 
   it('claims to hold none of your figures, not nothing about you, because the host sees technical details', () => {

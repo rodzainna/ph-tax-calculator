@@ -14,6 +14,7 @@ import { computeScenario } from '@/lib/computeScenario.ts'
 import { deductionHint } from '@/lib/deductionHint.ts'
 import { ANNUAL_FIRST_YEAR, taxYearsFrom } from '@/lib/taxYears.ts'
 import { usesBusiness, usesEmployers } from '@/lib/taxpayer.ts'
+import { useCountUse } from '@/lib/useCountUse.ts'
 import { useYear } from '@/lib/useYear.ts'
 import { YearProvider } from '@/lib/yearContext.tsx'
 import { newEmployer, withTaxpayer, withYear, yearEndScenario } from '@/lib/yearForm.ts'
@@ -33,6 +34,7 @@ const DIVIDER = 'my-7 h-px border-0 bg-gradient-to-r from-transparent via-foregr
 function Inner() {
   const { form, update, takeId } = useYear()
   const outcome = useMemo(() => computeScenario(form, yearEndScenario(form.year)), [form])
+  useCountUse('annual_estimate', outcome.ok)
   const details = outcome.ok ? outcome.details : []
   const showEmployers = usesEmployers(form.taxpayer)
   const showBusiness = usesBusiness(form.taxpayer)

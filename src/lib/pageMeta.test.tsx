@@ -10,6 +10,7 @@ import { CONTRIBUTIONS_FIRST_YEAR } from '@/engine/rules/contributions.ts'
 import indexHtml from '../../index.html?raw'
 import llms from '../../public/llms.txt?raw'
 import robots from '../../public/robots.txt?raw'
+import sitemap from '../../public/sitemap.xml?raw'
 import banner from '../../public/og-banner.jpg?inline'
 
 beforeEach(() => vi.stubGlobal('scrollTo', vi.fn()))
@@ -112,6 +113,21 @@ describe('what crawlers get', () => {
     expect(robots).toContain('User-agent: *\nAllow: /\n')
     expect(robots).not.toMatch(/^Disallow:\s*\S/m)
     expect(indexHtml).not.toMatch(/noindex|nofollow/)
+  })
+
+  it('has a sitemap that lists every page once, and robots.txt points to it', () => {
+    const document = new DOMParser().parseFromString(sitemap, 'application/xml')
+    expect(document.querySelector('parsererror')).toBeNull()
+    expect(document.documentElement.namespaceURI).toBe('http://www.sitemaps.org/schemas/sitemap/0.9')
+    const addresses = [...document.querySelectorAll('url > loc')].map((loc) => new URL(loc.textContent!))
+    expect(addresses.map((address) => address.pathname)).toEqual(routes)
+    for (const address of addresses) expect(address.origin).toBe('https://ph-tax-calculator.rodzainna.com')
+    expect(robots).toContain('\nSitemap: https://ph-tax-calculator.rodzainna.com/sitemap.xml\n')
+  })
+
+  it.each(routes)('keeps the Search Console verification tag on %s', (route) => {
+    const page = parse(withPageMeta(indexHtml, PAGE_META[route]!))
+    expect(content(page, 'meta[name="google-site-verification"]')).toBe('rs7cV8akx0hA79PmdcZMoLoTbrhlI5kOJab53VtmFXc')
   })
 
   it('is an llms.txt that links to every page', () => {

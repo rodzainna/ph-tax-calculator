@@ -33,6 +33,8 @@ export default defineConfig({
   },
   test: {
     environment: 'node',
+    // A local .env file must not change what the tests see.
+    env: { VITE_GTM_ID: '' },
     include: ['src/**/*.test.{ts,tsx}'],
   },
 })

@@ -9,6 +9,7 @@ import TaxpayerFields from '@/components/shared/TaxpayerFields.tsx'
 import { CONTRIBUTIONS_FIRST_YEAR } from '@/engine/rules/contributions.ts'
 import { initialMonthlyForm, monthlyOutcome, type MonthlyForm } from '@/lib/monthlyOutcome.ts'
 import { isSelfEmployed } from '@/lib/taxpayer.ts'
+import { useCountUse } from '@/lib/useCountUse.ts'
 import { capTaxYear, taxYearsFrom } from '@/lib/taxYears.ts'
 
 const YEARS = taxYearsFrom(CONTRIBUTIONS_FIRST_YEAR)
@@ -28,6 +29,7 @@ export default function Monthly() {
 
   const selfEmployed = isSelfEmployed(form.taxpayer)
   const outcome = useMemo(() => monthlyOutcome({ ...form, bonus: form.bonus ?? form.basic }), [form])
+  useCountUse('monthly_estimate', outcome.ok)
 
   return (
     <div className="space-y-4 pb-20 md:pb-0">

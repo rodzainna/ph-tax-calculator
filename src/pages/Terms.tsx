@@ -35,8 +35,10 @@ export default function Terms() {
           The estimates do not cover every situation. For example, they leave out percentage tax or VAT on your sales,
           so you could owe more than shown. They do not check de minimis benefits against the legal limits, so your tax
           could be higher than shown. They also do not deduct business losses carried forward from earlier years, so if
-          you are entitled to deduct one, your tax could be lower than shown. Before you file or pay, check the figures
-          with the BIR, your Revenue District Office, or a certified public accountant.
+          you are entitled to deduct one, your tax could be lower than shown. If you switch on &ldquo;Minimum wage
+          earner&rdquo;, all the pay you enter is treated as tax-free. If some of it, such as commissions, is taxable,
+          you could owe more than shown. Before you file or pay, check the figures with the BIR, your Revenue District
+          Office, or a certified public accountant.
         </p>
       </LegalSection>
 
