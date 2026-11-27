@@ -32,7 +32,7 @@ export default function ResultInsights({ result, year, taxpayer }: Props) {
           info={
             selfEmployed
               ? 'Your annual tax as a share of everything you receive in the year.'
-              : 'Your annual tax as a share of everything you earn in the year (salary, allowance and 13th month), before deductions.'
+              : 'Your annual tax as a share of your salary, taxable allowances, 13th month and bonuses, before deductions. Non-taxable allowances are left out.'
           }
         />
         {selfEmployed ? (

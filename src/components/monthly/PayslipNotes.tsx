@@ -12,6 +12,18 @@ interface Props {
   minimumWage: boolean
 }
 
+/** How the tax line of the slip on screen was worked out. The year view treats the bonuses' tax differently. */
+function taxExplanation(slip: Payslip, result: MonthlyPayResult): string {
+  if (slip.period === 'cutoff') {
+    return "A cutoff is half a month: each figure is half the monthly one, rounded to the centavo. Tax is the year's tax divided by 12, so it is an estimate."
+  }
+  if (slip.period === 'monthly') return "Tax is the year's tax divided by 12, so it is an estimate."
+  if (result.taxOnBonuses > 0) {
+    return `The tax above is the year's tax less ${formatPeso(result.taxOnBonuses)}. That part is caused by your 13th month and bonuses, so it is taken from them instead. It is an estimate.`
+  }
+  return "The tax above is the whole year's tax, so it is an estimate."
+}
+
 /** The notes under the payslip: warnings first, then what the figures assume. */
 export default function PayslipNotes({ slip, result, taxpayer, minimumWage }: Props) {
   const selfEmployed = isSelfEmployed(taxpayer)
@@ -57,12 +69,9 @@ export default function PayslipNotes({ slip, result, taxpayer, minimumWage }: Pr
         </ul>
       ) : null}
       <p className="text-xs text-muted-foreground">
-        {slip.period === 'cutoff'
-          ? 'A cutoff is half a month: each figure is half the monthly one, rounded to the centavo. '
-          : ''}
-        Tax is the year's tax divided by 12, so it is an estimate. For a full year with several jobs, use{' '}
+        {taxExplanation(slip, result)} For a full year with several jobs, use the{' '}
         <Link to="/year" className="underline">
-          Annual
+          Annual page
         </Link>
         .
       </p>

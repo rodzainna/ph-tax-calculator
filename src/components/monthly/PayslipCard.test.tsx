@@ -5,6 +5,8 @@ import { MemoryRouter } from 'react-router'
 import { afterEach, describe, expect, it } from 'vitest'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { initialMonthlyForm, monthlyOutcome, type MonthlyInput } from '@/lib/monthlyOutcome.ts'
+import { payslipFor } from '@/lib/payslip.ts'
+import { formatPeso } from '@/lib/peso.ts'
 import type { Taxpayer } from '@/lib/taxpayer.ts'
 import PayslipCard from './PayslipCard.tsx'
 
@@ -30,6 +32,40 @@ const DE_MINIMIS_NOTE =
   "Non-taxable allowances are treated as fully tax-free. This app doesn't check them against the legal limits for de minimis benefits, so your tax could be higher than shown."
 
 const period = () => screen.getByRole('radio', { checked: true }).textContent
+
+describe('how the payslip says its tax was worked out', () => {
+  const choose = (name: string) => userEvent.setup().click(screen.getByRole('radio', { name }))
+  const note = () => screen.getByRole('link', { name: 'Annual page' }).closest('p')!.textContent
+  const typed = (bonus: string) => ({ ...initialMonthlyForm(2026), taxpayer: EMPLOYEE, basic: '61111', bonus })
+
+  it('says divided by 12 on the month and the cutoff', async () => {
+    render(card(EMPLOYEE, '61111', { bonus: '133333' }))
+    expect(note()).toContain("Tax is the year's tax divided by 12")
+    await choose('Cutoff')
+    expect(note()).toContain('A cutoff is half a month')
+    expect(note()).toContain("Tax is the year's tax divided by 12")
+  })
+
+  it('on the year, names the bonus tax left out of the tax line, and the two add up to the year’s tax', async () => {
+    const outcome = monthlyOutcome(typed('133333'))
+    if (!outcome.ok) throw new Error(outcome.message)
+    const { taxYearly, taxOnBonuses } = outcome.result
+    expect(taxOnBonuses).toBeGreaterThan(0)
+    render(card(EMPLOYEE, '61111', { bonus: '133333' }))
+    await choose('Annual')
+    expect(note()).not.toContain('divided by 12')
+    expect(note()).toContain(`The tax above is the year's tax less ${formatPeso(taxOnBonuses)}.`)
+    expect(note()).toContain('it is taken from them instead')
+    expect(payslipFor(outcome.result, outcome.lines, 'annual').tax + taxOnBonuses).toBeCloseTo(taxYearly, 2)
+  })
+
+  it('on the year with tax-free bonuses, says the line is the whole year’s tax', async () => {
+    render(card(EMPLOYEE, '61111', { bonus: '41111' }))
+    await choose('Annual')
+    expect(note()).toContain("The tax above is the whole year's tax")
+    expect(note()).not.toContain('divided by 12')
+  })
+})
 
 describe('PayslipCard', () => {
   it('offers a cutoff to an employee, and shows it when chosen', async () => {
