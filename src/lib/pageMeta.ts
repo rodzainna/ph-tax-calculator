@@ -81,3 +81,10 @@ export function withPageMeta(html: string, meta: PageMeta): string {
     return result.replace(pattern, (_, before: string, after: string) => `${before}${escapeHtml(value)}${after}`)
   }, html)
 }
+
+/** The file served, with a 404 status, for an address that has no file of its own. Search engines are not to list it. */
+export function notFoundHtml(html: string): string {
+  if (!html.includes('</head>')) throw new Error('index.html has no </head>')
+  const page = withPageMeta(html, NOT_FOUND_META)
+  return page.replace('</head>', '  <meta name="robots" content="noindex" />\n  </head>')
+}

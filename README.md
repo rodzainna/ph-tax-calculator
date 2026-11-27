@@ -65,9 +65,9 @@ Each rule in `src/engine/rules` names its source. For 2026, the SSS figures from
 
 Static site, hosted on Vercel, which builds a preview for each pull request and the live site from `main`. `VITE_GTM_ID` is set there for production only, so previews and local runs are not counted.
 
-`pnpm build` writes the site to `dist/`, with one HTML file per page so that each has its own title and description in link previews (`src/lib/pageMeta.ts`). `vercel.json` sends other paths to `index.html`, so the app can show its own page for them. The Google Search Console verification tag is in `index.html`.
+`pnpm build` writes the site to `dist/`, with one HTML file per page so that each has its own title and description in link previews (`src/lib/pageMeta.ts`). It also writes `404.html`, which Vercel serves with a 404 status for any other address; it is marked `noindex`, and the app shows its own "page does not exist" screen. A new page therefore needs an entry in `pageMeta.ts`, and a test checks this. The Google Search Console verification tag is in `index.html`.
 
-To host it on Netlify instead, `netlify.toml` and `public/_redirects` do the same there; the host named in the Privacy Policy is set in `src/config.ts`.
+`netlify.toml` and `public/_redirects` are left from Netlify hosting. To move back, delete `_redirects`, which would answer unknown addresses with a 200 status there, and change the host named in the Privacy Policy in `src/config.ts`.
 
 ## Licence
 
