@@ -1,8 +1,11 @@
 name: CI
 
 # Vercel deploys on its own: a preview for each pull request, and the live site for each change to main.
+# One run for each change: a pull request is checked on its own, and a push is checked only on main, after a merge.
+# A branch with no pull request is not checked.
 on:
   push:
+    branches: [main]
   pull_request:
 
 permissions:
@@ -16,8 +19,8 @@ concurrency:
 
 jobs:
   checks:
-    # Both runs happen on purpose: a push checks the branch as it is, and a pull request checks it merged with main.
-    # Neither is skipped with `if`, because GitHub counts a skipped job as passed, even for a required check.
+    # A pull request run checks the branch merged with main. Do not skip a run with `if`: GitHub counts a skipped job
+    # as passed, even for a required check.
     # The rules for main require `Checks (pull_request)` by this name. Renaming it would block every merge.
     name: Checks (${{ github.event_name }})
     runs-on: ubuntu-latest
