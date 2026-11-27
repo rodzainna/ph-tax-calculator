@@ -10,7 +10,7 @@ import SelectField, { type Option } from '@/components/shared/SelectField.tsx'
 import { Button } from '@/components/ui/button'
 import { CardContent } from '@/components/ui/card'
 import type { PayFrequency } from '@/engine/pay.ts'
-import type { EarningsMode, EmployerState } from '@/lib/yearForm.ts'
+import { withPayFrequency, type EarningsMode, type EmployerState } from '@/lib/yearForm.ts'
 import { fieldSetter } from '@/lib/fieldSetter.ts'
 
 interface Props {
@@ -89,7 +89,7 @@ export default function EmployerSection({
               id={`freq-${employer.id}`}
               label="Paid"
               value={employer.frequency}
-              onChange={set('frequency')}
+              onChange={(frequency) => onChange(withPayFrequency(employer, frequency))}
               options={FREQUENCY_OPTIONS}
             />
           </div>

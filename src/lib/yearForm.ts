@@ -102,7 +102,30 @@ export const todayIso = (): string => {
   return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`
 }
 
-export const newDeMinimisLine = (id: number): DeMinimisLine => ({ id, label: '', amount: '', per: 'payout' })
+/** The benefit frequency that matches how the salary is paid. Pay twice a month comes in cutoffs. */
+const BENEFIT_PER: Record<PayFrequency, DeMinimisPer> = { monthly: 'month', 'semi-monthly': 'payout', yearly: 'year' }
+
+export const newDeMinimisLine = (id: number, frequency: PayFrequency): DeMinimisLine => ({
+  id,
+  label: '',
+  amount: '',
+  per: BENEFIT_PER[frequency],
+})
+
+/**
+ * Changes how the salary is paid. Benefits with no amount yet follow it, unless their own frequency was changed. A
+ * benefit with an amount keeps its frequency, so that no figure changes by itself.
+ */
+export function withPayFrequency(employer: EmployerState, frequency: PayFrequency): EmployerState {
+  const followed = BENEFIT_PER[employer.frequency]
+  return {
+    ...employer,
+    frequency,
+    deMinimis: employer.deMinimis.map((line) =>
+      line.amount.trim() === '' && line.per === followed ? { ...line, per: BENEFIT_PER[frequency] } : line,
+    ),
+  }
+}
 
 export const newEmployer = (id: number, lineId: number): EmployerState => ({
   id,
@@ -112,7 +135,7 @@ export const newEmployer = (id: number, lineId: number): EmployerState => ({
   basic: '',
   frequency: 'monthly',
   hasDeMinimis: false,
-  deMinimis: [newDeMinimisLine(lineId)],
+  deMinimis: [newDeMinimisLine(lineId, 'monthly')],
   thirteenthMode: 'estimate',
   thirteenthCustom: '',
   contributionsMode: 'estimate',

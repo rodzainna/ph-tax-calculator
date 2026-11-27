@@ -31,11 +31,16 @@ export default function EmployerSalaryDetails({ employer, nextLineId, onChange }
         {employer.hasDeMinimis ? (
           <DeMinimisList
             lines={employer.deMinimis}
+            payFrequency={employer.frequency}
             nextLineId={nextLineId}
             onChange={set('deMinimis')}
             // Removing the last benefit switches the section off and keeps a blank row for next time.
             onTurnOff={() =>
-              onChange({ ...employer, hasDeMinimis: false, deMinimis: [newDeMinimisLine(nextLineId())] })
+              onChange({
+                ...employer,
+                hasDeMinimis: false,
+                deMinimis: [newDeMinimisLine(nextLineId(), employer.frequency)],
+              })
             }
           />
         ) : null}

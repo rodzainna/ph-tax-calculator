@@ -3,9 +3,11 @@ import {
   endOfYearIso,
   initialForm,
   MONTHS_PER_BUSINESS_PERIOD,
+  newDeMinimisLine,
   newEmployer,
   soFarScenario,
   todayIso,
+  withPayFrequency,
   withTaxpayer,
   withYear,
   yearEndScenario,
@@ -73,7 +75,7 @@ describe('newEmployer', () => {
       basic: '',
       taxWithheld: '',
     })
-    expect(employer.deMinimis).toEqual([{ id: 8, label: '', amount: '', per: 'payout' }])
+    expect(employer.deMinimis).toEqual([{ id: 8, label: '', amount: '', per: 'month' }])
   })
 
   it('gives each employer its own lists', () => {
@@ -81,6 +83,33 @@ describe('newEmployer', () => {
     const b = newEmployer(3, 4)
     expect(a.deMinimis).not.toBe(b.deMinimis)
     expect(a.customContributions).not.toBe(b.customContributions)
+  })
+})
+
+describe('how often a benefit is paid', () => {
+  const job = newEmployer(1, 2)
+
+  it.each([
+    ['monthly', 'month'],
+    ['semi-monthly', 'payout'],
+    ['yearly', 'year'],
+  ] as const)('starts as the salary is paid: %s', (frequency, per) => {
+    expect(newDeMinimisLine(3, frequency).per).toBe(per)
+    expect(withPayFrequency(job, frequency).deMinimis[0]!.per).toBe(per)
+    expect(withPayFrequency(job, frequency).frequency).toBe(frequency)
+  })
+
+  it('goes on following the salary through several changes, while nothing is typed', () => {
+    const changed = withPayFrequency(withPayFrequency(job, 'yearly'), 'semi-monthly')
+    expect(changed.deMinimis[0]!.per).toBe('payout')
+  })
+
+  it.each([
+    ['has an amount', { id: 2, label: 'Rice', amount: '1111', per: 'month' }],
+    ['had its frequency chosen', { id: 2, label: '', amount: '', per: 'quarter' }],
+  ] as const)('is left alone once a row %s', (_, line) => {
+    const changed = withPayFrequency({ ...job, deMinimis: [line] }, 'semi-monthly')
+    expect(changed.deMinimis).toEqual([line])
   })
 })
 
