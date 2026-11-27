@@ -50,6 +50,9 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  /* The corner of the header buttons and the tab bars. A chosen tab sits 4px inside its bar, so its corner is tighter. */
+  --radius-control: 9px;
+  --radius-control-inner: 5px;
 }
 
 :root {

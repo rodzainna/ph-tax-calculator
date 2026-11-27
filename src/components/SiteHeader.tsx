@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
   cn(
-    'rounded-full px-3 py-1.5 text-center text-sm font-medium max-[359px]:px-1.5 transition-all duration-200 sm:px-4',
+    'rounded-control-inner px-3 py-1.5 text-center text-sm font-medium max-[359px]:px-1.5 transition-all duration-200 sm:px-4',
     isActive
       ? 'bg-gradient-to-br from-brand-teal to-brand-navy-mid text-white shadow-md shadow-brand-teal/30'
       : 'text-muted-foreground hover:bg-white/80 hover:text-foreground dark:hover:bg-white/10',
@@ -56,7 +56,7 @@ export default function SiteHeader({ calculatorOpen, onToggleCalculator }: Props
         {/* The pages, then the buttons grouped on the right (8px apart, set off from the pages). */}
         <div className="flex items-center justify-between gap-4 max-[359px]:gap-2 sm:justify-start">
           <nav aria-label="Main">
-            <div className="flex shrink-0 items-center rounded-full border border-white/80 bg-white/55 p-1 dark:border-white/10 dark:bg-white/5 shadow-[inset_0_1px_2px_rgb(32_46_84/0.07)] backdrop-blur">
+            <div className="flex shrink-0 items-center rounded-control border border-white/80 bg-white/55 p-1 dark:border-white/10 dark:bg-white/5 shadow-[inset_0_1px_2px_rgb(32_46_84/0.07)] backdrop-blur">
               <NavLink to="/" end className={linkClass}>
                 Monthly
               </NavLink>
@@ -80,7 +80,7 @@ export default function SiteHeader({ calculatorOpen, onToggleCalculator }: Props
               title="Calculator"
               className={cn(
                 // A square with only the icon on a phone; a wider button with a label on a large screen.
-                'flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-[22%] border text-sm font-medium shadow-sm transition-all duration-200 lg:w-auto lg:rounded-[9px] lg:pl-[3px] lg:pr-4',
+                'flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-control border text-sm font-medium shadow-sm transition-all duration-200 lg:w-auto lg:pl-[3px] lg:pr-4',
                 calculatorOpen
                   ? 'border-transparent bg-brand text-white shadow-md shadow-brand-navy/30'
                   : 'border-brand-teal-bright/30 bg-white/85 text-foreground hover:bg-white hover:shadow-md dark:border-white/15 dark:bg-white/10 dark:hover:bg-white/15',
@@ -94,7 +94,7 @@ export default function SiteHeader({ calculatorOpen, onToggleCalculator }: Props
               onClick={toggle}
               aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
               title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[22%] border border-brand-teal-bright/30 bg-white/85 shadow-sm transition-all duration-200 hover:bg-white hover:shadow-md dark:border-white/15 dark:bg-white/10 dark:hover:bg-white/15 lg:rounded-[9px]"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-control border border-brand-teal-bright/30 bg-white/85 shadow-sm transition-all duration-200 hover:bg-white hover:shadow-md dark:border-white/15 dark:bg-white/10 dark:hover:bg-white/15"
             >
               {theme === 'dark' ? <Sun className="size-5" /> : <Moon className="size-5" />}
             </button>
