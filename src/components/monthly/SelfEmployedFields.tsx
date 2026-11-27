@@ -12,13 +12,11 @@ interface Props {
   onChange: (patch: Partial<SelfEmployedValues>) => void
 }
 
-/** SSS, PhilHealth and Pag-IBIG are optional for the self-employed, so they start off. */
+/** The contributions a self-employed person pays. They start off, so only the ones added are taken off. */
 export default function SelfEmployedFields({ values, onChange }: Props) {
   return (
     <div className="space-y-4 border-t border-dashed border-foreground/25 pt-4">
-      <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-        Contributions · optional
-      </p>
+      <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">Contributions you pay</p>
       <ToggleRow
         id="m-sss"
         tone="bare"
@@ -37,7 +35,7 @@ export default function SelfEmployedFields({ values, onChange }: Props) {
       />
       <PesoInput
         label="Pag-IBIG"
-        description="Monthly — the amount you choose to put in."
+        description="Monthly — the amount you put in."
         value={values.pagibig}
         onChange={(pagibig) => onChange({ pagibig })}
       />

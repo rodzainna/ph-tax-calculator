@@ -20,7 +20,7 @@ export default function PayslipNotes({ slip, result, taxpayer, minimumWage }: Pr
       {slip.net < 0 ? (
         <p className="rounded-lg bg-secondary px-3 py-2 text-sm text-secondary-foreground">
           {selfEmployed
-            ? 'The contributions you chose come to more than your income. Check that you typed a monthly amount, not a daily one.'
+            ? 'The contributions you added come to more than your income. Check that you typed a monthly amount, not a daily one.'
             : 'SSS and PhilHealth have minimum contributions, and at this salary they come to more than the pay. Check that you typed a monthly amount, not a daily one.'}
         </p>
       ) : null}
@@ -45,9 +45,11 @@ export default function PayslipNotes({ slip, result, taxpayer, minimumWage }: Pr
       {selfEmployed ? (
         <ul className="list-disc space-y-1 pl-4 text-xs text-muted-foreground">
           <li>
-            SSS, PhilHealth and Pag-IBIG are optional for you and paid in full by you. They do not lower this tax: the
-            8% option and the 40% deduction allow no other deductions.
+            The law requires PhilHealth premiums from self-earning people, and SSS from many of the self-employed, such
+            as professionals and sole proprietors. Only what you add here is taken off, and you pay the whole
+            contribution.
           </li>
+          <li>Contributions do not lower this tax: the 8% option and the 40% deduction allow no other deductions.</li>
           {taxpayer.method === 'graduated' ? (
             <li>Graduated rates here use the 40% standard deduction. Percentage tax (3%) or VAT is not included.</li>
           ) : null}

@@ -60,7 +60,7 @@ export function monthlyOutcome(input: MonthlyInput): Outcome {
     return {
       ok: false,
       message: selfEmployed
-        ? 'Enter what you receive in a month and we work out your income tax, and the contributions you choose to pay.'
+        ? 'Enter what you receive in a month and we work out your income tax, and take off the contributions you add.'
         : 'Enter your monthly salary and we work out SSS, PhilHealth, Pag-IBIG and tax for you.',
       empty: true,
     }
