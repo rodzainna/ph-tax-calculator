@@ -4,9 +4,10 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import App from '@/App.tsx'
-import { metaFor, NOT_FOUND_META, PAGE_META, PAGE_TAGS, withPageMeta } from '@/lib/pageMeta.ts'
+import { metaFor, NOT_FOUND_META, notFoundHtml, PAGE_META, PAGE_TAGS, withPageMeta } from '@/lib/pageMeta.ts'
 import { ANNUAL_FIRST_YEAR } from '@/lib/taxYears.ts'
 import { CONTRIBUTIONS_FIRST_YEAR } from '@/engine/rules/contributions.ts'
+import appSource from '@/App.tsx?raw'
 import indexHtml from '../../index.html?raw'
 import llms from '../../public/llms.txt?raw'
 import robots from '../../public/robots.txt?raw'
@@ -44,6 +45,13 @@ describe('the page titles and descriptions', () => {
   it.each(routes)('belong to a page that exists: %s', (route) => {
     renderAt(route)
     expect(screen.queryByText('That page does not exist')).toBeNull()
+  })
+
+  // Only a page listed here gets an HTML file, and the host answers 404 for an address with no file.
+  it('cover every page the app has, so that each can be opened directly', () => {
+    const paths = [...appSource.matchAll(/<Route path="([^"]+)"/g)].map((match) => match[1]!)
+    expect(paths).toContain('*')
+    expect(paths.filter((path) => path !== '*')).toEqual(routes)
   })
 
   it('are found whatever the capitals or the slash at the end, as the router finds the page', () => {
@@ -92,6 +100,21 @@ describe('index.html', () => {
 
   it('fails loudly when a tag is missing', () => {
     expect(() => withPageMeta('<title>x</title>', NOT_FOUND_META)).toThrow('no tag matching')
+  })
+
+  it('becomes a 404 page that search engines are told not to list', () => {
+    const page = parse(notFoundHtml(indexHtml))
+    expect(content(page, 'meta[name="robots"]')).toBe('noindex')
+    expect(page.querySelectorAll('meta[name="robots"]')).toHaveLength(1)
+    expect(page.title).toBe(NOT_FOUND_META.title)
+    expect(content(page, 'meta[name="description"]')).toBe(NOT_FOUND_META.description)
+    // It still starts the app, which shows its own "page does not exist" screen.
+    expect(page.querySelector('#root')).not.toBeNull()
+    expect(page.querySelector('script[type="module"]')).not.toBeNull()
+  })
+
+  it('refuses to build a 404 page it cannot mark', () => {
+    expect(() => notFoundHtml('<title>x</title>')).toThrow('no </head>')
   })
 
   it('points link previews to a banner that exists, at the size it states', () => {

@@ -4,9 +4,9 @@ import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import type { Plugin } from 'vite'
 import { defineConfig } from 'vitest/config'
-import { PAGE_META, withPageMeta } from './src/lib/pageMeta.ts'
+import { notFoundHtml, PAGE_META, withPageMeta } from './src/lib/pageMeta.ts'
 
-/** Writes year/index.html and so on, each with that page's title and description. */
+/** Writes year/index.html and so on, each with that page's title and description, and 404.html. */
 function pageMetaFiles(): Plugin {
   return {
     name: 'page-meta-files',
@@ -19,6 +19,7 @@ function pageMetaFiles(): Plugin {
         await mkdir(folder, { recursive: true })
         await writeFile(path.join(folder, 'index.html'), withPageMeta(home, meta))
       }
+      await writeFile(path.join(dir, '404.html'), notFoundHtml(home))
     },
   }
 }
