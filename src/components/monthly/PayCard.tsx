@@ -21,7 +21,7 @@ export default function PayCard({ isSelfEmployed, basic, onBasicChange, autoFocu
         <CardTitle>{isSelfEmployed ? 'Monthly income' : 'Your pay'}</CardTitle>
         <p className="text-sm text-muted-foreground">
           {isSelfEmployed
-            ? 'Enter what you receive each month. Contributions are optional.'
+            ? 'Enter what you receive each month. No contributions are taken off until you add them.'
             : "Enter what's on your payslip. Contributions are computed automatically."}
         </p>
       </CardHeader>

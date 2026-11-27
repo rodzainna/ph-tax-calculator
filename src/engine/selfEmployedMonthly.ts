@@ -11,7 +11,7 @@ export interface SelfEmployedMonthlyInput {
   method: 'eight-percent' | 'graduated'
   /** Gross receipts in a typical month, before any tax withheld by clients. */
   monthlyIncome: number
-  /** Whether you pay SSS and PhilHealth. They are optional for the self-employed, so they default to off. */
+  /** Whether to take off SSS and PhilHealth. Both default to off; the About page says who has to pay. */
   paysSss?: boolean
   paysPhilhealth?: boolean
   /** What you put into Pag-IBIG each month, typed by you (0 if none). Its rules for the self-employed are not estimated. */
@@ -22,7 +22,11 @@ function check(name: string, value: number): void {
   if (!Number.isFinite(value) || value < 0) throw new RangeError(`${name} must be a number of 0 or more, got ${value}`)
 }
 
-/** One month of a self-employed person's income in the employee shape: chosen contributions (not deductible under the 8% or 40% options), tax as the year's divided by 12, no 13th month. */
+/**
+ * One month of a self-employed person's income, in the same shape as an employee's. Only the contributions asked for are
+ * taken off, and they do not lower the tax under the 8% option or the 40% deduction. Tax is the year's divided by 12,
+ * and there is no 13th month.
+ */
 export function selfEmployedMonthlyPay(input: SelfEmployedMonthlyInput): MonthlyPayResult {
   check('monthlyIncome', input.monthlyIncome)
   const pagibig = roundToCentavos(input.monthlyPagibig ?? 0)

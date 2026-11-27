@@ -22,7 +22,7 @@ const netSize = (amount: string): string => (amount.length > 15 ? 'text-xl' : 't
 /** The payslip itself: what comes in, what comes off, and what is left. */
 export default function PayslipBody({ slip, isSelfEmployed, rates, children }: Props) {
   const isAnnual = slip.period === 'annual'
-  // The self-employed only see the contributions they chose to pay.
+  // The self-employed only see the contributions they added.
   const showSss = !isSelfEmployed || slip.sss > 0
   const showPhilhealth = !isSelfEmployed || slip.philhealth > 0
   const showPagibig = !isSelfEmployed || slip.pagibig > 0
